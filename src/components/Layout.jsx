@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Shield, Activity, BookOpen, Trophy, Users, Dumbbell } from "lucide-react";
+import { Shield, Activity, BookOpen, Trophy, Users, Dumbbell, Video } from "lucide-react";
 
 const NAV = [
   { path: "/", label: "Command", icon: Shield },
@@ -8,6 +8,7 @@ const NAV = [
   { path: "/recovery", label: "Recovery", icon: Dumbbell },
   { path: "/competition", label: "Competition", icon: Trophy },
   { path: "/junior", label: "Junior", icon: Users },
+  { path: "/vault", label: "Film", icon: Video },
 ];
 
 export default function Layout() {

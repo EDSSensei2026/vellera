@@ -10,6 +10,7 @@ import TechniqueLibrary from './pages/TechniqueLibrary';
 import Recovery from './pages/Recovery';
 import Competition from './pages/Competition';
 import JuniorTracker from './pages/JuniorTracker';
+import VideoVault from './pages/VideoVault';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -45,6 +46,7 @@ const AuthenticatedApp = () => {
         <Route path="/recovery" element={<Recovery />} />
         <Route path="/competition" element={<Competition />} />
         <Route path="/junior" element={<JuniorTracker />} />
+        <Route path="/vault" element={<VideoVault />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

@@ -1,0 +1,66 @@
+{
+  "name": "VideoVault",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Clip Title"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Date"
+    },
+    "video_url": {
+      "type": "string",
+      "title": "Video URL"
+    },
+    "thumbnail_url": {
+      "type": "string",
+      "title": "Thumbnail URL"
+    },
+    "session_type": {
+      "type": "string",
+      "title": "Session Type"
+    },
+    "duration_seconds": {
+      "type": "number",
+      "title": "Duration (seconds)"
+    },
+    "ai_techniques_tagged": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "AI-Tagged Techniques"
+    },
+    "posture_score": {
+      "type": "number",
+      "title": "Posture Alignment Score (0-100)"
+    },
+    "ai_analysis": {
+      "type": "string",
+      "title": "AI Analysis"
+    },
+    "ai_coaching_cues": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Coaching Cues"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Personal Notes"
+    },
+    "analyzed": {
+      "type": "boolean",
+      "title": "Analysis Complete",
+      "default": false
+    }
+  },
+  "required": [
+    "title",
+    "date"
+  ]
+}
