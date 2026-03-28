@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import SafetyValve from "../components/SafetyValve";
+import RecoveryPerformanceWidget from "../components/RecoveryPerformanceWidget";
 import DailyFocus from "../components/DailyFocus";
 import WeightTracker from "../components/WeightTracker";
 import { Droplets, Flame, Moon, Heart, Zap, ChevronRight } from "lucide-react";
@@ -162,6 +163,9 @@ export default function Dashboard() {
           <p className="text-commander-muted text-xs">250 lbs ÷ 2 + 32 oz per mat hour</p>
         </div>
       </div>
+
+      {/* Recovery vs Performance Widget */}
+      <RecoveryPerformanceWidget />
 
       {/* Quick Links */}
       <div className="grid grid-cols-2 gap-2">
