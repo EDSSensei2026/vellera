@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import TrainingHeatmap from "../components/TrainingHeatmap";
 import { base44 } from "@/api/base44Client";
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from "recharts";
 import { Star, Zap, TrendingUp } from "lucide-react";
@@ -85,6 +86,9 @@ export default function Progress() {
   return (
     <div className="p-4 space-y-5 max-w-lg mx-auto pb-24">
       <h1 className="text-white text-xl font-black tracking-tight">XP & Mastery Progress</h1>
+
+      {/* Heatmap */}
+      <TrainingHeatmap />
 
       {/* Summary Stats */}
       <div className="grid grid-cols-3 gap-2">
