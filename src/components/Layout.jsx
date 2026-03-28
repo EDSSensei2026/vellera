@@ -38,7 +38,7 @@ export default function Layout() {
         {WARRIOR_IMAGES.map((src, i) => (
           <div key={src} className="absolute inset-0 transition-opacity duration-2000"
             style={{ opacity: i === imgIndex ? 1 : 0 }}>
-            <img src={src} alt="" className="w-full h-full object-cover object-top" />
+            <img src={src} alt="" className="w-full h-full object-contain" />
           </div>
         ))}
         <div className="absolute inset-0 bg-commander-dark/60" />
