@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import SafetyValve from "../components/SafetyValve";
+import WeightTracker from "../components/WeightTracker";
 import { Droplets, Flame, Moon, Heart, Zap, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -98,6 +99,9 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+
+      {/* Weight Tracker */}
+      <WeightTracker />
 
       {/* Safety Valve */}
       {loading ? (
