@@ -28,6 +28,10 @@
       "type": "string",
       "title": "Coach Notes"
     },
+    "video_url": {
+      "type": "string",
+      "title": "Reference Video URL (YouTube)"
+    },
     "xp": {
       "type": "number",
       "title": "Total XP",

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import VideoModal from "../components/VideoModal";
 import { base44 } from "@/api/base44Client";
-import { Plus, Star } from "lucide-react";
+import { Plus, Star, PlayCircle } from "lucide-react";
 import { toast } from "sonner";
 
 const CATEGORIES = ["Escapes & Survival", "Guard Retention", "Passing & Pressure", "Submissions", "Wrestling & Takedowns", "MMA Fundamentals"];
@@ -69,7 +70,8 @@ export default function TechniqueLibrary() {
   const [loading, setLoading] = useState(true);
   const [selectedCat, setSelectedCat] = useState("All");
   const [showAdd, setShowAdd] = useState(false);
-  const [newTech, setNewTech] = useState({ name: "", category: CATEGORIES[0], description: "", notes: "" });
+  const [newTech, setNewTech] = useState({ name: "", category: CATEGORIES[0], description: "", notes: "", video_url: "" });
+  const [videoTech, setVideoTech] = useState(null);
 
   const load = () => base44.entities.Technique.list("-xp", 100).then(t => { setTechniques(t); setLoading(false); });
 
@@ -133,6 +135,8 @@ export default function TechniqueLibrary() {
           </select>
           <input value={newTech.description} onChange={e => setNewTech(f => ({ ...f, description: e.target.value }))} placeholder="Mastery criteria"
             className="w-full bg-gray-800 border border-commander-border rounded-lg px-3 py-2 text-white text-sm" />
+          <input value={newTech.video_url} onChange={e => setNewTech(f => ({ ...f, video_url: e.target.value }))} placeholder="YouTube URL (optional)"
+            className="w-full bg-gray-800 border border-commander-border rounded-lg px-3 py-2 text-white text-sm" />
           <button onClick={addTechnique} className="w-full bg-commander-red text-white rounded-lg py-2 text-sm font-bold">Add Technique</button>
         </div>
       )}
@@ -154,7 +158,7 @@ export default function TechniqueLibrary() {
         <div className="space-y-2">
           {filtered.map(tech => (
             <div key={tech.id} className={`bg-commander-surface border rounded-xl p-4 transition-all ${tech.mastery_level >= 5 ? "border-yellow-700" : "border-commander-border"}`}>
-              <div className="flex items-start justify-between">                
+              <div className="flex items-start justify-between gap-2">                
                 <div className="flex-1">
                   <div className="flex items-center gap-2 flex-wrap mb-0.5">
                     <p className="text-white font-semibold text-sm">{tech.name}</p>
@@ -163,6 +167,11 @@ export default function TechniqueLibrary() {
                   {tech.description && <p className="text-commander-muted text-xs mt-0.5">{tech.description}</p>}
                   {tech.notes && <p className="text-yellow-600 text-xs mt-0.5 italic">{tech.notes}</p>}
                 </div>
+                {tech.video_url && (
+                  <button onClick={() => setVideoTech(tech)} className="flex-shrink-0 text-red-400 hover:text-red-300 transition-all" title="Watch reference video">
+                    <PlayCircle className="w-7 h-7" />
+                  </button>
+                )}
               </div>
               <XPBar xp={tech.xp || 0} level={tech.mastery_level || 0} />
               {tech.last_drilled && <p className="text-xs text-commander-muted mt-1">Last drilled: {tech.last_drilled}</p>}
@@ -170,6 +179,8 @@ export default function TechniqueLibrary() {
           ))}
         </div>
       )}
+
+      {videoTech && <VideoModal tech={videoTech} onClose={() => setVideoTech(null)} />}
     </div>
   );
 }
