@@ -3,8 +3,13 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
-import { AuthProvider, useAuth } from '@/lib/AuthContext';
-import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
+import TrainingLog from './pages/TrainingLog';
+import TechniqueLibrary from './pages/TechniqueLibrary';
+import Recovery from './pages/Recovery';
+import Competition from './pages/Competition';
+import JuniorTracker from './pages/JuniorTracker';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -33,7 +38,14 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      {/* Add your page Route elements here */}
+      <Route element={<Layout />}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/training" element={<TrainingLog />} />
+        <Route path="/techniques" element={<TechniqueLibrary />} />
+        <Route path="/recovery" element={<Recovery />} />
+        <Route path="/competition" element={<Competition />} />
+        <Route path="/junior" element={<JuniorTracker />} />
+      </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

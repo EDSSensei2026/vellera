@@ -1,0 +1,61 @@
+import { Outlet, Link, useLocation } from "react-router-dom";
+import { Shield, Activity, BookOpen, Trophy, Users, Dumbbell } from "lucide-react";
+
+const NAV = [
+  { path: "/", label: "Command", icon: Shield },
+  { path: "/training", label: "Log Session", icon: Activity },
+  { path: "/techniques", label: "Skill Matrix", icon: BookOpen },
+  { path: "/recovery", label: "Recovery", icon: Dumbbell },
+  { path: "/competition", label: "Competition", icon: Trophy },
+  { path: "/junior", label: "Junior", icon: Users },
+];
+
+export default function Layout() {
+  const { pathname } = useLocation();
+
+  return (
+    <div className="min-h-screen bg-commander-dark flex flex-col">
+      {/* Top Header */}
+      <header className="bg-commander-surface border-b border-commander-border px-4 py-3 flex items-center justify-between sticky top-0 z-50">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-commander-red rounded-lg flex items-center justify-center">
+            <Shield className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <span className="font-bold text-white text-sm tracking-widest uppercase">Mat-Commander</span>
+            <div className="text-xs text-commander-muted">The Lab Edition</div>
+          </div>
+        </div>
+        <div className="text-xs text-commander-muted font-mono">
+          {new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+        </div>
+      </header>
+
+      {/* Page Content */}
+      <main className="flex-1 overflow-auto">
+        <Outlet />
+      </main>
+
+      {/* Bottom Nav */}
+      <nav className="bg-commander-surface border-t border-commander-border px-2 py-2 sticky bottom-0 z-50">
+        <div className="flex justify-around">
+          {NAV.map(({ path, label, icon: Icon }) => {
+            const active = pathname === path;
+            return (
+              <Link
+                key={path}
+                to={path}
+                className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-all ${
+                  active ? "text-commander-red" : "text-commander-muted hover:text-white"
+                }`}
+              >
+                <Icon className="w-5 h-5" />
+                <span className="text-xs font-medium">{label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+    </div>
+  );
+}

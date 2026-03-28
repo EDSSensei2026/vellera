@@ -1,0 +1,63 @@
+{
+  "name": "Technique",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Technique Name"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Escapes & Survival",
+        "Guard Retention",
+        "Passing & Pressure",
+        "Submissions",
+        "Wrestling & Takedowns",
+        "MMA Fundamentals",
+        "Junior - Movement",
+        "Junior - BJJ Basics"
+      ],
+      "title": "Category"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description / Criteria"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Coach Notes"
+    },
+    "xp": {
+      "type": "number",
+      "title": "Total XP",
+      "default": 0
+    },
+    "mastery_level": {
+      "type": "number",
+      "title": "Mastery Level (1-5)",
+      "minimum": 0,
+      "maximum": 5,
+      "default": 0
+    },
+    "is_junior": {
+      "type": "boolean",
+      "title": "Junior Technique",
+      "default": false
+    },
+    "last_drilled": {
+      "type": "string",
+      "format": "date",
+      "title": "Last Drilled"
+    },
+    "locked_for_review": {
+      "type": "boolean",
+      "title": "Locked (Review Only)",
+      "default": false
+    }
+  },
+  "required": [
+    "name",
+    "category"
+  ]
+}

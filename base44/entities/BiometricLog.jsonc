@@ -1,0 +1,60 @@
+{
+  "name": "BiometricLog",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Date"
+    },
+    "recovery_pct": {
+      "type": "number",
+      "title": "Whoop Recovery (%)",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "hrv": {
+      "type": "number",
+      "title": "HRV (ms)"
+    },
+    "rhr": {
+      "type": "number",
+      "title": "Resting Heart Rate (bpm)"
+    },
+    "sleep_performance": {
+      "type": "number",
+      "title": "Sleep Performance (%)",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "body_battery": {
+      "type": "number",
+      "title": "Garmin Body Battery",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "strain": {
+      "type": "number",
+      "title": "Whoop Strain Score"
+    },
+    "weight_lbs": {
+      "type": "number",
+      "title": "Weight (lbs)"
+    },
+    "water_oz": {
+      "type": "number",
+      "title": "Water Intake (oz)"
+    },
+    "caloric_intake": {
+      "type": "number",
+      "title": "Caloric Intake"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Notes"
+    }
+  },
+  "required": [
+    "date"
+  ]
+}

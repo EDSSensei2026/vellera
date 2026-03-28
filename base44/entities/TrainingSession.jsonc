@@ -1,0 +1,110 @@
+{
+  "name": "TrainingSession",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Session Date"
+    },
+    "session_type": {
+      "type": "string",
+      "enum": [
+        "BJJ Foundations",
+        "MMA Wrestling",
+        "No-Gi",
+        "Masters Class",
+        "S&C Strength",
+        "S&C Zone2",
+        "Home Mobility",
+        "Open Mat"
+      ],
+      "title": "Session Type"
+    },
+    "location": {
+      "type": "string",
+      "enum": [
+        "The Lab",
+        "Work Gym",
+        "Crunch Fitness",
+        "Home"
+      ],
+      "title": "Location"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "title": "Duration (mins)"
+    },
+    "gas_level": {
+      "type": "number",
+      "title": "Gas Level (1-10)",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "gas_remaining_pct": {
+      "type": "number",
+      "title": "Gas Tank Remaining (%)"
+    },
+    "pressure_effectiveness": {
+      "type": "string",
+      "enum": [
+        "No (They moved too much)",
+        "Partial (Transitioned often)",
+        "Yes (Heavy Top Pressure)"
+      ],
+      "title": "Did you cook your opponent?"
+    },
+    "successful_escapes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Successful Escapes"
+    },
+    "techniques_drilled": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Techniques Drilled"
+    },
+    "mma_striking_accuracy": {
+      "type": "number",
+      "title": "Striking Accuracy (1-5)",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "mma_taken_down": {
+      "type": "boolean",
+      "title": "Got Taken Down?"
+    },
+    "wall_work_rounds": {
+      "type": "number",
+      "title": "Wall Work Rounds"
+    },
+    "injury_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Pain/Injury Areas"
+    },
+    "session_notes": {
+      "type": "string",
+      "title": "Session Notes"
+    },
+    "xp_awarded_technique": {
+      "type": "string",
+      "title": "XP Awarded To Technique"
+    },
+    "xp_amount": {
+      "type": "number",
+      "title": "XP Amount",
+      "default": 5
+    }
+  },
+  "required": [
+    "date",
+    "session_type"
+  ]
+}

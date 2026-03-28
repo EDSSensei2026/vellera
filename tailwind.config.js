@@ -4,6 +4,9 @@ module.exports = {
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+      fontFamily: {
+        inter: ['Inter', 'sans-serif'],
+      },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
@@ -58,7 +61,13 @@ module.exports = {
   				accent: 'hsl(var(--sidebar-accent))',
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
-  				ring: 'hsl(var(--sidebar-ring))'
+  				ring: 'hsl(var(--sidebar-ring))',
+  			},
+  			'commander-dark': 'hsl(var(--commander-dark))',
+  			'commander-surface': 'hsl(var(--commander-surface))',
+  			'commander-border': 'hsl(var(--commander-border))',
+  			'commander-red': 'hsl(var(--commander-red))',
+  			'commander-muted': 'hsl(var(--commander-muted))',
   			}
   		},
   		keyframes: {
