@@ -33,7 +33,7 @@ export default function Layout() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-commander-dark flex flex-col relative">
+    <div className="h-screen bg-commander-dark flex flex-col relative overflow-hidden">
       {/* Rotating Background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         {WARRIOR_IMAGES.map((src, i) => (
