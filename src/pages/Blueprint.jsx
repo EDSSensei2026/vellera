@@ -288,13 +288,21 @@ const SON_IMAGE = "https://media.base44.com/images/public/69c722c665db36b41f55ba
 
 export default function Blueprint() {
   const [imgIndex, setImgIndex] = useState(0);
+  const [athlete, setAthlete] = useState("dad");
+  const [section, setSection] = useState("nutrition");
+
+  const isDad = athlete === "dad";
+  const profile = isDad ? DAD : SON;
+  const meals = isDad ? DAD_MEALS : SON_MEALS;
+  const plan = isDad ? DAD_WEEKLY : SON_WEEKLY;
+  const supps = isDad ? DAD_SUPPS : SON_SUPPS;
+  const heroImg = isDad ? DAD_IMAGES[imgIndex] : SON_IMAGE;
 
   // cycle dad images every 5s
   useEffect(() => {
     const t = setInterval(() => setImgIndex(i => (i + 1) % DAD_IMAGES.length), 5000);
     return () => clearInterval(t);
   }, []);
-  const heroImg = isDad ? DAD_IMAGES[imgIndex] : SON_IMAGE;
 
   return (
     <div className="p-4 space-y-4 max-w-lg mx-auto pb-24">
