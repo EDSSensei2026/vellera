@@ -45,11 +45,8 @@ export default function Layout() {
       </div>
       {/* Hidden Background Music */}
       <div className="fixed -bottom-full -right-full" style={{opacity: 0, pointerEvents: 'none', width: 1, height: 1, overflow: 'hidden'}}>
-        <iframe
-          src="https://www.youtube.com/embed/Me6IG-fTQDI?autoplay=1&loop=1&playlist=Me6IG-fTQDI&controls=0&rel=0&mute=0"
-          allow="autoplay; encrypted-media"
-          title="Motivation Music"
-        />
+        <iframe src="https://www.youtube.com/embed/Me6IG-fTQDI?autoplay=1&loop=1&playlist=Me6IG-fTQDI&controls=0&rel=0&mute=0" allow="autoplay; encrypted-media" title="Motivation Music 1" />
+        <iframe src="https://www.youtube.com/embed/qTNcs3NSYWI?autoplay=1&loop=1&playlist=qTNcs3NSYWI&controls=0&rel=0&mute=0" allow="autoplay; encrypted-media" title="Motivation Music 2" />
       </div>
 
       {/* Top Header */}
