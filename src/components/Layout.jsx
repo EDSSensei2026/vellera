@@ -25,6 +25,7 @@ const NAV = [
 export default function Layout() {
   const { pathname } = useLocation();
   const [imgIndex, setImgIndex] = useState(0);
+  const [entered, setEntered] = useState(false);
 
   useEffect(() => {
     const t = setInterval(() => setImgIndex(i => (i + 1) % WARRIOR_IMAGES.length), 8000);
@@ -44,15 +45,36 @@ export default function Layout() {
         <div className="absolute inset-0 bg-commander-dark/60" />
       </div>
       {/* YouTube Music Player */}
-      <div className="fixed bottom-16 right-3 z-40">
-        <iframe
-          src="https://www.youtube.com/embed/Me6IG-fTQDI?autoplay=1&loop=1&playlist=Me6IG-fTQDI&controls=1&rel=0"
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-          className="w-48 h-28 rounded-xl border border-commander-border opacity-90 shadow-2xl"
-          title="Motivation Music"
-        />
-      </div>
+      {entered && (
+        <div className="fixed bottom-16 right-3 z-40">
+          <iframe
+            src="https://www.youtube.com/embed/Me6IG-fTQDI?autoplay=1&loop=1&playlist=Me6IG-fTQDI&controls=1&rel=0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            className="w-48 h-28 rounded-xl border border-commander-border opacity-90 shadow-2xl"
+            title="Motivation Music"
+          />
+        </div>
+      )}
+
+      {/* Enter Splash */}
+      {!entered && (
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="text-center space-y-4 px-8">
+            <div className="w-16 h-16 bg-commander-red rounded-2xl flex items-center justify-center mx-auto mb-2">
+              <Shield className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-white text-3xl font-black tracking-widest uppercase">Mat-Commander</h1>
+            <p className="text-commander-muted text-sm">The Lab Edition</p>
+            <button
+              onClick={() => setEntered(true)}
+              className="mt-6 bg-commander-red text-white font-black text-lg px-10 py-4 rounded-2xl hover:bg-red-700 transition-all uppercase tracking-widest shadow-2xl"
+            >
+              Enter The Lab
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Top Header */}
       <header className="bg-commander-surface/95 backdrop-blur border-b border-commander-border px-4 py-3 flex items-center justify-between sticky top-0 z-50 relative z-50">
