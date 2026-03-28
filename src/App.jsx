@@ -15,6 +15,7 @@ import JuniorTracker from './pages/JuniorTracker';
 import VideoVault from './pages/VideoVault';
 import Blueprint from './pages/Blueprint';
 import FoodLog from './pages/FoodLog';
+import Progress from './pages/Progress';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -53,6 +54,7 @@ const AuthenticatedApp = () => {
         <Route path="/vault" element={<VideoVault />} />
         <Route path="/blueprint" element={<Blueprint />} />
         <Route path="/food" element={<FoodLog />} />
+        <Route path="/progress" element={<Progress />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
