@@ -17,6 +17,7 @@ import Blueprint from './pages/Blueprint';
 import FoodLog from './pages/FoodLog';
 import Progress from './pages/Progress';
 import SparringPartners from './pages/SparringPartners';
+import TrainingHub from './pages/TrainingHub';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -57,6 +58,7 @@ const AuthenticatedApp = () => {
         <Route path="/food" element={<FoodLog />} />
         <Route path="/progress" element={<Progress />} />
         <Route path="/partners" element={<SparringPartners />} />
+        <Route path="/hub" element={<TrainingHub />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

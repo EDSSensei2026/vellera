@@ -1,0 +1,44 @@
+{
+  "name": "Curriculum_Progress",
+  "type": "object",
+  "properties": {
+    "curriculum_id": {
+      "type": "string",
+      "title": "Curriculum ID"
+    },
+    "user_email": {
+      "type": "string",
+      "title": "User Email"
+    },
+    "completion_status": {
+      "type": "string",
+      "enum": [
+        "Not Started",
+        "In Progress",
+        "Finished"
+      ],
+      "title": "Completion Status",
+      "default": "Not Started"
+    },
+    "assessment_score": {
+      "type": "number",
+      "title": "Assessment Score (%)",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "started_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Date Started"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Date Completed"
+    }
+  },
+  "required": [
+    "curriculum_id",
+    "user_email"
+  ]
+}

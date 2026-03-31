@@ -1,0 +1,34 @@
+{
+  "name": "Training_Curriculum",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Module Title"
+    },
+    "description": {
+      "type": "string",
+      "title": "Module Description"
+    },
+    "syllabus": {
+      "type": "string",
+      "title": "Detailed Syllabus"
+    },
+    "video_url": {
+      "type": "string",
+      "title": "Video URL (YouTube/Vimeo)"
+    },
+    "order": {
+      "type": "number",
+      "title": "Display Order",
+      "default": 0
+    },
+    "duration_minutes": {
+      "type": "number",
+      "title": "Duration (minutes)"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}
