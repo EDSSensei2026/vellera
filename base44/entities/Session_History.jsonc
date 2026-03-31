@@ -1,0 +1,84 @@
+{
+  "name": "Session_History",
+  "type": "object",
+  "properties": {
+    "workout_id": {
+      "type": "string",
+      "title": "Workout ID (Foreign Key)"
+    },
+    "date_completed": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Date Completed"
+    },
+    "total_time_spent": {
+      "type": "number",
+      "title": "Total Time Spent (seconds)"
+    },
+    "completed_rounds": {
+      "type": "number",
+      "title": "Completed Rounds",
+      "default": 1
+    },
+    "notes": {
+      "type": "string",
+      "title": "Session Notes"
+    },
+    "difficulty_rating": {
+      "type": "number",
+      "title": "User Difficulty Rating (1-5)",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "energy_level_after": {
+      "type": "number",
+      "title": "Energy Level After (1-10)",
+      "minimum": 1,
+      "maximum": 10
+    }
+  },
+  "required": [
+    "workout_id",
+    "date_completed",
+    "total_time_spent"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

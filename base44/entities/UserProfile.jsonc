@@ -1,0 +1,91 @@
+{
+  "name": "UserProfile",
+  "type": "object",
+  "properties": {
+    "momentum_score": {
+      "type": "number",
+      "title": "Momentum Score",
+      "default": 0
+    },
+    "momentum_level": {
+      "type": "number",
+      "title": "Momentum Level",
+      "default": 1
+    },
+    "current_streak_days": {
+      "type": "number",
+      "title": "Current Streak (days)",
+      "default": 0
+    },
+    "lifetime_workouts": {
+      "type": "number",
+      "title": "Lifetime Workouts Completed",
+      "default": 0
+    },
+    "lifetime_combat_rounds": {
+      "type": "number",
+      "title": "Lifetime Combat Rounds",
+      "default": 0
+    },
+    "lifetime_minutes": {
+      "type": "number",
+      "title": "Lifetime Training Minutes",
+      "default": 0
+    },
+    "subscription_status": {
+      "type": "string",
+      "enum": [
+        "trial",
+        "active",
+        "inactive"
+      ],
+      "title": "Subscription Status",
+      "default": "trial"
+    },
+    "last_workout_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Last Workout Date"
+    }
+  },
+  "required": [],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

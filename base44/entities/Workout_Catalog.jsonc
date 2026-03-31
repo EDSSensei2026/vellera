@@ -1,0 +1,92 @@
+{
+  "name": "Workout_Catalog",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Workout Title"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Combat",
+        "Foundation",
+        "Reset",
+        "Strength",
+        "Conditioning"
+      ],
+      "title": "Category"
+    },
+    "difficulty_level": {
+      "type": "string",
+      "enum": [
+        "All Levels",
+        "Beginner",
+        "Intermediate",
+        "Advanced"
+      ],
+      "title": "Difficulty Level"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "title": "Duration (minutes)"
+    },
+    "audio_track_url": {
+      "type": "string",
+      "title": "Audio Track URL (Spotify/Custom)"
+    },
+    "description": {
+      "type": "string",
+      "title": "Workout Description"
+    },
+    "exercise_list": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "duration_seconds": {
+            "type": "number"
+          },
+          "rest_seconds": {
+            "type": "number"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "Exercise List"
+    },
+    "is_published": {
+      "type": "boolean",
+      "title": "Published",
+      "default": false
+    }
+  },
+  "required": [
+    "title",
+    "category",
+    "duration_minutes"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
