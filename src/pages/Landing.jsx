@@ -210,9 +210,13 @@ export default function Landing() {
           <h2 className="text-4xl font-black mb-12">Meet the Creator.</h2>
 
           <div className="bg-commander-surface border border-commander-border rounded-2xl p-12 space-y-6">
-            {/* Placeholder Avatar */}
-            <div className="w-32 h-32 mx-auto bg-gradient-to-br from-vellera-blue to-vellera-green rounded-full border-4 border-commander-border flex items-center justify-center">
-              <span className="text-5xl">🛡️</span>
+            {/* Founder Avatar */}
+            <div className="w-32 h-32 mx-auto rounded-full border-4 border-commander-border overflow-hidden shadow-lg">
+              <img
+                src="https://media.base44.com/images/public/69c722c665db36b41f55ba9c/f8c8b63ac_Gemini_Generated_Image_l5e1fyl5e1fyl5e1.png"
+                alt="Asaad Morman"
+                className="w-full h-full object-cover object-top"
+              />
             </div>
 
             <div>

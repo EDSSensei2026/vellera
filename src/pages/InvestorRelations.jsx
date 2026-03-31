@@ -118,12 +118,13 @@ export default function InvestorRelations() {
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-black mb-12 text-center">The Unfair Advantage: The Founder</h2>
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Image Placeholder */}
-            <div className="relative h-96 bg-gradient-to-br from-vellera-blue/30 to-vellera-green/30 rounded-2xl border border-commander-border flex items-center justify-center">
-              <div className="text-center">
-                <Shield className="w-24 h-24 text-vellera-blue mx-auto mb-4" />
-                <p className="text-gray-400 text-sm">Asaad Morman — Founder</p>
-              </div>
+            {/* Founder Image */}
+            <div className="relative h-96 rounded-2xl border border-commander-border overflow-hidden shadow-2xl">
+              <img
+                src="https://media.base44.com/images/public/69c722c665db36b41f55ba9c/f8c8b63ac_Gemini_Generated_Image_l5e1fyl5e1fyl5e1.png"
+                alt="Asaad Morman — Founder"
+                className="w-full h-full object-cover"
+              />
             </div>
 
             {/* Bio */}
