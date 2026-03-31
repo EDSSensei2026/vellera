@@ -25,33 +25,8 @@ export default function Welcome() {
 
   return (
     <div className="w-full h-screen bg-vellera-dark flex flex-col items-center justify-center p-4 space-y-6">
-      {/* Vellera Logo - Dynamic V Arrow */}
-      <div className="relative w-24 h-24 flex items-center justify-center mb-4">
-        <svg
-          viewBox="0 0 100 100"
-          className="w-full h-full"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {/* V-shaped arrow pointing forward */}
-          <path
-            d="M 30 20 L 50 60 L 70 20"
-            stroke="#00E5FF"
-            strokeWidth="6"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          {/* Arrow head pointing right */}
-          <path
-            d="M 70 45 L 85 50 L 70 55"
-            stroke="#00E5FF"
-            strokeWidth="6"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
+      {/* Vellera Logo */}
+      <img src="https://media.base44.com/images/public/69c722c665db36b41f55ba9c/80e6bcea8_Gemini_Generated_Image_cza447cza447cza4.png" alt="Vellera Tactical" className="w-56 h-auto mb-4" />
 
       {/* Headline */}
       <h1 className="text-white text-4xl font-black text-center tracking-tight">
