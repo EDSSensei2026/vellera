@@ -108,6 +108,13 @@ export default function TabStackLayout() {
 
   const currentTabId = getCurrentTabId();
 
+  // Reset scroll when pathname changes
+  useEffect(() => {
+    if (scrollRefs.current[currentTabId]) {
+      scrollRefs.current[currentTabId] = 0;
+    }
+  }, [pathname]);
+
   return (
     <div className="h-screen bg-commander-dark flex flex-col relative overflow-hidden">
       {/* Vellera Animated Background */}
@@ -163,7 +170,7 @@ export default function TabStackLayout() {
       )}
 
       {/* Top Header */}
-      <header className="bg-commander-surface/95 backdrop-blur border-b border-commander-border px-4 py-3 flex items-center justify-between sticky top-0 z-50">
+      <header className="bg-commander-surface/95 backdrop-blur border-b border-commander-border px-4 py-3 flex items-center justify-between sticky top-0 z-50 safe-area-top">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-commander-red rounded-lg flex items-center justify-center">
             <Shield className="w-4 h-4 text-white" />
@@ -195,7 +202,7 @@ export default function TabStackLayout() {
       </main>
 
       {/* Bottom Nav - 5 tabs */}
-      <nav className="bg-commander-surface/95 backdrop-blur border-t border-commander-border px-2 py-2 fixed bottom-0 left-0 right-0 z-50 safe-area-bottom">
+      <nav className="bg-commander-surface/95 backdrop-blur border-t border-commander-border px-2 py-3 fixed bottom-0 left-0 right-0 z-50 safe-area-bottom">
         <div className="flex justify-around">
           {PRIMARY_NAV.map(({ path, label, icon: Icon, glow }) => {
             const active = pathname === path;
@@ -203,7 +210,7 @@ export default function TabStackLayout() {
               <Link
                 key={path}
                 to={path}
-                className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-all touch-target-min ${
+                className={`flex flex-col items-center gap-0.5 px-2 py-2 rounded-lg transition-all min-h-[44px] min-w-[44px] flex items-center justify-center ${
                   active
                     ? glow
                       ? "text-red-500 drop-shadow-lg drop-shadow-red-500/50"
