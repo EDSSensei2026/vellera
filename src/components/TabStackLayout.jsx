@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import DrillTimer from "./DrillTimer";
 import VelleraBackground from "./VelleraBackground";
+import SpotifyPlayer from "./SpotifyPlayer";
 import {
   Drawer,
   DrawerContent,
@@ -62,6 +63,7 @@ export default function TabStackLayout() {
   const [musicOn, setMusicOn] = useState(false);
   const [muted, setMuted] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [spotifyOpen, setSpotifyOpen] = useState(false);
 
   // Enforce strict dark mode on Android
   useEffect(() => {
@@ -117,18 +119,25 @@ export default function TabStackLayout() {
 
       {/* Music Toggle Button */}
       <button
-        onClick={() => {
-          if (!musicOn) {
-            setMusicOn(true);
-          } else {
-            setMuted(m => !m);
-          }
-        }}
-        className="fixed bottom-20 right-3 z-50 w-9 h-9 rounded-full bg-commander-surface border border-commander-border flex items-center justify-center text-base shadow-lg hover:border-commander-red transition-all"
-        title={musicOn ? (muted ? "Unmute music" : "Mute music") : "Play music"}
+        onClick={() => setSpotifyOpen(!spotifyOpen)}
+        className="fixed bottom-20 right-3 z-50 w-9 h-9 rounded-full bg-green-700 border border-green-600 flex items-center justify-center text-base shadow-lg hover:bg-green-600 transition-all"
+        title="Open Spotify Player"
       >
-        {!musicOn ? "🎵" : muted ? "🔇" : "🔊"}
+        🎵
       </button>
+
+      {/* Spotify Player Modal */}
+      {spotifyOpen && (
+        <div className="fixed bottom-20 right-3 z-50 w-80 max-h-96 shadow-2xl rounded-xl overflow-hidden">
+          <button
+            onClick={() => setSpotifyOpen(false)}
+            className="absolute top-2 right-2 z-10 text-white bg-black/50 hover:bg-black/70 rounded-full w-6 h-6 flex items-center justify-center"
+          >
+            ✕
+          </button>
+          <SpotifyPlayer />
+        </div>
+      )}
 
       {/* Top Header */}
       <header className="bg-commander-surface/95 backdrop-blur border-b border-commander-border px-4 py-3 flex items-center justify-between sticky top-0 z-50">
