@@ -34,6 +34,7 @@ const Settings = lazy(() => import('./pages/Settings'));
 const ActiveWorkout = lazy(() => import('./pages/ActiveWorkout'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Paywall = lazy(() => import('./pages/Paywall'));
+const InvestorRelations = lazy(() => import('./pages/InvestorRelations'));
 
 const LoadingSpinner = () => (
   <div className="fixed inset-0 flex items-center justify-center bg-commander-dark z-50">
@@ -95,6 +96,7 @@ const AuthenticatedApp = () => {
         <Route path="/profile" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Profile /></Suspense></PageTransition>} />
       </Route>
       <Route path="/paywall" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Paywall /></Suspense></PageTransition>} />
+      <Route path="/investors" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><InvestorRelations /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>
