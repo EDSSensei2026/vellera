@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import DrillTimer from "./DrillTimer";
-import { Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Drawer,
