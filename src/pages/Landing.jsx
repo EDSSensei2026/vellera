@@ -56,6 +56,13 @@ export default function Landing() {
 
   return (
     <div className="bg-vellera-dark min-h-screen text-white overflow-hidden">
+      {/* Beta Banner */}
+      <div className="bg-yellow-900/40 border-b border-yellow-700 px-4 py-3 text-center">
+        <p className="text-sm text-yellow-300 font-semibold">
+          ⚠️ <span className="uppercase tracking-widest">Beta Version</span> — Currently awaiting App Store & Play Store approval. Features may change.
+        </p>
+      </div>
+
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden">
         {/* Animated gradient background */}
@@ -81,15 +88,15 @@ export default function Landing() {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <a href="#" className="px-6 py-4 bg-vellera-blue text-vellera-dark font-bold rounded-lg hover:shadow-lg hover:shadow-vellera-blue/50 transition-all flex items-center justify-center gap-2">
-                  📱 Download for iOS
-                </a>
-                <a href="#" className="px-6 py-4 bg-vellera-green text-vellera-dark font-bold rounded-lg hover:shadow-lg hover:shadow-vellera-green/50 transition-all flex items-center justify-center gap-2">
-                  🤖 Download for Android
-                </a>
+                <button disabled className="px-6 py-4 bg-gray-600 text-white font-bold rounded-lg opacity-60 cursor-not-allowed flex items-center justify-center gap-2" title="Coming soon after app store approval">
+                    📱 Coming to iOS
+                  </button>
+                  <button disabled className="px-6 py-4 bg-gray-600 text-white font-bold rounded-lg opacity-60 cursor-not-allowed flex items-center justify-center gap-2" title="Coming soon after app store approval">
+                    🤖 Coming to Android
+                  </button>
               </div>
 
-              <p className="text-sm text-gray-400">✨ 7-day free trial. No credit card required.</p>
+              <p className="text-sm text-gray-500">📋 Beta access available — download directly from this web app for now.</p>
             </div>
 
             {/* Right: Phone Mockup */}
