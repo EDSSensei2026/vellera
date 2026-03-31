@@ -1,0 +1,55 @@
+{
+  "name": "System_Config",
+  "type": "object",
+  "properties": {
+    "config_key": {
+      "type": "string",
+      "title": "Configuration Key"
+    },
+    "founding_athlete_count": {
+      "type": "number",
+      "title": "Founding Athlete Subscriptions Sold",
+      "default": 0
+    },
+    "founding_athlete_cap": {
+      "type": "number",
+      "title": "Founding Athlete Cap",
+      "default": 1000
+    },
+    "founding_athlete_price_usd": {
+      "type": "number",
+      "title": "Founding Athlete Price (USD)",
+      "default": 249.99
+    },
+    "stripe_price_id": {
+      "type": "string",
+      "title": "Stripe Price ID for Founding Athlete"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last Updated Timestamp"
+    }
+  },
+  "required": [
+    "config_key"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

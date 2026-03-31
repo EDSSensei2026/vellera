@@ -37,7 +37,8 @@
       "enum": [
         "trial",
         "active",
-        "inactive"
+        "inactive",
+        "active_lifetime"
       ],
       "title": "Subscription Status",
       "default": "trial"
@@ -46,6 +47,29 @@
       "type": "string",
       "format": "date",
       "title": "Last Workout Date"
+    },
+    "subscription_tier": {
+      "type": "string",
+      "enum": [
+        "Free",
+        "Premium",
+        "Founding Athlete"
+      ],
+      "title": "Subscription Tier",
+      "default": "Free"
+    },
+    "subscription_price_paid": {
+      "type": "number",
+      "title": "Price Paid (USD)"
+    },
+    "lifetime_access": {
+      "type": "boolean",
+      "title": "Lifetime Access",
+      "default": false
+    },
+    "apple_music_token": {
+      "type": "string",
+      "title": "Apple Music Token (Future Integration)"
     }
   },
   "required": [],
