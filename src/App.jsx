@@ -4,9 +4,9 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react'
 import PageNotFound from './lib/PageNotFound';
-import Layout from './components/Layout';
+import TabStackLayout from './components/TabStackLayout';
 
 const Landing = lazy(() => import('./pages/Landing'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
@@ -69,7 +69,7 @@ const AuthenticatedApp = () => {
       <Route path="/welcome" element={<Suspense fallback={<LoadingSpinner />}><Welcome /></Suspense>} />
       <Route path="/home" element={<Suspense fallback={<LoadingSpinner />}><Home /></Suspense>} />
       <Route path="/combat" element={<Suspense fallback={<LoadingSpinner />}><CombatHub /></Suspense>} />
-      <Route element={<Layout />}>
+      <Route element={<TabStackLayout />}>
         <Route path="/" element={<Suspense fallback={<LoadingSpinner />}><Dashboard /></Suspense>} />
         <Route path="/training" element={<Suspense fallback={<LoadingSpinner />}><TrainingLog /></Suspense>} />
         <Route path="/techniques" element={<Suspense fallback={<LoadingSpinner />}><TechniqueLibrary /></Suspense>} />

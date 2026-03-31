@@ -25,7 +25,9 @@ function BiometricEntry({ onSaved }) {
     },
     onMutate: async (data) => {
       const today = new Date().toISOString().split("T")[0];
-      // Update today's biometric cache
+      // Cancel ongoing queries to prevent race conditions
+      await queryClient.cancelQueries({ queryKey: ["biometrics"] });
+      // Update today's biometric cache with optimistic data
       queryClient.setQueryData(["biometrics", "today"], data);
       // Update week's biometric cache
       queryClient.setQueryData(["biometrics", "week"], (old) => old ? [data, ...old.slice(0, 6)] : [data]);
@@ -34,6 +36,8 @@ function BiometricEntry({ onSaved }) {
     onSuccess: (data, variables, context) => {
       toast.success("Morning metrics saved!");
       setForm({ recovery_pct: "", hrv: "", rhr: "", sleep_performance: "", body_battery: "", weight_lbs: "", caloric_intake: "" });
+      // Re-fetch to ensure server data is synced
+      queryClient.refetchQueries({ queryKey: ["biometrics", "today"] });
       onSaved();
     },
     onError: (error, variables, context) => {
@@ -143,6 +147,8 @@ function SessionJournal() {
       }
     },
     onMutate: async (sessionData) => {
+      // Cancel ongoing queries to prevent race conditions
+      await queryClient.cancelQueries({ queryKey: ["sessions"] });
       // Optimistic update - add to recent sessions
       queryClient.setQueryData(["sessions", "recent"], (old) => old ? [sessionData, ...old.slice(0, 4)] : [sessionData]);
       return { sessionData };
@@ -150,6 +156,8 @@ function SessionJournal() {
     onSuccess: (data, variables, context) => {
       toast.success("Session logged. Stay hydrated, Commander. 🥋");
       setForm(f => ({ ...f, session_notes: "", injury_notes: [], successful_escapes: [], wins: "", lessons: "", lifting_exercises: "" }));
+      // Re-fetch to ensure server data is synced
+      queryClient.refetchQueries({ queryKey: ["sessions", "recent"] });
     },
     onError: (error, variables, context) => {
       toast.error("Failed to log session");

@@ -4,20 +4,31 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Force dark mode as strict default for mobile (Android/iOS compliance) */
+/* CRITICAL: Enforce strict dark mode as default for Android/iOS compliance per Base44 guidelines */
 body, html {
-  color-scheme: dark;
+  color-scheme: dark !important;
+  background-color: #121212 !important;
+  color: #ffffff !important;
 }
 
-/* Prevent light mode override */
+/* Prevent light mode override globally */
 :root {
   color-scheme: dark !important;
+  --force-dark: 1;
 }
 
+/* Prevent system light mode preference from affecting the app */
 @media (prefers-color-scheme: light) {
-  :root:not(.light) {
-    --background: 222 20% 8%;
-    --foreground: 210 20% 92%;
+  :root {
+    color-scheme: dark !important;
+    --background: 7 0% 7%;
+    --foreground: 0 0% 95%;
+  }
+}
+
+/* Android-specific enforcement */
+@supports (padding: max(0px)) {
+  html {
     color-scheme: dark !important;
   }
 }
