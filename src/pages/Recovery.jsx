@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import { ArrowLeft } from "lucide-react"
 
 const RESTORATION_PROTOCOLS = [
   { name: "Open the Book", sets: "10 reps/side", desc: "Lie on your side, knees tucked. Reach top arm over to other side. Opens chest for better breathing." },
@@ -59,8 +60,13 @@ export default function Recovery() {
   const lowSleep = latestLog && latestLog.sleep_performance < 70;
 
   return (
-    <div className="p-4 space-y-4 max-w-lg mx-auto pb-24">
-      <h1 className="text-white text-xl font-black tracking-tight">Recovery Hub</h1>
+    <div className="p-4 space-y-4 max-w-lg mx-auto pb-24 safe-area-top">
+      <div className="flex items-center gap-2 mb-2">
+        <a href="/" className="text-commander-muted hover:text-white transition-all touch-target-min" title="Go back">
+          <ArrowLeft className="w-5 h-5" />
+        </a>
+        <h1 className="text-white text-xl font-black tracking-tight">Recovery Hub</h1>
+      </div>
 
       {/* Alerts */}
       {slowGrowthFlag && (
@@ -121,8 +127,8 @@ export default function Recovery() {
         <p className="text-commander-muted text-xs mb-4">Monday & Friday · 20 minutes · No equipment · 250lb spine & joint care</p>
         <div className="space-y-3">
           {RESTORATION_PROTOCOLS.map((p, i) => (
-            <div key={p.name} className="flex gap-3">
-              <div className="w-6 h-6 rounded-full bg-commander-red flex items-center justify-center flex-shrink-0 mt-0.5">
+            <div key={p.name} className="flex gap-3 p-2 touch-target-min">
+              <div className="w-8 h-8 rounded-full bg-commander-red flex items-center justify-center flex-shrink-0 mt-0.5">
                 <span className="text-white text-xs font-bold">{i + 1}</span>
               </div>
               <div>
@@ -136,11 +142,11 @@ export default function Recovery() {
 
       {/* Weekly Stats */}
       <div className="grid grid-cols-2 gap-2">
-        <div className="bg-commander-surface border border-commander-border rounded-xl p-3 text-center">
+        <div className="bg-commander-surface border border-commander-border rounded-xl p-3 text-center min-h-[80px] flex flex-col items-center justify-center">
           <p className="text-white font-black text-2xl">{weekSessions.length}</p>
           <p className="text-commander-muted text-xs">Sessions this week</p>
         </div>
-        <div className="bg-commander-surface border border-commander-border rounded-xl p-3 text-center">
+        <div className="bg-commander-surface border border-commander-border rounded-xl p-3 text-center min-h-[80px] flex flex-col items-center justify-center">
           <p className={`font-black text-2xl ${avgGas > 8 ? "text-red-400" : avgGas > 6 ? "text-yellow-400" : "text-green-400"}`}>{avgGas.toFixed(1)}</p>
           <p className="text-commander-muted text-xs">Avg gas level</p>
         </div>

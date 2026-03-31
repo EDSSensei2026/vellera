@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
-import { Save, Plus } from "lucide-react";
+import { Save, Plus, ArrowLeft } from "lucide-react";
+import { FormError, SubmitButton, RequiredField } from "../components/FormValidation";
 
 const ESCAPE_OPTIONS = ["Trap & Roll (Bridge)", "Shrimping to Guard", "Elbow Escape (Mount)", "Posturing in Closed Guard", "Knee-Shield (Z-Guard)", "Wall Walk (MMA)", "Technical Stand-up"];
 const INJURY_AREAS = ["Lower Back", "Neck", "Fingers/Grips", "Knees", "Shoulders", "Hips", "Ribs"];
@@ -13,13 +14,26 @@ function BiometricEntry({ onSaved }) {
   const [form, setForm] = useState({ recovery_pct: "", hrv: "", rhr: "", sleep_performance: "", body_battery: "", weight_lbs: "", caloric_intake: "" });
   const [saving, setSaving] = useState(false);
 
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const newErrors = {};
+    if (!form.recovery_pct && !form.hrv && !form.rhr) {
+      newErrors.general = "Please enter at least one biometric measurement";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const save = async () => {
+    if (!validate()) return;
     setSaving(true);
     const today = new Date().toISOString().split("T")[0];
     const data = { date: today };
     Object.entries(form).forEach(([k, v]) => { if (v !== "") data[k] = Number(v); });
     await base44.entities.BiometricLog.create(data);
     toast.success("Morning metrics saved!");
+    setForm({ recovery_pct: "", hrv: "", rhr: "", sleep_performance: "", body_battery: "", weight_lbs: "", caloric_intake: "" });
     onSaved();
     setSaving(false);
   };
@@ -40,7 +54,8 @@ function BiometricEntry({ onSaved }) {
   return (
     <div className="bg-commander-surface border border-commander-border rounded-xl p-4">
       <h3 className="text-white font-bold mb-3">Morning Biometrics</h3>
-      <div className="grid grid-cols-2 gap-3 mb-4">
+      {errors.general && <FormError message={errors.general} />}
+      <div className="grid grid-cols-2 gap-3 mb-4 max-h-[300px] overflow-y-auto">
         {field("Whoop Recovery (%)", "recovery_pct", "e.g. 72")}
         {field("HRV (ms)", "hrv", "e.g. 55")}
         {field("Resting HR (bpm)", "rhr", "e.g. 58")}
@@ -48,9 +63,7 @@ function BiometricEntry({ onSaved }) {
         {field("Garmin Body Battery", "body_battery", "e.g. 45")}
         {field("Weight (lbs)", "weight_lbs", "e.g. 249")}
       </div>
-      <button onClick={save} disabled={saving} className="w-full bg-commander-red text-white rounded-lg py-2 text-sm font-bold hover:bg-red-700 transition-all disabled:opacity-50">
-        {saving ? "Saving..." : "Save Morning Metrics"}
-      </button>
+      <SubmitButton onClick={save} disabled={false} loading={saving} label="Save Morning Metrics" />
     </div>
   );
 }
@@ -116,24 +129,41 @@ function SessionJournal() {
     setSaving(false);
   };
 
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const newErrors = {};
+    if (!form.date) newErrors.date = "Date is required";
+    if (!form.duration_minutes || Number(form.duration_minutes) <= 0) newErrors.duration = "Duration must be greater than 0";
+    if (!form.session_type) newErrors.session_type = "Session type is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const isMMA = form.session_type === "MMA Wrestling";
   const isLifting = form.session_type === "S&C Strength";
 
   return (
-    <div className="bg-commander-surface border border-commander-border rounded-xl p-4 space-y-4">
+    <div className="bg-commander-surface border border-commander-border rounded-xl p-4 space-y-4 max-h-[70vh] overflow-y-auto">
       <h3 className="text-white font-bold">Post-Lab Session Journal</h3>
 
       {/* Date & Type */}
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="text-xs text-commander-muted block mb-1">Date</label>
-          <input type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
-            className="w-full bg-gray-800 border border-commander-border rounded-lg px-3 py-2 text-white text-sm" />
+          <RequiredField>
+            <label className="text-xs text-commander-muted block mb-1">Date</label>
+          </RequiredField>
+          <input type="date" value={form.date} onChange={e => { setForm(f => ({ ...f, date: e.target.value })); setErrors(e => ({ ...e, date: "" })); }}
+            className={`w-full bg-gray-800 border rounded-lg px-3 py-2 text-white text-sm focus:outline-none min-h-[44px] ${errors.date ? "border-red-700" : "border-commander-border focus:border-commander-red"}`} />
+          {errors.date && <FormError message={errors.date} />}
         </div>
         <div>
-          <label className="text-xs text-commander-muted block mb-1">Duration (mins)</label>
-          <input type="number" value={form.duration_minutes} onChange={e => setForm(f => ({ ...f, duration_minutes: e.target.value }))}
-            placeholder="60" className="w-full bg-gray-800 border border-commander-border rounded-lg px-3 py-2 text-white text-sm" />
+          <RequiredField>
+            <label className="text-xs text-commander-muted block mb-1">Duration (mins)</label>
+          </RequiredField>
+          <input type="number" value={form.duration_minutes} onChange={e => { setForm(f => ({ ...f, duration_minutes: e.target.value })); setErrors(e => ({ ...e, duration: "" })); }}
+            placeholder="60" className={`w-full bg-gray-800 border rounded-lg px-3 py-2 text-white text-sm focus:outline-none min-h-[44px] ${errors.duration ? "border-red-700" : "border-commander-border focus:border-commander-red"}`} />
+          {errors.duration && <FormError message={errors.duration} />}
         </div>
       </div>
 
@@ -291,10 +321,7 @@ function SessionJournal() {
         </div>
       </div>
 
-      <button onClick={save} disabled={saving} className="w-full bg-commander-red text-white rounded-xl py-3 font-bold flex items-center justify-center gap-2 hover:bg-red-700 transition-all disabled:opacity-50">
-        <Save className="w-4 h-4" />
-        {saving ? "Saving..." : "Save to Mat-Commander DB"}
-      </button>
+      <SubmitButton onClick={() => { if (validate()) save(); }} disabled={false} loading={saving} label="Save to Mat-Commander DB" />
     </div>
   );
 }
@@ -302,22 +329,32 @@ function SessionJournal() {
 export default function TrainingLog() {
   const [tab, setTab] = useState("session");
   const [refreshKey, setRefreshKey] = useState(0);
+  const isDeepLinked = window.location.pathname === "/training";
 
   return (
-    <div className="p-4 space-y-4 max-w-lg mx-auto pb-24">
-      <h1 className="text-white text-xl font-black tracking-tight">Training Log</h1>
+    <div className="p-4 space-y-4 max-w-lg mx-auto pb-24 safe-area-top">
+      <div className="flex items-center gap-2 mb-2">
+        {isDeepLinked && (
+          <a href="/" className="text-commander-muted hover:text-white transition-all touch-target-min" title="Go back">
+            <ArrowLeft className="w-5 h-5" />
+          </a>
+        )}
+        <h1 className="text-white text-xl font-black tracking-tight">Training Log</h1>
+      </div>
 
       <div className="flex bg-commander-surface border border-commander-border rounded-xl overflow-hidden">
         {[["session", "Session Log"], ["biometrics", "Morning Metrics"]].map(([v, l]) => (
-          <button key={v} onClick={() => setTab(v)} className={`flex-1 py-2 text-sm font-medium transition-all ${tab === v ? "bg-commander-red text-white" : "text-commander-muted"}`}>{l}</button>
+          <button key={v} onClick={() => setTab(v)} className={`flex-1 py-2 px-2 text-xs sm:text-sm font-medium transition-all min-h-[44px] flex items-center justify-center ${tab === v ? "bg-commander-red text-white" : "text-commander-muted"}`}>{l}</button>
         ))}
       </div>
 
-      {tab === "biometrics" ? (
-        <BiometricEntry onSaved={() => setRefreshKey(k => k + 1)} />
-      ) : (
-        <SessionJournal key={refreshKey} />
-      )}
+      <div className="flex-1 overflow-hidden">
+        {tab === "biometrics" ? (
+          <BiometricEntry onSaved={() => setRefreshKey(k => k + 1)} />
+        ) : (
+          <SessionJournal key={refreshKey} />
+        )}
+      </div>
     </div>
   );
 }

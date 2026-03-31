@@ -83,4 +83,25 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Safe area padding for notches/system UI */
+  .safe-area-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
+  /* 44x44px minimum touch target */
+  .touch-target-min {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile-friendly text */
+  @media (max-width: 390px) {
+    input, select, textarea, button {
+      font-size: 16px; /* Prevents iOS zoom on focus */
+    }
+  }
 }

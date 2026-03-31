@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
-import { Camera, Loader2, ChevronDown, ChevronUp, Droplets, TrendingUp, TrendingDown, AlertTriangle, CheckCircle } from "lucide-react";
+import { Camera, Loader2, ChevronDown, ChevronUp, Droplets, TrendingUp, TrendingDown, AlertTriangle, CheckCircle, ArrowLeft } from "lucide-react";
+import { FormError } from "../components/FormValidation";
 
 // Daily targets from Blueprint
 const TARGETS = {
@@ -234,15 +235,20 @@ Return JSON with: food_description (string, describe what you see), calories (nu
   const proteinRemaining = target.protein_g - totals.protein_g;
 
   return (
-    <div className="p-4 space-y-4 max-w-lg mx-auto pb-24">
-      <h1 className="text-white text-xl font-black tracking-tight">Food Log</h1>
+    <div className="p-4 space-y-4 max-w-lg mx-auto pb-24 safe-area-top">
+      <div className="flex items-center gap-2 mb-2">
+        <a href="/" className="text-commander-muted hover:text-white transition-all touch-target-min" title="Go back">
+          <ArrowLeft className="w-5 h-5" />
+        </a>
+        <h1 className="text-white text-xl font-black tracking-tight">Food Log</h1>
+      </div>
 
       {/* Athlete Toggle */}
       <div className="flex bg-commander-surface border border-commander-border rounded-xl overflow-hidden">
-        <button onClick={() => setAthlete("dad")} className={`flex-1 py-2.5 text-sm font-bold transition-all ${athlete === "dad" ? "bg-commander-red text-white" : "text-commander-muted"}`}>
+        <button onClick={() => setAthlete("dad")} className={`flex-1 py-2.5 px-2 text-xs sm:text-sm font-bold transition-all min-h-[44px] flex items-center justify-center ${athlete === "dad" ? "bg-commander-red text-white" : "text-commander-muted"}`}>
           ⚔️ Commander
         </button>
-        <button onClick={() => setAthlete("son")} className={`flex-1 py-2.5 text-sm font-bold transition-all ${athlete === "son" ? "bg-blue-700 text-white" : "text-commander-muted"}`}>
+        <button onClick={() => setAthlete("son")} className={`flex-1 py-2.5 px-2 text-xs sm:text-sm font-bold transition-all min-h-[44px] flex items-center justify-center ${athlete === "son" ? "bg-blue-700 text-white" : "text-commander-muted"}`}>
           🥋 Lil Prodigy
         </button>
       </div>
@@ -288,7 +294,7 @@ Return JSON with: food_description (string, describe what you see), calories (nu
           <div className="flex gap-1 ml-auto">
             {[8, 16, 24, 32].map(oz => (
               <button key={oz} onClick={() => setWaterToday(w => Math.min(target.water_oz, w + oz))}
-                className="text-xs bg-cyan-950 border border-cyan-800 text-cyan-400 px-2 py-1 rounded-lg hover:bg-cyan-900 transition-all">
+                className="text-xs bg-cyan-950 border border-cyan-800 text-cyan-400 px-2 py-1.5 rounded-lg hover:bg-cyan-900 transition-all min-h-[40px] flex items-center touch-target-min">
                 +{oz}oz
               </button>
             ))}
@@ -327,7 +333,7 @@ Return JSON with: food_description (string, describe what you see), calories (nu
           {photoPreview ? (
             <img src={photoPreview} alt="meal preview" className="w-full h-40 object-cover" />
           ) : (
-            <div className="py-8 text-center">
+            <div className="py-12 text-center min-h-[160px] flex flex-col items-center justify-center">
               <Camera className="w-8 h-8 text-commander-muted mx-auto mb-2" />
               <p className="text-commander-muted text-sm font-medium">Tap to take photo or upload</p>
               <p className="text-commander-muted text-xs mt-1">AI will analyze portions & estimate macros</p>
@@ -336,7 +342,7 @@ Return JSON with: food_description (string, describe what you see), calories (nu
         </label>
 
         <button onClick={handleAnalyze} disabled={analyzing || !photoFile}
-          className="w-full bg-commander-red text-white rounded-xl py-3 font-bold flex items-center justify-center gap-2 hover:bg-red-700 transition-all disabled:opacity-60">
+          className="w-full bg-commander-red text-white rounded-xl py-3 font-bold flex items-center justify-center gap-2 hover:bg-red-700 transition-all disabled:opacity-60 min-h-[44px]" title={!photoFile ? "Please upload a photo first" : ""}>
           {analyzing ? (
             <><Loader2 className="w-4 h-4 animate-spin" /> Analyzing with Vision AI...</>
           ) : (
