@@ -4,16 +4,26 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Auto-apply dark class on dark preference */
-@media (prefers-color-scheme: dark) {
-  :not([class*="light"]) {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    color-scheme: dark;
+/* Force dark mode as strict default for mobile (Android/iOS compliance) */
+body, html {
+  color-scheme: dark;
+}
+
+/* Prevent light mode override */
+:root {
+  color-scheme: dark !important;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not(.light) {
+    --background: 222 20% 8%;
+    --foreground: 210 20% 92%;
+    color-scheme: dark !important;
   }
 }
 
 :root {
+  color-scheme: dark;
   --background: 222 20% 8%;
   --foreground: 210 20% 92%;
   --card: 222 18% 10%;

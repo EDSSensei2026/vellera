@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Save, Plus, ArrowLeft } from "lucide-react";
 import { FormError, SubmitButton, RequiredField } from "../components/FormValidation";
@@ -18,12 +18,17 @@ function BiometricEntry({ onSaved }) {
   const [form, setForm] = useState({ recovery_pct: "", hrv: "", rhr: "", sleep_performance: "", body_battery: "", weight_lbs: "", caloric_intake: "" });
   const [errors, setErrors] = useState({});
 
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (data) => {
       return base44.entities.BiometricLog.create(data);
     },
     onMutate: async (data) => {
-      // Optimistic update
+      const today = new Date().toISOString().split("T")[0];
+      // Update today's biometric cache
+      queryClient.setQueryData(["biometrics", "today"], data);
+      // Update week's biometric cache
+      queryClient.setQueryData(["biometrics", "week"], (old) => old ? [data, ...old.slice(0, 6)] : [data]);
       return { data };
     },
     onSuccess: (data, variables, context) => {
@@ -31,8 +36,10 @@ function BiometricEntry({ onSaved }) {
       setForm({ recovery_pct: "", hrv: "", rhr: "", sleep_performance: "", body_battery: "", weight_lbs: "", caloric_intake: "" });
       onSaved();
     },
-    onError: (error) => {
+    onError: (error, variables, context) => {
       toast.error("Failed to save metrics");
+      // Rollback on error
+      queryClient.refetchQueries({ queryKey: ["biometrics"] });
     },
   });
 
@@ -121,6 +128,7 @@ function SessionJournal() {
     }));
   };
 
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (sessionData) => {
       await base44.entities.TrainingSession.create(sessionData);
@@ -135,15 +143,18 @@ function SessionJournal() {
       }
     },
     onMutate: async (sessionData) => {
-      // Optimistic update
+      // Optimistic update - add to recent sessions
+      queryClient.setQueryData(["sessions", "recent"], (old) => old ? [sessionData, ...old.slice(0, 4)] : [sessionData]);
       return { sessionData };
     },
     onSuccess: (data, variables, context) => {
       toast.success("Session logged. Stay hydrated, Commander. 🥋");
       setForm(f => ({ ...f, session_notes: "", injury_notes: [], successful_escapes: [], wins: "", lessons: "", lifting_exercises: "" }));
     },
-    onError: () => {
+    onError: (error, variables, context) => {
       toast.error("Failed to log session");
+      // Rollback on error
+      queryClient.refetchQueries({ queryKey: ["sessions", "recent"] });
     },
   });
 

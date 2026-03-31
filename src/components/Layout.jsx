@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import DrillTimer from "./DrillTimer";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Drawer,
@@ -98,19 +98,14 @@ export default function Layout() {
         </div>
       </header>
 
-      {/* Page Content */}
+      {/* Page Content - Tab Stack */}
       <main className="flex-1 overflow-hidden relative z-10">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={pathname}
-            initial={{ x: 300, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -300, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
+        {/* Each tab stays mounted in DOM, switches visibility */}
+        <div className={`absolute inset-0 overflow-auto ${pathname === "/" ? "block" : "hidden"}`}>
+          <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
             <Outlet />
           </motion.div>
-        </AnimatePresence>
+        </div>
       </main>
 
       {/* Bottom Nav - 5 tabs */}

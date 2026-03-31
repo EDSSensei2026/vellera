@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import SafetyValve from "../components/SafetyValve";
 import { usePullToRefresh } from "../hooks/usePullToRefresh";
@@ -41,10 +42,7 @@ function getCompPhase(daysLeft) {
 
 export default function Dashboard() {
   const containerRef = useRef(null);
-  const [todayLog, setTodayLog] = useState(null);
-  const [weekLogs, setWeekLogs] = useState([]);
-  const [recentSessions, setRecentSessions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [refreshing, setRefreshing] = useState(false);
 
   const today = new Date();
@@ -58,27 +56,41 @@ export default function Dashboard() {
   const sc = SC_PROMPT[dayOfWeek];
   const todayClasses = SCHEDULE[dayOfWeek] || [];
 
+  const { data: todayLog = null } = useQuery({
+    queryKey: ["biometrics", "today"],
+    queryFn: async () => {
+      const todayStr = today.toISOString().split("T")[0];
+      const result = await base44.entities.BiometricLog.filter({ date: todayStr });
+      return result[0] || null;
+    },
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const { data: weekLogs = [] } = useQuery({
+    queryKey: ["biometrics", "week"],
+    queryFn: () => base44.entities.BiometricLog.list("-date", 7),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const { data: recentSessions = [] } = useQuery({
+    queryKey: ["sessions", "recent"],
+    queryFn: () => base44.entities.TrainingSession.list("-date", 5),
+    staleTime: 1000 * 60 * 5,
+  });
+
   const handleRefresh = async () => {
     setRefreshing(true);
     try {
-      const todayStr = today.toISOString().split("T")[0];
-      const [tl, wl, rs] = await Promise.all([
-        base44.entities.BiometricLog.filter({ date: todayStr }),
-        base44.entities.BiometricLog.list("-date", 7),
-        base44.entities.TrainingSession.list("-date", 5),
+      await Promise.all([
+        queryClient.refetchQueries({ queryKey: ["biometrics", "today"] }),
+        queryClient.refetchQueries({ queryKey: ["biometrics", "week"] }),
+        queryClient.refetchQueries({ queryKey: ["sessions", "recent"] }),
       ]);
-      setTodayLog(tl[0] || null);
-      setWeekLogs(wl);
-      setRecentSessions(rs);
       toast.success("Data refreshed");
     } finally {
       setRefreshing(false);
     }
   };
-
-  useEffect(() => {
-    handleRefresh();
-  }, []);
 
   const pullRef = usePullToRefresh(handleRefresh);
   useTabStack(containerRef);
@@ -135,11 +147,7 @@ export default function Dashboard() {
       <DailyFocus />
 
       {/* Safety Valve */}
-      {loading ? (
-        <div className="h-20 bg-commander-surface border border-commander-border rounded-xl animate-pulse" />
-      ) : (
-        <SafetyValve log={todayLog} weekLogs={weekLogs} />
-      )}
+      <SafetyValve log={todayLog} weekLogs={weekLogs} />
 
       {/* Today's Biometrics */}
       {todayLog && (
