@@ -1,0 +1,23 @@
+{
+  "name": "Temporal_Countdowns",
+  "type": "object",
+  "properties": {
+    "event_title": {
+      "type": "string",
+      "title": "Event Title"
+    },
+    "target_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Target Date & Time"
+    },
+    "description": {
+      "type": "string",
+      "title": "Event Description"
+    }
+  },
+  "required": [
+    "event_title",
+    "target_timestamp"
+  ]
+}
