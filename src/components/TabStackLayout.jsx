@@ -13,7 +13,7 @@ import {
   DrawerTitle,
   DrawerClose,
 } from "@/components/ui/drawer";
-import { Shield, Activity, BookOpen, Trophy, Users, Dumbbell, Video, Flame, Apple, BarChart2, Swords, Zap, Calendar } from "lucide-react";
+import { Shield, Activity, BookOpen, Trophy, Users, Dumbbell, Video, Flame, Apple, BarChart2, Swords, Zap, CalendarDays } from "lucide-react";
 
 const DEFAULT_IMAGES = [
   "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
@@ -46,7 +46,7 @@ const MORE_NAV = [
   { path: "/events", label: "Events", icon: Trophy },
   { path: "/squads", label: "Squads", icon: Users },
   { path: "/wearables", label: "Wearables", icon: Activity },
-  { path: "/calendar", label: "Calendar", icon: Calendar },
+  { path: "/calendar", label: "Calendar", icon: CalendarDays },
   { path: "/settings", label: "Settings", icon: Shield },
 ];
 

@@ -113,6 +113,7 @@ const AuthenticatedApp = () => {
       <Route path="/squads" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingSquads /></Suspense></PageTransition>} />
       <Route path="/wearables" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WearablesHub /></Suspense></PageTransition>} />
       <Route path="/calendar" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingCalendar /></Suspense></PageTransition>} />
+      <Route path="/calendar" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingCalendar /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>
