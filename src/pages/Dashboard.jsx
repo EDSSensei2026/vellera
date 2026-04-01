@@ -6,6 +6,7 @@ import SafetyValve from "../components/SafetyValve";
 import { usePullToRefresh } from "../hooks/usePullToRefresh";
 import { useTabStack } from "../hooks/useTabStack";
 import RecoveryPerformanceWidget from "../components/RecoveryPerformanceWidget";
+import StreaksWidget from "../components/StreaksWidget";
 import DailyFocus from "../components/DailyFocus";
 import WeightTracker from "../components/WeightTracker";
 import DailyMatPriority from "../components/DailyMatPriority";
@@ -148,6 +149,9 @@ export default function Dashboard() {
 
       {/* Daily Mat Priority — AI-generated morning brief */}
       <DailyMatPriority />
+
+      {/* Streaks */}
+      <StreaksWidget />
 
       {/* Weight Tracker */}
       <WeightTracker />
