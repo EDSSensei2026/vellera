@@ -1,0 +1,130 @@
+{
+  "name": "PlanAdjustment",
+  "type": "object",
+  "properties": {
+    "plan_id": {
+      "type": "string",
+      "title": "Training Plan ID"
+    },
+    "user_email": {
+      "type": "string",
+      "title": "User Email"
+    },
+    "adjustment_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Date of Adjustment"
+    },
+    "target_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Date Being Adjusted"
+    },
+    "recovery_score": {
+      "type": "number",
+      "title": "Recovery Score at Adjustment Time",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "intensity_zone": {
+      "type": "string",
+      "enum": [
+        "Rest",
+        "Technique",
+        "Moderate",
+        "Green",
+        "Peak"
+      ],
+      "title": "Recommended Intensity Zone"
+    },
+    "original_activity": {
+      "type": "string",
+      "title": "Original Planned Activity"
+    },
+    "original_intensity": {
+      "type": "string",
+      "title": "Original Planned Intensity"
+    },
+    "adjusted_activity": {
+      "type": "string",
+      "title": "New Recommended Activity"
+    },
+    "adjusted_intensity": {
+      "type": "string",
+      "title": "New Recommended Intensity"
+    },
+    "adjustment_reason": {
+      "type": "string",
+      "title": "Why This Adjustment Was Made"
+    },
+    "metrics_snapshot": {
+      "type": "object",
+      "properties": {
+        "hrv": {
+          "type": "number"
+        },
+        "resting_hr": {
+          "type": "number"
+        },
+        "sleep_performance": {
+          "type": "number"
+        },
+        "body_battery": {
+          "type": "number"
+        },
+        "recent_gas_avg": {
+          "type": "number"
+        }
+      },
+      "title": "Biometric Snapshot at Adjustment"
+    },
+    "was_applied": {
+      "type": "boolean",
+      "title": "User Applied This Adjustment",
+      "default": false
+    }
+  },
+  "required": [
+    "plan_id",
+    "user_email",
+    "adjustment_date",
+    "target_date",
+    "recovery_score"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

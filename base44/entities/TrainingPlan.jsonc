@@ -1,0 +1,172 @@
+{
+  "name": "TrainingPlan",
+  "type": "object",
+  "properties": {
+    "plan_name": {
+      "type": "string",
+      "title": "Plan Name"
+    },
+    "user_email": {
+      "type": "string",
+      "title": "User Email"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Plan Start Date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Plan End Date"
+    },
+    "primary_goal": {
+      "type": "string",
+      "enum": [
+        "strength",
+        "bjj",
+        "endurance",
+        "bodybuilding",
+        "tactical",
+        "whole_health"
+      ],
+      "title": "Primary Goal"
+    },
+    "total_phases": {
+      "type": "number",
+      "title": "Total Training Phases"
+    },
+    "current_phase": {
+      "type": "number",
+      "title": "Current Phase (1-indexed)",
+      "default": 1
+    },
+    "base_intensity_level": {
+      "type": "string",
+      "enum": [
+        "Beginner",
+        "Intermediate",
+        "Advanced"
+      ],
+      "title": "Base Intensity Level",
+      "default": "Intermediate"
+    },
+    "weeks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "week_number": {
+            "type": "number"
+          },
+          "phase": {
+            "type": "number"
+          },
+          "focus": {
+            "type": "string"
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "day_of_week": {
+                  "type": "number",
+                  "description": "0=Sunday, 6=Saturday"
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "base_activity": {
+                  "type": "string"
+                },
+                "base_duration_minutes": {
+                  "type": "number"
+                },
+                "base_intensity": {
+                  "type": "string",
+                  "enum": [
+                    "light",
+                    "moderate",
+                    "high",
+                    "max"
+                  ]
+                },
+                "adjusted_activity": {
+                  "type": "string",
+                  "description": "Current recommended activity (may differ from base)"
+                },
+                "adjusted_intensity": {
+                  "type": "string"
+                },
+                "reason_for_adjustment": {
+                  "type": "string"
+                },
+                "is_adjusted": {
+                  "type": "boolean",
+                  "default": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "title": "Multi-Week Plan Structure"
+    },
+    "auto_adjust_enabled": {
+      "type": "boolean",
+      "title": "Auto-Adjust Based on Recovery",
+      "default": true
+    },
+    "notes": {
+      "type": "string",
+      "title": "Plan Notes / Goals"
+    }
+  },
+  "required": [
+    "plan_name",
+    "user_email",
+    "start_date",
+    "primary_goal"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
