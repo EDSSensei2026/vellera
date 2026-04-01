@@ -18,30 +18,40 @@ export default function WearableProviderCard({ provider, token, onRefresh }) {
 
   const handleConnect = async () => {
     setLoading(true);
-    base44.analytics.track({ eventName: "wearable_connect_initiated", properties: { provider } });
-    const res = await base44.functions.invoke(cfg.startFn, {});
-    const url = res.data?.url;
-    if (url) {
-      const popup = window.open(url, "_blank", "width=600,height=700");
-      const timer = setInterval(() => {
-        if (!popup || popup.closed) {
-          clearInterval(timer);
-          setLoading(false);
-          base44.analytics.track({ eventName: "wearable_connected", properties: { provider } });
-          onRefresh();
-        }
-      }, 500);
-    } else {
+    try {
+      base44.analytics.track({ eventName: "wearable_connect_initiated", properties: { provider } });
+      const res = await base44.functions.invoke(cfg.startFn, {});
+      const url = res.data?.url;
+      if (url) {
+        const popup = window.open(url, "_blank", "width=600,height=700");
+        const timer = setInterval(() => {
+          if (!popup || popup.closed) {
+            clearInterval(timer);
+            setLoading(false);
+            base44.analytics.track({ eventName: "wearable_connected", properties: { provider } });
+            onRefresh();
+          }
+        }, 500);
+      } else {
+        setLoading(false);
+      }
+    } catch (e) {
+      console.error(`${provider} connect error:`, e);
       setLoading(false);
     }
   };
 
   const handleSync = async () => {
     setSyncing(true);
-    base44.analytics.track({ eventName: "wearable_sync", properties: { provider } });
-    await base44.functions.invoke(cfg.syncFn, {});
-    setSyncing(false);
-    onRefresh();
+    try {
+      base44.analytics.track({ eventName: "wearable_sync", properties: { provider } });
+      await base44.functions.invoke(cfg.syncFn, {});
+      onRefresh();
+    } catch (e) {
+      console.error(`${provider} sync error:`, e);
+    } finally {
+      setSyncing(false);
+    }
   };
 
   const handleDisconnect = async () => {
