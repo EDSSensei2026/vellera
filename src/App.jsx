@@ -3,7 +3,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { lazy, Suspense } from 'react'
 import PageNotFound from './lib/PageNotFound';
 import { AnimatePresence } from 'framer-motion';
@@ -64,6 +64,18 @@ const LoadingSpinner = () => (
 );
 // Add page imports here
 
+const PublicApp = () => (
+  <AnimatePresence mode="wait">
+    <Routes>
+      <Route path="/landing" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Landing /></Suspense></PageTransition>} />
+      <Route path="/terms" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TermsOfService /></Suspense></PageTransition>} />
+      <Route path="/privacy" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PrivacyPolicy /></Suspense></PageTransition>} />
+      <Route path="/auth" element={<Auth />} />
+      <Route path="*" element={<Navigate to="/landing" replace />} />
+    </Routes>
+  </AnimatePresence>
+);
+
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
@@ -81,23 +93,17 @@ const AuthenticatedApp = () => {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
-      navigateToLogin();
-      return null;
+      // Show login page
+      return <Auth />;
     }
   }
 
-  // Render the main app
+  // Render the main authenticated app
   return (
     <AnimatePresence mode="wait">
       <Routes>
-      <Route path="/landing" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Landing /></Suspense></PageTransition>} />
-      <Route path="/terms" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TermsOfService /></Suspense></PageTransition>} />
-      <Route path="/privacy" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PrivacyPolicy /></Suspense></PageTransition>} />
       <Route path="/welcome" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Welcome /></Suspense></PageTransition>} />
       <Route path="/workout" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ActiveWorkout /></Suspense></PageTransition>} />
-      <Route path="/home" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Home /></Suspense></PageTransition>} />
-      <Route path="/combat" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><CombatHub /></Suspense></PageTransition>} />
       <Route element={<TabStackLayout />}>
        <Route path="/" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Dashboard /></Suspense></PageTransition>} />
        <Route path="/training" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingLog /></Suspense></PageTransition>} />
@@ -137,7 +143,6 @@ const AuthenticatedApp = () => {
       <Route path="/squad-challenges" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SquadChallenges /></Suspense></PageTransition>} />
       <Route path="/macros" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MacroTracking /></Suspense></PageTransition>} />
       <Route path="/leaderboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Leaderboard /></Suspense></PageTransition>} />
-      <Route path="/auth" element={<Auth />} />
       <Route path="/setup" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ProfileSetup /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
@@ -145,14 +150,24 @@ const AuthenticatedApp = () => {
   );
 };
 
+const RootApp = () => {
+  const { isLoadingAuth, authError } = useAuth();
+  
+  if (isLoadingAuth) return <LoadingSpinner />;
+  
+  // Show public routes if not authenticated (and no user_not_registered error)
+  const isAuthenticated = !authError || authError.type === 'user_not_registered';
+  
+  return isAuthenticated ? <AuthenticatedApp /> : <PublicApp />;
+};
+
 
 function App() {
-
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
-          <AuthenticatedApp />
+          <RootApp />
         </Router>
         <Toaster />
       </QueryClientProvider>
