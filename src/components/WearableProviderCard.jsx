@@ -18,6 +18,7 @@ export default function WearableProviderCard({ provider, token, onRefresh }) {
 
   const handleConnect = async () => {
     setLoading(true);
+    base44.analytics.track({ eventName: "wearable_connect_initiated", properties: { provider } });
     const res = await base44.functions.invoke(cfg.startFn, {});
     const url = res.data?.url;
     if (url) {
@@ -26,6 +27,7 @@ export default function WearableProviderCard({ provider, token, onRefresh }) {
         if (!popup || popup.closed) {
           clearInterval(timer);
           setLoading(false);
+          base44.analytics.track({ eventName: "wearable_connected", properties: { provider } });
           onRefresh();
         }
       }, 500);
@@ -36,6 +38,7 @@ export default function WearableProviderCard({ provider, token, onRefresh }) {
 
   const handleSync = async () => {
     setSyncing(true);
+    base44.analytics.track({ eventName: "wearable_sync", properties: { provider } });
     await base44.functions.invoke(cfg.syncFn, {});
     setSyncing(false);
     onRefresh();
@@ -43,6 +46,7 @@ export default function WearableProviderCard({ provider, token, onRefresh }) {
 
   const handleDisconnect = async () => {
     setLoading(true);
+    base44.analytics.track({ eventName: "wearable_disconnected", properties: { provider } });
     await base44.entities.WearableToken.delete(token.id);
     setLoading(false);
     onRefresh();
