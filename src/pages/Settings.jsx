@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { ArrowLeft, Trash2 } from "lucide-react";
+import { ArrowLeft, Trash2, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -17,6 +18,15 @@ export default function Settings() {
   const navigate = useNavigate();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await base44.auth.logout();
+      toast.success("Logged out successfully");
+    } catch (err) {
+      toast.error("Logout failed: " + err.message);
+    }
+  };
 
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
@@ -59,6 +69,14 @@ export default function Settings() {
           <p className="text-commander-muted text-xs">Logged in as</p>
           <p className="text-white font-semibold">User Account</p>
         </div>
+
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-2 bg-commander-surface border border-commander-border text-white hover:border-commander-red rounded-xl py-3 px-4 font-semibold transition-all min-h-[44px]"
+        >
+          <LogOut className="w-4 h-4" />
+          Logout
+        </button>
 
         <button
           onClick={() => setShowDeleteDialog(true)}
