@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import BackButton from "../components/BackButton";
+import InjuryPatternAnalytics from "../components/InjuryPatternAnalytics";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
 const RESTORATION_PROTOCOLS = [
@@ -117,6 +118,9 @@ export default function Recovery() {
           </ResponsiveContainer>
         </div>
       )}
+
+      {/* Injury Pattern Analytics */}
+      <InjuryPatternAnalytics />
 
       {/* Heavyweight Restoration Protocol */}
       <div className="bg-commander-surface border border-commander-border rounded-xl p-4">
