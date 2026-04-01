@@ -2,58 +2,57 @@
   "name": "SupplementLog",
   "type": "object",
   "properties": {
-    "date": {
-      "type": "string",
-      "format": "date",
-      "title": "Date"
-    },
     "name": {
       "type": "string",
       "title": "Supplement / Medication Name"
     },
-    "dosage": {
-      "type": "string",
-      "title": "Dosage (e.g. 5g, 500mg, 2 caps)"
-    },
-    "timing": {
-      "type": "string",
-      "enum": [
-        "Morning",
-        "Pre-Workout",
-        "Post-Workout",
-        "With Meal",
-        "Bedtime",
-        "As Needed"
-      ],
-      "title": "Timing"
-    },
-    "category": {
+    "type": {
       "type": "string",
       "enum": [
         "Supplement",
         "Medication",
-        "Vitamin/Mineral",
+        "Vitamin",
         "Herb/Adaptogen",
-        "Protein/Amino",
-        "Recovery"
+        "Protein/Fuel",
+        "Other"
       ],
-      "title": "Category"
+      "title": "Type"
     },
-    "taken": {
-      "type": "boolean",
-      "title": "Taken Today",
-      "default": false
-    },
-    "notes": {
+    "dose": {
       "type": "string",
-      "title": "Notes / Side Effects"
+      "title": "Dose (e.g. 500mg, 2 capsules)"
+    },
+    "timing": {
+      "type": "string",
+      "enum": [
+        "Pre-Workout",
+        "Post-Workout",
+        "Morning",
+        "Evening",
+        "With Meals",
+        "As Needed"
+      ],
+      "title": "Timing"
+    },
+    "purpose": {
+      "type": "string",
+      "title": "Purpose / Notes"
+    },
+    "active": {
+      "type": "boolean",
+      "title": "Currently Taking",
+      "default": true
+    },
+    "date_started": {
+      "type": "string",
+      "format": "date",
+      "title": "Date Started"
     }
   },
   "required": [
-    "date",
     "name",
-    "timing",
-    "category"
+    "type",
+    "timing"
   ],
   "rls": {
     "create": {},

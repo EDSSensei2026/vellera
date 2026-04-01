@@ -45,6 +45,7 @@ const WearablesHub = lazy(() => import('./pages/WearablesHub'));
 const TrainingCalendar = lazy(() => import('./pages/TrainingCalendar'));
 const MasteryMap = lazy(() => import('./pages/MasteryMap'));
 const PreWorkoutPrep = lazy(() => import('./pages/PreWorkoutPrep'));
+const SupplementLog = lazy(() => import('./pages/SupplementLog'));
 
 const LoadingSpinner = () => (
   <div className="fixed inset-0 flex items-center justify-center bg-commander-dark z-50">
@@ -117,6 +118,7 @@ const AuthenticatedApp = () => {
       <Route path="/calendar" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingCalendar /></Suspense></PageTransition>} />
       <Route path="/mastery-map" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MasteryMap /></Suspense></PageTransition>} />
       <Route path="/prep" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PreWorkoutPrep /></Suspense></PageTransition>} />
+      <Route path="/supplements" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SupplementLog /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>
