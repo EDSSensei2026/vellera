@@ -8,6 +8,7 @@ import { useTabStack } from "../hooks/useTabStack";
 import RecoveryPerformanceWidget from "../components/RecoveryPerformanceWidget";
 import DailyFocus from "../components/DailyFocus";
 import WeightTracker from "../components/WeightTracker";
+import DailyMatPriority from "../components/DailyMatPriority";
 import { Droplets, Flame, Moon, Heart, Zap, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -139,6 +140,9 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+
+      {/* Daily Mat Priority — AI-generated morning brief */}
+      <DailyMatPriority />
 
       {/* Weight Tracker */}
       <WeightTracker />
