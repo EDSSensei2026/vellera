@@ -177,8 +177,8 @@ export default function TabStackLayout() {
             <Shield className="w-4 h-4 text-white" />
           </div>
           <div>
-            <span className="font-bold text-white text-sm tracking-widest uppercase">Mat-Commander</span>
-            <div className="text-xs text-commander-muted">The Lab Edition</div>
+            <span className="font-bold text-white text-sm tracking-widest uppercase">Apex Forge</span>
+            <div className="text-xs text-commander-muted">Train Everything</div>
           </div>
         </div>
         <div className="text-xs text-commander-muted font-mono">
