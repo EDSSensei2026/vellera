@@ -8,6 +8,9 @@ import { useTabStack } from "../hooks/useTabStack";
 import RecoveryPerformanceWidget from "../components/RecoveryPerformanceWidget";
 import RecoveryCommandCenter from "../components/RecoveryCommandCenter";
 import WhoopConnect from "../components/WhoopConnect";
+import StrengthMetrics from "../components/StrengthMetrics.jsx";
+import BodybuildingMetrics from "../components/BodybuildingMetrics.jsx";
+import EnduranceMetrics from "../components/EnduranceMetrics.jsx";
 import StreaksWidget from "../components/StreaksWidget";
 import DailyFocus from "../components/DailyFocus";
 import WeightTracker from "../components/WeightTracker";
@@ -51,8 +54,17 @@ export default function Dashboard() {
   const containerRef = useRef(null);
   const queryClient = useQueryClient();
   const [refreshing, setRefreshing] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
+    base44.auth.me().then(u => {
+      if (u) {
+        base44.entities.UserProfile.filter({ created_by: u.email }).then(profiles => {
+          setUserProfile(profiles[0] || null);
+        });
+      }
+    });
+
     base44.analytics.track({
       eventName: "daily_login",
       properties: {
@@ -182,6 +194,11 @@ export default function Dashboard() {
 
       {/* Daily Focus */}
       <DailyFocus />
+
+      {/* Path-Specific Metrics */}
+      {userProfile?.fitness_path === "strength" && <StrengthMetrics />}
+      {userProfile?.fitness_path === "bodybuilding" && <BodybuildingMetrics />}
+      {userProfile?.fitness_path === "endurance" && <EnduranceMetrics />}
 
       {/* Safety Valve */}
       <SafetyValve log={todayLog} weekLogs={weekLogs} />
