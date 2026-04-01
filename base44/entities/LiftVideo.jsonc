@@ -1,0 +1,102 @@
+{
+  "name": "LiftVideo",
+  "type": "object",
+  "properties": {
+    "exercise_name": {
+      "type": "string",
+      "title": "Exercise Name"
+    },
+    "video_url": {
+      "type": "string",
+      "title": "Video URL"
+    },
+    "thumbnail_url": {
+      "type": "string",
+      "title": "Thumbnail URL"
+    },
+    "form_score": {
+      "type": "number",
+      "title": "Form Score (0-100)",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "technique_errors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Identified Technique Errors"
+    },
+    "form_tips": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Form Correction Tips"
+    },
+    "safety_alerts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Safety Concerns"
+    },
+    "ai_feedback": {
+      "type": "string",
+      "title": "Full AI Analysis"
+    },
+    "analyzed": {
+      "type": "boolean",
+      "title": "Analysis Complete",
+      "default": false
+    },
+    "analysis_date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Analysis Date"
+    }
+  },
+  "required": [
+    "exercise_name",
+    "video_url"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
