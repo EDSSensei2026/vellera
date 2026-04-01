@@ -55,6 +55,7 @@ const MacroTracking = lazy(() => import('./pages/MacroTracking'));
 const Auth = lazy(() => import('./pages/Auth'));
 const ProfileSetup = lazy(() => import('./pages/ProfileSetup'));
 const CommunityChallenge = lazy(() => import('./pages/CommunityChallenge'));
+const Leaderboard = lazy(() => import('./pages/Leaderboard'));
 
 const LoadingSpinner = () => (
   <div className="fixed inset-0 flex items-center justify-center bg-commander-dark z-50">
@@ -135,6 +136,7 @@ const AuthenticatedApp = () => {
       <Route path="/lift-analysis" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><LiftAnalysis /></Suspense></PageTransition>} />
       <Route path="/squad-challenges" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SquadChallenges /></Suspense></PageTransition>} />
       <Route path="/macros" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MacroTracking /></Suspense></PageTransition>} />
+      <Route path="/leaderboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Leaderboard /></Suspense></PageTransition>} />
       <Route path="/auth" element={<Auth />} />
       <Route path="/setup" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ProfileSetup /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />

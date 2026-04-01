@@ -1,0 +1,76 @@
+{
+  "name": "MonthlyConsistency",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "title": "User Email"
+    },
+    "user_name": {
+      "type": "string",
+      "title": "User Name"
+    },
+    "year_month": {
+      "type": "string",
+      "title": "Year-Month (YYYY-MM)",
+      "description": "Format: 2026-04 for April 2026"
+    },
+    "total_sessions": {
+      "type": "number",
+      "title": "Total Training Sessions",
+      "default": 0
+    },
+    "total_minutes": {
+      "type": "number",
+      "title": "Total Training Minutes",
+      "default": 0
+    },
+    "streak_days": {
+      "type": "number",
+      "title": "Current Streak (days)",
+      "default": 0
+    },
+    "consistency_score": {
+      "type": "number",
+      "title": "Consistency Score (0-100)",
+      "description": "Weighted score: 40% sessions, 40% minutes, 20% streak",
+      "default": 0
+    },
+    "categories_trained": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Training Categories (BJJ, Strength, etc)",
+      "default": []
+    },
+    "avg_session_duration": {
+      "type": "number",
+      "title": "Average Session Duration (minutes)",
+      "default": 0
+    }
+  },
+  "required": [
+    "user_email",
+    "year_month",
+    "consistency_score"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
