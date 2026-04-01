@@ -10,6 +10,7 @@ import DailyFocus from "../components/DailyFocus";
 import WeightTracker from "../components/WeightTracker";
 import DailyMatPriority from "../components/DailyMatPriority";
 import AdaptiveHome from "../components/AdaptiveHome";
+import AdaptiveWorkoutDashboard from "../components/AdaptiveWorkoutDashboard";
 import { Droplets, Flame, Moon, Heart, Zap, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -208,6 +209,9 @@ export default function Dashboard() {
 
       {/* Recovery vs Performance Widget */}
       <RecoveryPerformanceWidget />
+
+      {/* Adaptive Workout Dashboard — filtered by user track */}
+      <AdaptiveWorkoutDashboard />
 
       {/* Quick Links */}
       <div className="grid grid-cols-2 gap-2">
