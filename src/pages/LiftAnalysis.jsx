@@ -9,12 +9,27 @@ const EXERCISES = [
   "Barbell Curl", "Tricep Extension", "Leg Press", "Hack Squat", "Machine Leg Press"
 ];
 
+import { useEffect } from "react";
+
 export default function LiftAnalysis() {
   const [videos, setVideos] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(null);
   const [exercise, setExercise] = useState("Squat");
   const [fileInput, setFileInput] = useState(null);
+
+  const seedDemoData = async () => {
+    try {
+      const result = await base44.functions.invoke('seedExampleVideos', {});
+      if (result.data.success) {
+        toast.success("Demo videos loaded!");
+        loadVideos();
+      }
+    } catch (err) {
+      console.log("Demo data already seeded or error:", err.message);
+      loadVideos();
+    }
+  };
 
   const handleUpload = async (file) => {
     if (!file) return;
@@ -62,7 +77,12 @@ export default function LiftAnalysis() {
   const loadVideos = async () => {
     const data = await base44.entities.LiftVideo.list("-created_date", 20);
     setVideos(data);
+    setLoading(false);
   };
+
+  useEffect(() => {
+    seedDemoData();
+  }, []);
 
   return (
     <div className="p-4 space-y-4 max-w-lg mx-auto pb-24 safe-area-top overflow-auto h-screen">

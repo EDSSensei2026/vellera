@@ -109,6 +109,16 @@ function ClipCard({ clip, onDelete }) {
   );
 }
 
+const seedDemoBJJClips = async () => {
+  try {
+    const result = await base44.functions.invoke('seedExampleVideos', {});
+    return result.data.success;
+  } catch (err) {
+    console.log("Demo clips already seeded");
+    return false;
+  }
+};
+
 export default function VideoVault() {
   const [clips, setClips] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -126,7 +136,9 @@ export default function VideoVault() {
   const load = () =>
     base44.entities.VideoVault.list("-date", 50).then(c => { setClips(c); setLoading(false); });
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { 
+    seedDemoBJJClips().then(() => load());
+  }, []);
 
   const handleUploadAndAnalyze = async () => {
     if (!form.title) { toast.error("Please add a clip title"); return; }
