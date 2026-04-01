@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import VideoModal from "../components/VideoModal";
 import { base44 } from "@/api/base44Client";
-import { Plus, Star, PlayCircle } from "lucide-react";
+import { Plus, Star, PlayCircle, Map } from "lucide-react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 const CATEGORIES = ["Escapes & Survival", "Guard Retention", "Passing & Pressure", "Submissions", "Wrestling & Takedowns", "MMA Fundamentals"];
@@ -107,9 +108,14 @@ export default function TechniqueLibrary() {
     <div className="p-4 space-y-4 max-w-lg mx-auto pb-24 safe-area-top overflow-auto h-screen">
       <div className="flex items-center justify-between">
         <h1 className="text-white text-xl font-black tracking-tight">Skill Matrix</h1>
-        <button onClick={() => setShowAdd(s => !s)} className="min-h-[44px] min-w-[44px] flex items-center justify-center bg-commander-red text-white rounded-lg hover:bg-red-700 transition-all">
-          <Plus className="w-5 h-5" />
-        </button>
+        <div className="flex gap-2">
+          <Link to="/mastery-map" className="min-h-[44px] min-w-[44px] flex items-center justify-center bg-commander-surface border border-[#00E5FF40] text-[#00E5FF] rounded-lg hover:border-[#00E5FF] transition-all">
+            <Map className="w-5 h-5" />
+          </Link>
+          <button onClick={() => setShowAdd(s => !s)} className="min-h-[44px] min-w-[44px] flex items-center justify-center bg-commander-red text-white rounded-lg hover:bg-red-700 transition-all">
+            <Plus className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
       {/* Blue Belt Progress */}
