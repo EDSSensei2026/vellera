@@ -2,25 +2,25 @@ import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import SafetyValve from "../components/SafetyValve";
-import { usePullToRefresh } from "../hooks/usePullToRefresh";
-import { useTabStack } from "../hooks/useTabStack";
-import RecoveryPerformanceWidget from "../components/RecoveryPerformanceWidget";
-import RecoveryCommandCenter from "../components/RecoveryCommandCenter";
-import WhoopConnect from "../components/WhoopConnect";
-import WeeklyTrainingTrends from "../components/WeeklyTrainingTrends";
-import PerformanceSummaryWidget from "../components/PerformanceSummaryWidget";
-import StrengthMetrics from "../components/StrengthMetrics";
-import BodybuildingMetrics from "../components/BodybuildingMetrics";
-import EnduranceMetrics from "../components/EnduranceMetrics";
-import StreaksWidget from "../components/StreaksWidget";
-import DailyFocus from "../components/DailyFocus";
-import WeightTracker from "../components/WeightTracker";
-import DailyMatPriority from "../components/DailyMatPriority";
-import AdaptiveHome from "../components/AdaptiveHome";
-import ReadinessCheckIn from "../components/ReadinessCheckIn";
-import AdaptiveWorkoutDashboard from "../components/AdaptiveWorkoutDashboard";
-import AchievementsWidget from "../components/AchievementsWidget";
+// import SafetyValve from "../components/SafetyValve";
+// import { usePullToRefresh } from "../hooks/usePullToRefresh";
+// import { useTabStack } from "../hooks/useTabStack";
+// import RecoveryPerformanceWidget from "../components/RecoveryPerformanceWidget";
+// import RecoveryCommandCenter from "../components/RecoveryCommandCenter";
+// import WhoopConnect from "../components/WhoopConnect";
+// import WeeklyTrainingTrends from "../components/WeeklyTrainingTrends";
+// import PerformanceSummaryWidget from "../components/PerformanceSummaryWidget";
+// import StrengthMetrics from "../components/StrengthMetrics";
+// import BodybuildingMetrics from "../components/BodybuildingMetrics";
+// import EnduranceMetrics from "../components/EnduranceMetrics";
+// import StreaksWidget from "../components/StreaksWidget";
+// import DailyFocus from "../components/DailyFocus";
+// import WeightTracker from "../components/WeightTracker";
+// import DailyMatPriority from "../components/DailyMatPriority";
+// import AdaptiveHome from "../components/AdaptiveHome";
+// import ReadinessCheckIn from "../components/ReadinessCheckIn";
+// import AdaptiveWorkoutDashboard from "../components/AdaptiveWorkoutDashboard";
+// import AchievementsWidget from "../components/AchievementsWidget";
 import { Droplets, Flame, Moon, Heart, Zap, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -142,8 +142,8 @@ export default function Dashboard() {
     }
   };
 
-  const pullRef = usePullToRefresh(handleRefresh);
-  useTabStack(containerRef);
+  // const pullRef = usePullToRefresh(handleRefresh);
+  // useTabStack(containerRef);
 
   const waterTarget = Math.round(250 / 2 + 32 * (todayClasses.length > 0 ? 1.5 : 0));
 
@@ -217,12 +217,12 @@ export default function Dashboard() {
       {/* <DailyFocus /> */}
 
       {/* Path-Specific Metrics */}
-      {userProfile?.fitness_path === "strength" && <StrengthMetrics />}
+      {/* {userProfile?.fitness_path === "strength" && <StrengthMetrics />}
       {userProfile?.fitness_path === "bodybuilding" && <BodybuildingMetrics />}
-      {userProfile?.fitness_path === "endurance" && <EnduranceMetrics />}
+      {userProfile?.fitness_path === "endurance" && <EnduranceMetrics />} */}
 
       {/* Safety Valve */}
-      <SafetyValve log={todayLog} weekLogs={weekLogs} />
+      {/* <SafetyValve log={todayLog} weekLogs={weekLogs} /> */}
 
       {/* Today's Schedule */}
       {todayClasses.length > 0 && (
