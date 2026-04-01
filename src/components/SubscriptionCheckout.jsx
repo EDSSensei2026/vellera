@@ -3,34 +3,46 @@ import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 
-export default function SubscriptionCheckout({ planType, priceId, onSuccess }) {
+export default function SubscriptionCheckout({ planType, priceId }) {
   const [loading, setLoading] = useState(false);
 
   const handleCheckout = async () => {
     setLoading(true);
+    console.log('Starting checkout with planType:', planType);
+    
     try {
-      // Check if running in iframe (published app requirement)
       if (window.self !== window.top) {
         toast.error('Checkout only works from the published app, not the preview.');
         setLoading(false);
         return;
       }
 
+      if (!planType) {
+        toast.error('Please select a plan');
+        setLoading(false);
+        return;
+      }
+
+      console.log('Invoking createCheckoutSession...');
       const res = await base44.functions.invoke('createCheckoutSession', {
-        planType,
-        priceId,
+        planType: planType,
+        priceId: priceId || null,
       });
 
+      console.log('Response:', res.data);
+      
       if (!res.data?.url) {
         toast.error('Failed to create checkout session');
         setLoading(false);
         return;
       }
 
+      console.log('Redirecting to:', res.data.url);
       window.location.href = res.data.url;
     } catch (error) {
       console.error('Checkout error:', error);
-      toast.error('Checkout failed: ' + error.message);
+      const errorMsg = error.response?.data?.error || error.message || 'Unknown error';
+      toast.error('Checkout failed: ' + errorMsg);
       setLoading(false);
     }
   };
