@@ -126,6 +126,16 @@ function SessionJournal() {
     base44.entities.SparringPartner.list("-created_date", 100).then(setPartners);
   }, []);
 
+  useEffect(() => {
+    base44.analytics.track({
+      eventName: "session_started",
+      properties: {
+        session_type: form.session_type,
+        day_of_week: new Date().toLocaleDateString("en-US", { weekday: "long" }),
+      },
+    });
+  }, []);
+
   const toggle = (field, val) => {
     setForm(f => ({
       ...f,
@@ -155,6 +165,17 @@ function SessionJournal() {
       return { sessionData };
     },
     onSuccess: (data, variables, context) => {
+      base44.analytics.track({
+        eventName: "session_completed",
+        properties: {
+          session_type: variables.session_type,
+          intensity: variables.intensity,
+          intensity_label: variables.intensity <= 3 ? "low" : variables.intensity <= 6 ? "medium" : variables.intensity <= 8 ? "high" : "max",
+          gas_level: variables.gas_level,
+          duration_minutes: Number(variables.duration_minutes) || 0,
+          day_of_week: new Date().toLocaleDateString("en-US", { weekday: "long" }),
+        },
+      });
       base44.analytics.track({
         eventName: "session_logged",
         properties: {
