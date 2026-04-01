@@ -52,6 +52,8 @@ const LiftAnalysis = lazy(() => import('./pages/LiftAnalysis'));
 const StudentFeedbackCenter = lazy(() => import('./pages/StudentFeedbackCenter'));
 const SquadChallenges = lazy(() => import('./pages/SquadChallenges'));
 const MacroTracking = lazy(() => import('./pages/MacroTracking'));
+const Auth = lazy(() => import('./pages/Auth'));
+const ProfileSetup = lazy(() => import('./pages/ProfileSetup'));
 const CommunityChallenge = lazy(() => import('./pages/CommunityChallenge'));
 
 const LoadingSpinner = () => (
@@ -133,6 +135,8 @@ const AuthenticatedApp = () => {
       <Route path="/lift-analysis" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><LiftAnalysis /></Suspense></PageTransition>} />
       <Route path="/squad-challenges" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SquadChallenges /></Suspense></PageTransition>} />
       <Route path="/macros" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MacroTracking /></Suspense></PageTransition>} />
+      <Route path="/auth" element={<Auth />} />
+      <Route path="/setup" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ProfileSetup /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>

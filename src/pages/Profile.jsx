@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Settings } from "lucide-react";
+import { Settings, LogOut, Edit2, Check, X } from "lucide-react";
 import BackButton from "../components/BackButton";
+import { toast } from "sonner";
 import MomentumRing from "../components/MomentumRing";
 import StatsGrid from "../components/StatsGrid";
 import ActivityFeed from "../components/ActivityFeed";
@@ -12,6 +13,8 @@ export default function Profile() {
   const [profile, setProfile] = useState(null);
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const [editForm, setEditForm] = useState({});
 
   useEffect(() => {
     const loadData = async () => {
@@ -28,6 +31,7 @@ export default function Profile() {
         );
         if (profiles.length > 0) {
           setProfile(profiles[0]);
+          setEditForm(profiles[0]);
         }
 
         // Get recent sessions
@@ -47,6 +51,28 @@ export default function Profile() {
     loadData();
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      await base44.auth.logout();
+      toast.success("Logged out successfully");
+    } catch (err) {
+      toast.error("Logout failed: " + err.message);
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    try {
+      if (profile?.id) {
+        await base44.entities.UserProfile.update(profile.id, editForm);
+        setProfile(editForm);
+        setEditing(false);
+        toast.success("Profile updated!");
+      }
+    } catch (err) {
+      toast.error("Failed to save: " + err.message);
+    }
+  };
+
   if (loading) {
     return (
       <div className="p-4 space-y-4 max-w-lg mx-auto pb-24 safe-area-top overflow-auto h-screen">
@@ -63,13 +89,24 @@ export default function Profile() {
           <BackButton to="/" />
           <h1 className="text-white text-xl font-black tracking-tight">Profile</h1>
         </div>
-        <Link
-          to="/settings"
-          className="text-commander-muted hover:text-white transition-all touch-target-min"
-          title="Settings"
-        >
-          <Settings className="w-5 h-5" />
-        </Link>
+        <div className="flex items-center gap-2">
+          {!editing && (
+            <button
+              onClick={() => setEditing(true)}
+              className="text-commander-muted hover:text-white transition-all touch-target-min"
+              title="Edit Profile"
+            >
+              <Edit2 className="w-5 h-5" />
+            </button>
+          )}
+          <button
+            onClick={handleLogout}
+            className="text-commander-muted hover:text-red-400 transition-all touch-target-min"
+            title="Log Out"
+          >
+            <LogOut className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
       {/* Athlete Profile Section */}
@@ -102,6 +139,50 @@ export default function Profile() {
       {!profile && (
         <div className="bg-commander-surface border border-commander-border rounded-xl p-8 text-center">
           <p className="text-commander-muted text-sm">Start your first workout to see your progress!</p>
+        </div>
+      )}
+
+      {/* Edit Mode */}
+      {editing && profile && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-commander-surface border border-commander-border rounded-xl p-6 max-w-sm w-full space-y-4">
+            <h3 className="text-white text-lg font-bold">Edit Profile</h3>
+
+            <div>
+              <label className="text-xs text-commander-muted block mb-2">Weight (lbs)</label>
+              <input
+                type="number"
+                value={editForm.weight_lbs || ""}
+                onChange={(e) => setEditForm({ ...editForm, weight_lbs: parseInt(e.target.value) })}
+                className="w-full bg-gray-800 border border-commander-border rounded-lg px-3 py-2 text-white text-sm min-h-[44px]"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs text-commander-muted block mb-2">Fitness Goal</label>
+              <input
+                type="text"
+                value={editForm.onboarding_goal || ""}
+                onChange={(e) => setEditForm({ ...editForm, onboarding_goal: e.target.value })}
+                className="w-full bg-gray-800 border border-commander-border rounded-lg px-3 py-2 text-white text-sm min-h-[44px]"
+              />
+            </div>
+
+            <div className="flex gap-2 pt-4">
+              <button
+                onClick={() => setEditing(false)}
+                className="flex-1 border border-commander-border text-commander-muted rounded-lg py-2 font-bold text-sm hover:text-white transition-all min-h-[44px] flex items-center justify-center gap-2"
+              >
+                <X className="w-4 h-4" /> Cancel
+              </button>
+              <button
+                onClick={handleSaveProfile}
+                className="flex-1 bg-commander-red text-white rounded-lg py-2 font-bold text-sm hover:bg-red-700 transition-all min-h-[44px] flex items-center justify-center gap-2"
+              >
+                <Check className="w-4 h-4" /> Save
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
