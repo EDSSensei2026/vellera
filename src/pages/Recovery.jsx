@@ -3,14 +3,94 @@ import { base44 } from "@/api/base44Client";
 import BackButton from "../components/BackButton";
 import InjuryPatternAnalytics from "../components/InjuryPatternAnalytics";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import { Play, ChevronDown, ChevronUp } from "lucide-react";
 
 const RESTORATION_PROTOCOLS = [
-  { name: "Open the Book", sets: "10 reps/side", desc: "Lie on your side, knees tucked. Reach top arm over to other side. Opens chest for better breathing." },
-  { name: "90/90 Hip Switch", sets: "2 minutes continuous", desc: "Both legs at 90°. Rotate knees side to side without lifting your butt. Essential for guard play." },
-  { name: "Cat-Cow into Child's Pose", sets: "3 minutes rhythmic", desc: "Flow from Cat-Cow into wide-knee Child's Pose. Decompresses spine after wrestling." },
-  { name: "Thoracic Bridge", sets: "5 reps", desc: "From seated, drive hips up and reach one arm back. Opens anterior chain." },
-  { name: "Hip Flexor Lunge Stretch", sets: "60s each side", desc: "Long split stance, back knee down. Essential at 250lb for protecting lower back." },
+  {
+    name: "Open the Book",
+    sets: "10 reps/side",
+    desc: "Lie on your side, knees tucked. Reach top arm over to other side. Opens chest for better breathing.",
+    youtube: "https://www.youtube.com/embed/oZU2BxeYbVg",
+    photo: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&q=80"
+  },
+  {
+    name: "90/90 Hip Switch",
+    sets: "2 minutes continuous",
+    desc: "Both legs at 90°. Rotate knees side to side without lifting your butt. Essential for guard play.",
+    youtube: "https://www.youtube.com/embed/9Z7TbyxMPzM",
+    photo: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&q=80"
+  },
+  {
+    name: "Cat-Cow into Child's Pose",
+    sets: "3 minutes rhythmic",
+    desc: "Flow from Cat-Cow into wide-knee Child's Pose. Decompresses spine after wrestling.",
+    youtube: "https://www.youtube.com/embed/kqnua4rHVVA",
+    photo: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&q=80"
+  },
+  {
+    name: "Thoracic Bridge",
+    sets: "5 reps",
+    desc: "From seated, drive hips up and reach one arm back. Opens anterior chain.",
+    youtube: "https://www.youtube.com/embed/XhQjlC5YK2c",
+    photo: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80"
+  },
+  {
+    name: "Hip Flexor Lunge Stretch",
+    sets: "60s each side",
+    desc: "Long split stance, back knee down. Essential at 250lb for protecting lower back.",
+    youtube: "https://www.youtube.com/embed/v0SnstM8LA8",
+    photo: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80"
+  },
 ];
+
+function StretchCard({ protocol }) {
+  const [expanded, setExpanded] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+
+  return (
+    <div className="bg-gray-800/40 border border-gray-700 rounded-xl overflow-hidden">
+      {/* Photo header */}
+      <div className="relative h-32 overflow-hidden">
+        <img src={protocol.photo} alt={protocol.name} className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-2 flex items-end justify-between">
+          <div>
+            <p className="text-white font-bold text-xs">{protocol.name}</p>
+            <p className="text-purple-400 text-xs font-medium">{protocol.sets}</p>
+          </div>
+          <button
+            onClick={() => setShowVideo(v => !v)}
+            className="flex items-center gap-1 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded transition-all min-h-[32px]"
+          >
+            <Play className="w-3 h-3" /> {showVideo ? "Hide" : "Play"}
+          </button>
+        </div>
+      </div>
+
+      {/* Video embed */}
+      {showVideo && (
+        <div className="aspect-video bg-black">
+          <iframe
+            src={protocol.youtube}
+            className="w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title={protocol.name}
+          />
+        </div>
+      )}
+
+      {/* Description */}
+      <button
+        onClick={() => setExpanded(e => !e)}
+        className="w-full flex items-center justify-between px-3 py-2 text-left"
+      >
+        <p className="text-commander-muted text-xs flex-1 pr-2">{expanded ? protocol.desc : protocol.desc.slice(0, 50) + "…"}</p>
+        {expanded ? <ChevronUp className="w-4 h-4 text-commander-muted flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-commander-muted flex-shrink-0" />}
+      </button>
+    </div>
+  );
+}
 
 export default function Recovery() {
   const [logs, setLogs] = useState([]);
@@ -130,17 +210,9 @@ export default function Recovery() {
       <div className="bg-commander-surface border border-commander-border rounded-xl p-4">
         <p className="text-xs text-commander-muted uppercase tracking-widest mb-3">Heavyweight Restoration Protocol</p>
         <p className="text-commander-muted text-xs mb-4">Monday & Friday · 20 minutes · No equipment · 250lb spine & joint care</p>
-        <div className="space-y-3">
-          {RESTORATION_PROTOCOLS.map((p, i) => (
-            <div key={p.name} className="flex gap-3 p-2 touch-target-min">
-              <div className="w-8 h-8 rounded-full bg-commander-red flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-white text-xs font-bold">{i + 1}</span>
-              </div>
-              <div>
-                <p className="text-white text-sm font-semibold">{p.name} <span className="text-commander-red text-xs">· {p.sets}</span></p>
-                <p className="text-commander-muted text-xs mt-0.5">{p.desc}</p>
-              </div>
-            </div>
+        <div className="space-y-2">
+          {RESTORATION_PROTOCOLS.map((p) => (
+            <StretchCard key={p.name} protocol={p} />
           ))}
         </div>
       </div>
