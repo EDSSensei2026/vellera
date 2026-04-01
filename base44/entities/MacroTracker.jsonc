@@ -1,0 +1,130 @@
+{
+  "name": "MacroTracker",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Date"
+    },
+    "calories_consumed": {
+      "type": "number",
+      "title": "Calories Consumed",
+      "default": 0
+    },
+    "protein_g": {
+      "type": "number",
+      "title": "Protein (g)",
+      "default": 0
+    },
+    "carbs_g": {
+      "type": "number",
+      "title": "Carbs (g)",
+      "default": 0
+    },
+    "fat_g": {
+      "type": "number",
+      "title": "Fat (g)",
+      "default": 0
+    },
+    "foods_logged": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "servings": {
+            "type": "number"
+          },
+          "calories": {
+            "type": "number"
+          },
+          "protein": {
+            "type": "number"
+          },
+          "carbs": {
+            "type": "number"
+          },
+          "fat": {
+            "type": "number"
+          },
+          "time": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "Foods Logged",
+      "default": []
+    },
+    "daily_target_calories": {
+      "type": "number",
+      "title": "Daily Target Calories"
+    },
+    "daily_target_protein": {
+      "type": "number",
+      "title": "Daily Target Protein (g)"
+    },
+    "daily_target_carbs": {
+      "type": "number",
+      "title": "Daily Target Carbs (g)"
+    },
+    "daily_target_fat": {
+      "type": "number",
+      "title": "Daily Target Fat (g)"
+    },
+    "training_volume_minutes": {
+      "type": "number",
+      "title": "Training Volume (minutes)",
+      "default": 0
+    },
+    "under_fueling_alert": {
+      "type": "boolean",
+      "title": "Under-Fueling Alert Triggered",
+      "default": false
+    }
+  },
+  "required": [
+    "date"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
