@@ -10,6 +10,12 @@ const PRICES = {
 
 Deno.serve(async (req) => {
   try {
+    const base44 = createClientFromRequest(req);
+    const user = await base44.auth.me();
+    if (!user) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     console.log('Request method:', req.method);
     console.log('Request headers:', Object.fromEntries(req.headers.entries()));
     
@@ -27,7 +33,7 @@ Deno.serve(async (req) => {
 
     console.log('Parsed body:', body);
     const { priceId, planType } = body;
-    console.log('planType:', planType, 'priceId:', priceId);
+    console.log('Checkout for user:', user.email, 'planType:', planType, 'priceId:', priceId);
 
     if (!priceId && !planType) {
       return Response.json({ error: 'Missing priceId or planType' }, { status: 400 });

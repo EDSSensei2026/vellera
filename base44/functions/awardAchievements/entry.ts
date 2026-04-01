@@ -120,9 +120,9 @@ Deno.serve(async (req) => {
       toAward.push({ badge_id: 'first_xp_award', badge_name: 'XP Earned', category: 'technique' });
     }
 
-    // Award new achievements
+    // Award new achievements using service role (RLS restricts create to admins)
     if (toAward.length > 0) {
-      await base44.entities.Achievement.bulkCreate(
+      await base44.asServiceRole.entities.Achievement.bulkCreate(
         toAward.map(badge => ({
           badge_id: badge.badge_id,
           badge_name: badge.badge_name,
@@ -130,7 +130,8 @@ Deno.serve(async (req) => {
           awarded_date: new Date().toISOString(),
           badge_description: `${badge.badge_name} - Achievement earned`,
           rarity: 'common',
-        }))
+        })),
+        { created_by: user.email } // Set created_by to track which user earned the badge
       );
     }
 
