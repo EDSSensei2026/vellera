@@ -1,0 +1,84 @@
+{
+  "name": "WearableToken",
+  "type": "object",
+  "properties": {
+    "provider": {
+      "type": "string",
+      "enum": [
+        "strava",
+        "google_fit",
+        "fitbit",
+        "polar"
+      ],
+      "title": "Provider"
+    },
+    "user_email": {
+      "type": "string",
+      "title": "User Email"
+    },
+    "access_token": {
+      "type": "string",
+      "title": "Access Token"
+    },
+    "refresh_token": {
+      "type": "string",
+      "title": "Refresh Token"
+    },
+    "expires_at": {
+      "type": "number",
+      "title": "Expires At (epoch ms)"
+    },
+    "provider_user_id": {
+      "type": "string",
+      "title": "Provider User ID"
+    },
+    "last_synced": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last Synced"
+    }
+  },
+  "required": [
+    "provider",
+    "user_email"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

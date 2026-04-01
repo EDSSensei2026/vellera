@@ -41,6 +41,7 @@ const AgentForge = lazy(() => import('./pages/AgentForge'));
 const WorkoutHistory = lazy(() => import('./pages/WorkoutHistory'));
 const AnalyzeTechnique = lazy(() => import('./pages/AnalyzeTechnique'));
 const TrainingSquads = lazy(() => import('./pages/TrainingSquads'));
+const WearablesHub = lazy(() => import('./pages/WearablesHub'));
 
 const LoadingSpinner = () => (
   <div className="fixed inset-0 flex items-center justify-center bg-commander-dark z-50">
@@ -109,6 +110,7 @@ const AuthenticatedApp = () => {
       <Route path="/workout-history" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WorkoutHistory /></Suspense></PageTransition>} />
       <Route path="/analyze" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><AnalyzeTechnique /></Suspense></PageTransition>} />
       <Route path="/squads" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingSquads /></Suspense></PageTransition>} />
+      <Route path="/wearables" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WearablesHub /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>
