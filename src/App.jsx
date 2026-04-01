@@ -57,6 +57,7 @@ const ProfileSetup = lazy(() => import('./pages/ProfileSetup'));
 const CommunityChallenge = lazy(() => import('./pages/CommunityChallenge'));
 const Leaderboard = lazy(() => import('./pages/Leaderboard'));
 const PersonalizedTrainingDashboard = lazy(() => import('./pages/PersonalizedTrainingDashboard'));
+const BiometricsDashboard = lazy(() => import('./pages/BiometricsDashboard'));
 
 const LoadingSpinner = () => (
   <div className="fixed inset-0 flex items-center justify-center bg-commander-dark z-50">
@@ -148,6 +149,7 @@ const AuthenticatedApp = () => {
       <Route path="/leaderboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Leaderboard /></Suspense></PageTransition>} />
       <Route path="/setup" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ProfileSetup /></Suspense></PageTransition>} />
       <Route path="/training-dashboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PersonalizedTrainingDashboard /></Suspense></PageTransition>} />
+      <Route path="/biometrics" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BiometricsDashboard /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>
