@@ -211,11 +211,11 @@ export default function Landing() {
 
           <div className="bg-commander-surface border border-commander-border rounded-2xl overflow-hidden">
             {/* Combined Photo */}
-            <div className="h-96 md:h-[500px] overflow-hidden">
+            <div className="bg-gradient-to-br from-vellera-blue/10 to-vellera-green/10 flex items-center justify-center p-8">
               <img
                 src="https://media.base44.com/images/public/69c722c665db36b41f55ba9c/69137a96a_Gemini_Generated_Image_y5i1n5y5i1n5y5i1.png"
                 alt="Asaad & Shauntze Morman"
-                className="w-full h-full object-cover"
+                className="w-full h-auto max-h-[600px] object-contain"
               />
             </div>
 
