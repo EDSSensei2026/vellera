@@ -68,19 +68,22 @@ export default function Dashboard() {
       const result = await base44.entities.BiometricLog.filter({ date: todayStr });
       return result[0] || null;
     },
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: false,
   });
 
   const { data: weekLogs = [] } = useQuery({
     queryKey: ["biometrics", "week"],
-    queryFn: () => base44.entities.BiometricLog.list("-date", 7),
-    staleTime: 1000 * 60 * 5,
+    queryFn: () => new Promise(r => setTimeout(r, 300)).then(() => base44.entities.BiometricLog.list("-date", 7)),
+    staleTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: false,
   });
 
   const { data: recentSessions = [] } = useQuery({
     queryKey: ["sessions", "recent"],
-    queryFn: () => base44.entities.TrainingSession.list("-date", 5),
-    staleTime: 1000 * 60 * 5,
+    queryFn: () => new Promise(r => setTimeout(r, 600)).then(() => base44.entities.TrainingSession.list("-date", 5)),
+    staleTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: false,
   });
 
   const handleRefresh = async () => {
