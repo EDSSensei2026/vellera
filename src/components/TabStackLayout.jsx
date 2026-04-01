@@ -31,6 +31,7 @@ const PRIMARY_NAV = [
 ];
 
 const MORE_NAV = [
+  { path: "/coach", label: "AI Coach", icon: Zap },
   { path: "/recovery", label: "Recovery", icon: Dumbbell },
   { path: "/competition", label: "Competition", icon: Trophy },
   { path: "/junior", label: "Junior", icon: Users },

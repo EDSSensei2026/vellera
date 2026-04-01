@@ -35,6 +35,7 @@ const ActiveWorkout = lazy(() => import('./pages/ActiveWorkout'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Paywall = lazy(() => import('./pages/Paywall'));
 const InvestorRelations = lazy(() => import('./pages/InvestorRelations'));
+const AICoach = lazy(() => import('./pages/AICoach'));
 
 const LoadingSpinner = () => (
   <div className="fixed inset-0 flex items-center justify-center bg-commander-dark z-50">
@@ -97,6 +98,7 @@ const AuthenticatedApp = () => {
       </Route>
       <Route path="/paywall" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Paywall /></Suspense></PageTransition>} />
       <Route path="/investors" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><InvestorRelations /></Suspense></PageTransition>} />
+      <Route path="/coach" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><AICoach /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>
