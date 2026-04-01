@@ -27,23 +27,25 @@ import { Link } from "react-router-dom";
 const COMP_DATE = new Date("2026-07-18");
 const PREP_START = new Date("2026-03-28");
 
+// User's custom schedule (can be set in settings)
 const SCHEDULE = {
-  1: [{ time: "6:15 PM", name: "BJJ Foundations", type: "bjj" }, { time: "7:15 PM", name: "MMA Wrestling", type: "mma" }],
-  2: [{ time: "6:15 PM", name: "BJJ Foundations", type: "bjj" }],
-  3: [{ time: "6:15 PM", name: "No-Gi / BJJ", type: "nogi" }],
-  4: [{ time: "6:15 PM", name: "BJJ Foundations", type: "bjj" }, { time: "7:15 PM", name: "MMA Wrestling", type: "mma" }],
-  5: [{ time: "6:15 PM", name: "No-Gi / BJJ", type: "nogi" }],
-  6: [{ time: "10:00 AM", name: "Masters Class", type: "masters" }],
+  1: [{ time: "6:15 PM", name: "Training Session", type: "training" }],
+  2: [{ time: "6:15 PM", name: "Training Session", type: "training" }],
+  3: [{ time: "6:15 PM", name: "Training Session", type: "training" }],
+  4: [{ time: "6:15 PM", name: "Training Session", type: "training" }],
+  5: [{ time: "6:15 PM", name: "Training Session", type: "training" }],
+  6: [{ time: "10:00 AM", name: "Training Session", type: "training" }],
 };
 
+// Daily focus suggestions (customizable)
 const SC_PROMPT = {
-  1: { label: "Home Mobility", color: "text-purple-400", desc: "90/90 Hips · Open the Book · Cat-Cow · Child's Pose" },
-  2: { label: "Work Gym — Strength & Power", color: "text-blue-400", desc: "Compound lifts · Focus on posterior chain" },
-  3: { label: "Crunch — Zone 2 Cardio", color: "text-green-400", desc: "30 min at 130–145 bpm. Exhale with every strike." },
-  4: { label: "Work Gym — Strength & Power", color: "text-blue-400", desc: "Explosive movements · Hip drive" },
-  5: { label: "Home Mobility", color: "text-purple-400", desc: "Decompression · Joint lubrication · Wall walks" },
-  6: { label: "Active Recovery", color: "text-yellow-400", desc: "Light movement only. Film study after Masters." },
-  0: { label: "Rest Day", color: "text-gray-400", desc: "CNS recovery. Prioritize sleep and hydration." },
+  1: { label: "Mobility & Activation", color: "text-purple-400", desc: "Dynamic stretching · Joint prep · Breathing work" },
+  2: { label: "Strength & Power", color: "text-blue-400", desc: "Heavy compound lifts · Progressive overload · Core focus" },
+  3: { label: "Conditioning", color: "text-green-400", desc: "Zone 2 cardio or HIIT · Build work capacity" },
+  4: { label: "Technical Work", color: "text-vellera-blue", desc: "Skill practice · Form refinement · Sport-specific drills" },
+  5: { label: "Active Recovery", color: "text-purple-400", desc: "Light movement · Stretching · Mental reset" },
+  6: { label: "Structured Workout", color: "text-vellera-green", desc: "Your planned session or class" },
+  0: { label: "Rest Day", color: "text-gray-400", desc: "Full recovery. Sleep, hydration, nutrition focus." },
 };
 
 function getCompPhase(daysLeft) {
@@ -172,9 +174,9 @@ export default function Dashboard() {
         <img src={heroImg} alt="warrior" className="absolute inset-0 w-full h-full object-cover object-top" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/90" />
         <div className="relative p-4 flex flex-col justify-end" style={{ minHeight: 200 }}>
-          <p className="text-xs text-commander-red uppercase tracking-widest font-bold mb-1">July 18, 2026 Competition</p>
-          <p className="text-white text-5xl font-black font-mono leading-none">{daysLeft}</p>
-          <p className="text-white/70 text-sm mb-2">days until the mat calls</p>
+          <p className="text-xs text-commander-red uppercase tracking-widest font-bold mb-1">Event Countdown</p>
+              <p className="text-white text-5xl font-black font-mono leading-none">{daysLeft}</p>
+              <p className="text-white/70 text-sm mb-2">days until your goal</p>
           <div className="w-full bg-white/20 rounded-full h-2 mb-1">
             <div className="bg-commander-red h-2 rounded-full transition-all" style={{ width: `${progress}%` }} />
           </div>
@@ -226,8 +228,8 @@ export default function Dashboard() {
 
       {/* Today's Schedule */}
       {todayClasses.length > 0 && (
-        <div className="bg-commander-surface border border-commander-border rounded-xl p-4">
-          <p className="text-xs text-commander-muted uppercase tracking-widest mb-3">Tonight @ The Lab</p>
+       <div className="bg-commander-surface border border-commander-border rounded-xl p-4">
+         <p className="text-xs text-commander-muted uppercase tracking-widest mb-3">Today's Schedule</p>
           <div className="space-y-2">
             {todayClasses.map((cls) => (
               <div key={cls.time} className="flex items-center gap-3">
@@ -240,9 +242,9 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* S&C Prompt */}
+      {/* Today's Focus */}
       <div className="bg-commander-surface border border-commander-border rounded-xl p-4">
-        <p className="text-xs text-commander-muted uppercase tracking-widest mb-1">Today's S&C Focus</p>
+        <p className="text-xs text-commander-muted uppercase tracking-widest mb-1">Today's Focus</p>
         <p className={`font-bold text-sm ${sc.color}`}>{sc.label}</p>
         <p className="text-commander-muted text-xs mt-1">{sc.desc}</p>
       </div>
@@ -252,7 +254,7 @@ export default function Dashboard() {
         <Droplets className="w-5 h-5 text-blue-400" />
         <div>
           <p className="text-white text-sm font-semibold">Hydration Target: {waterTarget} oz</p>
-          <p className="text-commander-muted text-xs">250 lbs ÷ 2 + 32 oz per mat hour</p>
+          <p className="text-commander-muted text-xs">Body weight ÷ 2 + 32 oz per hour of training</p>
         </div>
       </div>
 

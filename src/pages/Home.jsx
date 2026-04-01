@@ -7,29 +7,29 @@ export default function Home() {
 
   const workoutCategories = [
     {
-      title: "The Primer",
-      subtitle: "Warm-ups",
+      title: "Warm-Up",
+      subtitle: "Dynamic prep",
       icon: "🔥",
       color: "from-orange-500/20 to-orange-600/10",
       border: "border-orange-500/30",
     },
     {
-      title: "The Tempo",
-      subtitle: "Cardio / HIIT",
-      icon: "⚡",
-      color: "from-vellera-blue/20 to-cyan-600/10",
-      border: "border-vellera-blue/30",
-    },
-    {
-      title: "The Foundation",
-      subtitle: "Strength",
+      title: "Strength & Power",
+      subtitle: "Lift, build, press",
       icon: "💪",
       color: "from-vellera-green/20 to-lime-600/10",
       border: "border-vellera-green/30",
     },
     {
-      title: "The Reset",
-      subtitle: "Recovery",
+      title: "Cardio & Conditioning",
+      subtitle: "Endurance work",
+      icon: "⚡",
+      color: "from-vellera-blue/20 to-cyan-600/10",
+      border: "border-vellera-blue/30",
+    },
+    {
+      title: "Recovery & Mobility",
+      subtitle: "Restore & prep",
       icon: "🧘",
       color: "from-purple-500/20 to-violet-600/10",
       border: "border-purple-500/30",
@@ -42,12 +42,12 @@ export default function Home() {
       <div className="bg-gradient-to-b from-vellera-blue/10 to-vellera-dark border border-vellera-blue/30 rounded-2xl p-6 space-y-3">
         <div>
           <h1 className="text-white text-3xl font-black">VELLERA</h1>
-          <p className="text-vellera-blue text-sm font-bold tracking-wide">Command Your Recovery</p>
+          <p className="text-vellera-blue text-sm font-bold tracking-wide">Command Your Training & Recovery</p>
         </div>
         <p className="text-vellera-muted text-sm leading-relaxed">
-          Vellera is the recovery-first training platform for combat athletes and tactical professionals. We combine biometric data, AI coaching, and squad-based accountability to optimize your performance—not just your workouts.
+          Your all-in-one training platform for strength, endurance, combat sports, tactical conditioning, bodybuilding, and whole health. We combine biometric recovery data, AI coaching, and squad accountability to optimize every athlete—regardless of sport or level.
         </p>
-        <p className="text-xs text-vellera-blue italic">"Vellera" = velocity + the warrior's path. Built for those who train with purpose.</p>
+        <p className="text-xs text-vellera-blue italic">"Vellera" = velocity + the warrior's path. Built for every athlete who trains with purpose.</p>
       </div>
 
       {/* Founders Section */}
