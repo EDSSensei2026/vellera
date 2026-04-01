@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
 import { Camera, Loader2, ChevronDown, ChevronUp, Droplets, TrendingUp, TrendingDown, AlertTriangle, CheckCircle } from "lucide-react";
 import BackButton from "../components/BackButton";
+import FuelTrainingMatrix from "../components/FuelTrainingMatrix";
 import { FormError } from "../components/FormValidation";
 import SelectDrawer from "../components/SelectDrawer";
 
@@ -141,6 +142,7 @@ export default function FoodLog() {
   const [athlete, setAthlete] = useState("dad");
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("log");
   const [analyzing, setAnalyzing] = useState(false);
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
@@ -252,6 +254,20 @@ Return JSON with: food_description (string, describe what you see), calories (nu
           🥋 Lil Prodigy
         </button>
       </div>
+
+      {/* Tab Nav */}
+      <div className="flex bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+        <button onClick={() => setActiveTab("log")} className={`flex-1 py-2.5 text-xs font-bold transition-all min-h-[44px] ${activeTab === "log" ? "bg-[#00E5FF20] text-[#00E5FF]" : "text-gray-500"}`}>
+          📋 Daily Log
+        </button>
+        <button onClick={() => setActiveTab("matrix")} className={`flex-1 py-2.5 text-xs font-bold transition-all min-h-[44px] ${activeTab === "matrix" ? "bg-[#CCFF0020] text-[#CCFF00]" : "text-gray-500"}`}>
+          📊 Fuel Matrix
+        </button>
+      </div>
+
+      {activeTab === "matrix" && <FuelTrainingMatrix athlete={athlete} />}
+
+      {activeTab === "log" && <>
 
       {/* Date Selector */}
       <div>
@@ -376,6 +392,7 @@ Return JSON with: food_description (string, describe what you see), calories (nu
           <p className="text-commander-muted text-sm">No meals logged yet. Snap a photo of your next meal to get started.</p>
         </div>
       )}
+      </> }
     </div>
   );
 }
