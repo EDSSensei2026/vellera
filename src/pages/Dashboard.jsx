@@ -231,8 +231,12 @@ export default function Dashboard() {
           <span className="text-white text-sm font-medium">Skill Matrix</span>
           <ChevronRight className="w-4 h-4 text-commander-muted" />
         </Link>
-        <Link to="/workout-history" className="col-span-2 bg-commander-surface border border-commander-border rounded-xl p-3 flex items-center justify-between hover:border-[#00E5FF] transition-all">
+        <Link to="/workout-history" className="bg-commander-surface border border-commander-border rounded-xl p-3 flex items-center justify-between hover:border-[#00E5FF] transition-all">
           <span className="text-white text-sm font-medium">📊 Workout Analytics</span>
+          <ChevronRight className="w-4 h-4 text-commander-muted" />
+        </Link>
+        <Link to="/analyze" className="bg-commander-surface border border-[#00E5FF40] rounded-xl p-3 flex items-center justify-between hover:border-[#00E5FF] transition-all">
+          <span className="text-white text-sm font-medium">🎯 Analyze Technique</span>
           <ChevronRight className="w-4 h-4 text-commander-muted" />
         </Link>
       </div>
