@@ -1,0 +1,61 @@
+{
+  "name": "UserBackgroundImage",
+  "type": "object",
+  "properties": {
+    "image_url": {
+      "type": "string",
+      "title": "Image URL"
+    },
+    "caption": {
+      "type": "string",
+      "title": "Caption / Motivation Note"
+    },
+    "is_active": {
+      "type": "boolean",
+      "title": "Active in Rotation",
+      "default": true
+    }
+  },
+  "required": [
+    "image_url"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

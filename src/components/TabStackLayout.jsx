@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
+import { base44 } from "@/api/base44Client";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import DrillTimer from "./DrillTimer";
 import VelleraBackground from "./VelleraBackground";
 import SpotifyPlayer from "./SpotifyPlayer";
+import BackgroundImageManager from "./BackgroundImageManager";
 import {
   Drawer,
   DrawerContent,
@@ -13,13 +15,13 @@ import {
 } from "@/components/ui/drawer";
 import { Shield, Activity, BookOpen, Trophy, Users, Dumbbell, Video, Flame, Apple, BarChart2, Swords, Zap } from "lucide-react";
 
-const WARRIOR_IMAGES = [
-  "https://media.base44.com/images/public/69c722c665db36b41f55ba9c/9af62c059_2845.png",
-  "https://media.base44.com/images/public/69c722c665db36b41f55ba9c/3d1213c6a_2825.jpg",
-  "https://media.base44.com/images/public/69c722c665db36b41f55ba9c/96befed01_2826.jpg",
-  "https://media.base44.com/images/public/69c722c665db36b41f55ba9c/112a5c2cc_2827.jpg",
-  "https://media.base44.com/images/public/69c722c665db36b41f55ba9c/6d582ea34_2837.png",
-  "https://media.base44.com/images/public/69c722c665db36b41f55ba9c/97927d4ed_Gemini_Generated_Image_ry3411ry3411ry34.png",
+const DEFAULT_IMAGES = [
+  "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
+  "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800&q=80",
+  "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800&q=80",
+  "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=800&q=80",
+  "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80",
+  "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=800&q=80",
 ];
 
 const PRIMARY_NAV = [
@@ -83,6 +85,8 @@ function TabStack({ tabId, currentTabId, children, scrollRefs }) {
 export default function TabStackLayout() {
   const { pathname } = useLocation();
   const [imgIndex, setImgIndex] = useState(0);
+  const [allImages, setAllImages] = useState(DEFAULT_IMAGES);
+  const [bgManagerOpen, setBgManagerOpen] = useState(false);
   const [musicOn, setMusicOn] = useState(false);
   const [muted, setMuted] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
@@ -97,9 +101,18 @@ export default function TabStackLayout() {
   }, []);
 
   useEffect(() => {
-    const t = setInterval(() => setImgIndex(i => (i + 1) % WARRIOR_IMAGES.length), 8000);
-    return () => clearInterval(t);
+    base44.entities.UserBackgroundImage.filter({ is_active: true })
+      .then(userImgs => {
+        const urls = userImgs.map(i => i.image_url).filter(Boolean);
+        setAllImages(urls.length > 0 ? [...DEFAULT_IMAGES, ...urls] : DEFAULT_IMAGES);
+      })
+      .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    const t = setInterval(() => setImgIndex(i => (i + 1) % allImages.length), 8000);
+    return () => clearInterval(t);
+  }, [allImages]);
 
   // Map current path to tab ID
   const getCurrentTabId = () => {
@@ -123,15 +136,15 @@ export default function TabStackLayout() {
 
       {/* Rotating Background */}
       <div className="fixed inset-0 z-1 pointer-events-none" style={{ overscrollBehavior: 'contain' }}>
-        {WARRIOR_IMAGES.map((src, i) => (
-          <div
-            key={src}
-            className="absolute inset-0 transition-opacity duration-2000"
-            style={{ opacity: i === imgIndex ? 1 : 0 }}
-          >
-            <img src={src} alt="" className="w-full h-full object-contain" />
-          </div>
-        ))}
+        {allImages.map((src, i) => (
+        <div
+          key={src}
+          className="absolute inset-0 transition-opacity duration-2000"
+          style={{ opacity: i === imgIndex ? 1 : 0 }}
+        >
+          <img src={src} alt="" className="w-full h-full object-cover" />
+        </div>
+      ))}
         <div className="absolute inset-0 bg-commander-dark/60" />
       </div>
 
@@ -181,8 +194,17 @@ export default function TabStackLayout() {
             <div className="text-xs text-commander-muted">Train Everything</div>
           </div>
         </div>
-        <div className="text-xs text-commander-muted font-mono">
-          {new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setBgManagerOpen(true)}
+            title="My Motivation Wall"
+            className="text-xs text-commander-muted hover:text-white transition-all px-2 py-1 rounded-lg hover:bg-gray-800"
+          >
+            🖼️
+          </button>
+          <div className="text-xs text-commander-muted font-mono">
+            {new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+          </div>
         </div>
       </header>
 
@@ -234,6 +256,8 @@ export default function TabStackLayout() {
           </button>
         </div>
       </nav>
+
+      <BackgroundImageManager open={bgManagerOpen} onOpenChange={setBgManagerOpen} />
 
       {/* More Drawer */}
       <Drawer open={moreOpen} onOpenChange={setMoreOpen}>
