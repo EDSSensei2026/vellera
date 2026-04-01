@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Music, Zap, Flame, Shield, RotateCcw } from "lucide-react";
+import { Music, Zap, Flame, Shield, RotateCcw, CheckCircle, Clock } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [userName] = useState("Champion");
@@ -36,12 +37,104 @@ export default function Home() {
   ];
 
   return (
-    <div className="p-4 space-y-6 max-w-lg mx-auto pb-24 safe-area-top">
+    <div className="p-4 space-y-6 max-w-lg mx-auto pb-24 safe-area-top overflow-auto">
+      {/* App Hero Section */}
+      <div className="bg-gradient-to-b from-vellera-blue/10 to-vellera-dark border border-vellera-blue/30 rounded-2xl p-6 space-y-3">
+        <div>
+          <h1 className="text-white text-3xl font-black">VELLERA</h1>
+          <p className="text-vellera-blue text-sm font-bold tracking-wide">Command Your Recovery</p>
+        </div>
+        <p className="text-vellera-muted text-sm leading-relaxed">
+          Vellera is the recovery-first training platform for combat athletes and tactical professionals. We combine biometric data, AI coaching, and squad-based accountability to optimize your performance—not just your workouts.
+        </p>
+        <p className="text-xs text-vellera-blue italic">"Vellera" = velocity + the warrior's path. Built for those who train with purpose.</p>
+      </div>
+
+      {/* Founders Section */}
+      <div className="bg-commander-surface border border-commander-border rounded-2xl p-4 space-y-3">
+        <p className="text-xs text-commander-muted uppercase tracking-widest font-bold">Built by Warriors</p>
+        <div className="flex gap-4 items-center">
+          <img
+            src="https://media.base44.com/images/public/69c722c665db36b41f55ba9c/f5ddba3fd_Gemini_Generated_Image_y5i1n5y5i1n5y5i1.png"
+            alt="Founders Asaad & Shauntze Morman"
+            className="w-20 h-20 rounded-lg object-cover"
+          />
+          <div>
+            <h3 className="text-white font-bold text-sm">Asaad & Shauntze Morman</h3>
+            <p className="text-commander-muted text-xs">Combat athletes, coaches, and recovery obsessives building the platform they wish existed.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* How We Compare */}
+      <div className="bg-commander-surface border border-commander-border rounded-2xl p-4 space-y-3">
+        <p className="text-xs text-commander-muted uppercase tracking-widest font-bold">Why Vellera?</p>
+        <div className="space-y-2 text-xs">
+          <div className="flex gap-2 items-start">
+            <CheckCircle className="w-4 h-4 text-vellera-green flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-white font-semibold">Recovery-First Design</p>
+              <p className="text-commander-muted">Unlike generic fitness apps, we prioritize biometric recovery over simple calorie counting.</p>
+            </div>
+          </div>
+          <div className="flex gap-2 items-start">
+            <CheckCircle className="w-4 h-4 text-vellera-green flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-white font-semibold">Combat-Sport Specific</p>
+              <p className="text-commander-muted">Built for BJJ, MMA, boxing—not generic CrossFit or running metrics.</p>
+            </div>
+          </div>
+          <div className="flex gap-2 items-start">
+            <CheckCircle className="w-4 h-4 text-vellera-green flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-white font-semibold">Squad Accountability</p>
+              <p className="text-commander-muted">Train with your crew. Real-time motivation & challenge tracking.</p>
+            </div>
+          </div>
+          <div className="flex gap-2 items-start">
+            <CheckCircle className="w-4 h-4 text-vellera-green flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-white font-semibold">AI Coach That Listens</p>
+              <p className="text-commander-muted">Contextual coaching based on YOUR recovery, not generic scripts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Device Integration */}
+      <div className="bg-commander-surface border border-commander-border rounded-2xl p-4 space-y-3">
+        <p className="text-xs text-commander-muted uppercase tracking-widest font-bold">Connected Devices</p>
+        
+        {/* Currently Supported */}
+        <div>
+          <p className="text-white text-xs font-bold mb-2 flex items-center gap-2"><CheckCircle className="w-3 h-3 text-green-400" /> Connected Now</p>
+          <div className="grid grid-cols-2 gap-2">
+            {["Whoop", "Fitbit", "Garmin", "Apple Watch", "Google Fit", "Strava"].map((device) => (
+              <div key={device} className="bg-gray-800/50 rounded-lg px-3 py-2 text-center border border-green-800/30">
+                <p className="text-white text-xs font-semibold">{device}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Coming Soon */}
+        <div>
+          <p className="text-white text-xs font-bold mb-2 flex items-center gap-2"><Clock className="w-3 h-3 text-vellera-blue" /> Coming Soon</p>
+          <div className="grid grid-cols-2 gap-2">
+            {["Oura Ring", "WHOOP 5.0", "Polar H10", "Apple Health", "Rested AI", "TrainingPeaks"].map((device) => (
+              <div key={device} className="bg-gray-800/30 rounded-lg px-3 py-2 text-center border border-vellera-blue/20">
+                <p className="text-commander-muted text-xs font-semibold">{device}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Header Greeting */}
       <div className="space-y-2">
-        <h1 className="text-white text-2xl font-black">
+        <h2 className="text-white text-2xl font-black">
           Welcome back, <span className="text-vellera-blue">{userName}</span>.
-        </h1>
+        </h2>
         <p className="text-vellera-muted text-sm">Let's find your pace today.</p>
       </div>
 
