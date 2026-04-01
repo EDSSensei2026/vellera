@@ -18,6 +18,7 @@ import DailyMatPriority from "../components/DailyMatPriority";
 import AdaptiveHome from "../components/AdaptiveHome";
 import ReadinessCheckIn from "../components/ReadinessCheckIn";
 import AdaptiveWorkoutDashboard from "../components/AdaptiveWorkoutDashboard";
+import AchievementsWidget from "../components/AchievementsWidget";
 import { Droplets, Flame, Moon, Heart, Zap, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -62,6 +63,8 @@ export default function Dashboard() {
         base44.entities.UserProfile.filter({ created_by: u.email }).then(profiles => {
           setUserProfile(profiles[0] || null);
         });
+        // Award achievements on login
+        base44.functions.invoke('awardAchievements', {});
       }
     });
 
@@ -185,6 +188,9 @@ export default function Dashboard() {
 
       {/* Daily Mat Priority — AI-generated morning brief */}
       <DailyMatPriority />
+
+      {/* Achievements */}
+      <AchievementsWidget />
 
       {/* Streaks */}
       <StreaksWidget />

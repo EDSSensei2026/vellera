@@ -1,0 +1,112 @@
+{
+  "name": "Achievement",
+  "type": "object",
+  "properties": {
+    "badge_id": {
+      "type": "string",
+      "title": "Badge ID",
+      "enum": [
+        "first_session",
+        "sessions_10",
+        "sessions_50",
+        "sessions_100",
+        "strength_5lb_increase",
+        "strength_25lb_increase",
+        "strength_50lb_increase",
+        "consistency_7_days",
+        "consistency_30_days",
+        "endurance_100_minutes",
+        "endurance_500_minutes",
+        "weight_loss_5lbs",
+        "weight_loss_10lbs",
+        "first_technique",
+        "techniques_10",
+        "first_xp_award"
+      ]
+    },
+    "badge_name": {
+      "type": "string",
+      "title": "Badge Name"
+    },
+    "badge_description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "badge_icon": {
+      "type": "string",
+      "title": "Icon Emoji"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "milestone",
+        "strength",
+        "endurance",
+        "consistency",
+        "technique",
+        "weight"
+      ],
+      "title": "Category"
+    },
+    "awarded_date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Awarded Date"
+    },
+    "rarity": {
+      "type": "string",
+      "enum": [
+        "common",
+        "uncommon",
+        "rare",
+        "legendary"
+      ],
+      "title": "Rarity Level",
+      "default": "common"
+    }
+  },
+  "required": [
+    "badge_id",
+    "badge_name",
+    "category"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
