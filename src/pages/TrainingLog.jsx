@@ -155,6 +155,17 @@ function SessionJournal() {
       return { sessionData };
     },
     onSuccess: (data, variables, context) => {
+      base44.analytics.track({
+        eventName: "session_logged",
+        properties: {
+          intensity: variables.intensity,
+          intensity_label: variables.intensity <= 3 ? "low" : variables.intensity <= 6 ? "medium" : variables.intensity <= 8 ? "high" : "max",
+          session_type: variables.session_type,
+          gas_level: variables.gas_level,
+          duration_minutes: Number(variables.duration_minutes) || 0,
+          day_of_week: new Date().toLocaleDateString("en-US", { weekday: "long" }),
+        },
+      });
       toast.success("Session logged. Stay hydrated, Commander. 🥋");
       setForm(f => ({ ...f, session_notes: "", injury_notes: [], successful_escapes: [], wins: "", lessons: "", lifting_exercises: "" }));
       // Re-fetch to ensure server data is synced

@@ -51,6 +51,16 @@ export default function Dashboard() {
   const queryClient = useQueryClient();
   const [refreshing, setRefreshing] = useState(false);
 
+  useEffect(() => {
+    base44.analytics.track({
+      eventName: "daily_login",
+      properties: {
+        day_of_week: new Date().toLocaleDateString("en-US", { weekday: "long" }),
+        hour_of_day: new Date().getHours(),
+      },
+    });
+  }, []);
+
   const today = new Date();
   const daysLeft = Math.max(0, Math.ceil((COMP_DATE - today) / 86400000));
   const totalDays = Math.ceil((COMP_DATE - PREP_START) / 86400000);
