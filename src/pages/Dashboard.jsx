@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import SafetyValve from "../components/SafetyValve";
+import TrainingIntensityRecommendation from "../components/TrainingIntensityRecommendation";
 import { usePullToRefresh } from "../hooks/usePullToRefresh";
 import { useTabStack } from "../hooks/useTabStack";
 import RecoveryPerformanceWidget from "../components/RecoveryPerformanceWidget";
@@ -197,6 +198,13 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Training Intensity Recommendation */}
+      <TrainingIntensityRecommendation
+        recovery={todayLog?.recovery_pct}
+        sleep={todayLog?.sleep_performance}
+        hrv={todayLog?.hrv}
+      />
+
       {/* Today's Schedule */}
       {todayClasses.length > 0 && (
         <div className="bg-commander-surface border border-commander-border rounded-xl p-4">
@@ -229,8 +237,21 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Whoop Connect */}
+      {/* Whoop Connect + Fitbit Sync Button */}
       <WhoopConnect />
+      <button
+        onClick={async () => {
+          try {
+            await base44.functions.invoke("fitbitSync", {});
+            await queryClient.refetchQueries({ queryKey: ["biometrics", "today"] });
+          } catch (e) {
+            console.error(e);
+          }
+        }}
+        className="w-full bg-blue-900/40 border border-blue-800 text-blue-300 text-xs font-bold px-4 py-3 rounded-xl hover:bg-blue-900 transition-all min-h-[44px]"
+      >
+        🏃 Sync Fitbit
+      </button>
 
       {/* Recovery vs Performance Widget */}
       <RecoveryPerformanceWidget />
