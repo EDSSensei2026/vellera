@@ -34,23 +34,28 @@ export default function Landing() {
       icon: "🧘",
     },
     {
-      title: "The Tempo",
-      desc: "Beat-driven cardio and HIIT that moves with your music.",
-      icon: "⚡",
-    },
-    {
-      title: "The Foundation",
-      desc: "Strength and weightlifting protocols built for real athletes.",
+      title: "Strength & Power",
+      desc: "Progressive overload protocols for weightlifting, bodybuilding, and conditioning.",
       icon: "💪",
     },
     {
-      title: "Vellera Combat",
-      desc: "MMA, boxing, and grappling timers. Fight-ready conditioning.",
+      title: "Combat & Competition",
+      desc: "MMA, boxing, BJJ, wrestling, and sport-specific training timers.",
       icon: "🥊",
     },
     {
-      title: "Bring Your Own Energy",
-      desc: "Full Spotify & Apple Music integration. Your soundtrack, your rules.",
+      title: "Cardio & Endurance",
+      desc: "Beat-driven HIIT, Zone 2 steady state, and aerobic conditioning.",
+      icon: "⚡",
+    },
+    {
+      title: "Recovery & Biometrics",
+      desc: "Connect Whoop, Strava, Polar, Fitbit. Real-time recovery insights.",
+      icon: "💓",
+    },
+    {
+      title: "Your Soundtrack",
+      desc: "Full Spotify & Apple Music integration. Train to your vibe.",
       icon: "🎵",
     },
   ];
@@ -83,7 +88,7 @@ export default function Landing() {
                   Your <span className="text-vellera-blue">Vellera.</span>
                 </h1>
                 <p className="text-lg text-gray-300 leading-relaxed">
-                  The only fitness and combat sports app built for all levels—from your first 15-minute mobility routine to elite MMA conditioning.
+                  The only training app for all fitness paths—strength, combat sports, endurance, bodybuilding, mobility, and more. From your first 15-minute warm-up to elite performance.
                 </p>
               </div>
 
@@ -123,8 +128,8 @@ export default function Landing() {
       <section className="py-24 px-4 bg-gradient-to-b from-transparent via-vellera-blue/5 to-transparent">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black mb-4">Built Different.</h2>
-            <p className="text-xl text-gray-300">Everything you need to find your momentum.</p>
+            <h2 className="text-4xl md:text-5xl font-black mb-4">Built for Every Path.</h2>
+            <p className="text-xl text-gray-300">Strength, endurance, combat, bodybuilding, mobility, and beyond.</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -173,7 +178,7 @@ export default function Landing() {
                 {[
                   "Personal momentum, not metrics",
                   "Spotify & Apple Music integration",
-                  "Combat sports + fitness + recovery",
+                  "All fitness paths: strength, combat, endurance, bodybuilding, and more",
                   "Built for beginners AND athletes",
                   "Your soundtrack, your style, your pace",
                 ].map((item, i) => (
@@ -193,12 +198,12 @@ export default function Landing() {
         <div className="max-w-3xl mx-auto">
           <div className="bg-commander-surface border border-commander-border rounded-2xl p-12">
             <h2 className="text-4xl font-black mb-6">Forged in Discipline.</h2>
-            <h3 className="text-2xl text-vellera-blue font-bold mb-8">Built for Everyone.</h3>
+            <h3 className="text-2xl text-vellera-blue font-bold mb-8">Built for Every Goal.</h3>
             <p className="text-lg text-gray-300 leading-relaxed mb-6">
-              Vellera wasn't created in a Silicon Valley boardroom. It was born from a need for a training platform that respects the mental and physical grind of real athletes, while remaining entirely accessible to beginners.
+              Vellera wasn't created in a Silicon Valley boardroom. It was built by people who train hard across all disciplines—from strength gyms to mats to trails. We understand that whether you're chasing strength gains, endurance PRs, combat sport excellence, or just better health, you deserve a platform that respects your effort.
             </p>
             <p className="text-lg text-gray-300 leading-relaxed">
-              We realized that true momentum—whether you are walking your first mile or stepping onto the mat—requires the same mindset: discipline, consistency, and the right tools. Vellera bridges that gap.
+              True momentum—whether you're taking your first workout or preparing for competition—requires the same mindset: discipline, consistency, and the right tools. Vellera bridges that gap for every athlete.
             </p>
           </div>
         </div>
@@ -227,7 +232,7 @@ export default function Landing() {
                   <p className="text-white font-bold text-xs uppercase tracking-widest mt-1">Founder & Creator</p>
                 </div>
                 <p className="text-gray-300 leading-relaxed text-sm">
-                  Military veteran, martial artist, and tactical defense specialist. Asaad brings decades of experience in firearms training, self-defense, and executive protection to every aspect of Vellera's design. His mission: make elite-level training accessible to everyone.
+                  Military veteran, martial artist, strength coach, and tactical specialist. Asaad brings decades of experience across combat sports, strength training, and human performance to every aspect of Vellera's design. His mission: make elite-level training accessible to everyone.
                 </p>
                 <a href="https://cyberdojosensai.org" target="_blank" rel="noopener noreferrer" className="inline-block text-vellera-blue font-bold text-sm hover:text-vellera-green transition">
                   cyberdojosensai.org →
@@ -240,7 +245,7 @@ export default function Landing() {
                   <p className="text-white font-bold text-xs uppercase tracking-widest mt-1">Co-Founder</p>
                 </div>
                 <p className="text-gray-300 leading-relaxed text-sm">
-                  Public service professional with extensive background as an EMT, firefighter, dispatcher, and firearms instructor. Shauntze brings real-world emergency response expertise and a deep understanding of functional fitness that keeps people ready for anything—on and off the mat.
+                  Public service professional with extensive background as an EMT, firefighter, dispatcher, and fitness educator. Shauntze brings real-world functional fitness expertise and a deep understanding of performance training that keeps people ready for every goal—strength, endurance, competition, or longevity.
                 </p>
                 <a href="https://shauntzemorman.info" target="_blank" rel="noopener noreferrer" className="inline-block text-vellera-green font-bold text-sm hover:text-vellera-blue transition">
                   shauntzemorman.info →
