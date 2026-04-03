@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { ArrowLeft, Zap, Heart, Shield, Flame } from "lucide-react";
+import { ArrowLeft, Zap, Heart, Shield, Flame, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import MovementGuide from "../components/MovementGuide";
 
 export default function ZuluMasterProtocol() {
   const navigate = useNavigate();
@@ -9,6 +10,9 @@ export default function ZuluMasterProtocol() {
   const [profile, setProfile] = useState(null);
   const [recovery, setRecovery] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [movements, setMovements] = useState([]);
+  const [selectedMovement, setSelectedMovement] = useState(null);
+  const [movementLoading, setMovementLoading] = useState(false);
 
   useEffect(() => {
     const loadMasterData = async () => {
@@ -34,7 +38,22 @@ export default function ZuluMasterProtocol() {
       }
     };
 
+    const loadMovementLibrary = async () => {
+      try {
+        setMovementLoading(true);
+        const response = await base44.functions.invoke("getMovementLibrary", { category: null });
+        if (response.data?.exercises) {
+          setMovements(response.data.exercises);
+        }
+      } catch (err) {
+        console.error("Failed to load movement library:", err);
+      } finally {
+        setMovementLoading(false);
+      }
+    };
+
     loadMasterData();
+    loadMovementLibrary();
   }, [navigate]);
 
   const dayOfWeek = new Date().getDay();
@@ -161,6 +180,39 @@ export default function ZuluMasterProtocol() {
         <p className="text-xs text-gray-300 mt-2">16:8 Fasting Window optional for CEO/PhD focus. High electrolytes for recovery + BJJ fluid loss.</p>
       </div>
 
+      {/* Visual Movement Guide */}
+      <div className="bg-commander-surface border border-commander-border rounded-xl p-4 space-y-3">
+        <p className="text-commander-muted text-xs uppercase font-bold flex items-center gap-2">
+          <Eye className="w-4 h-4" /> Visual Movement Library
+        </p>
+        {movementLoading ? (
+          <p className="text-commander-muted text-xs">Loading exercises...</p>
+        ) : movements.length > 0 ? (
+          <div className="grid grid-cols-2 gap-2 text-xs">
+            {movements.map((move) => (
+              <button
+                key={move.id}
+                onClick={() => setSelectedMovement(move)}
+                className={`rounded-lg p-2 text-left transition-all ${
+                  move.category === "Forge"
+                    ? "bg-blue-900/30 hover:bg-blue-900/50 border border-blue-700 text-blue-300"
+                    : move.category === "Charge"
+                    ? "bg-green-900/30 hover:bg-green-900/50 border border-green-700 text-green-300"
+                    : move.category === "Combat"
+                    ? "bg-red-900/30 hover:bg-red-900/50 border border-red-700 text-red-300"
+                    : "bg-purple-900/30 hover:bg-purple-900/50 border border-purple-700 text-purple-300"
+                }`}
+              >
+                <p className="font-bold">{move.exercise_name}</p>
+                <p className="text-xs opacity-75">{move.category}</p>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <p className="text-commander-muted text-xs">No exercises loaded yet.</p>
+        )}
+      </div>
+
       {/* Weekly Master Schedule */}
       <div className="bg-commander-surface border border-commander-border rounded-xl p-4 space-y-3">
         <p className="text-commander-muted text-xs uppercase font-bold">Master Schedule</p>
@@ -208,6 +260,11 @@ export default function ZuluMasterProtocol() {
         <p className="text-white text-sm font-bold">Execution Start</p>
         <p className="text-vellera-green text-xs font-bold mt-1">Monday, April 6, 2026 | 05:00 AM | The Lab w/ Colin Eaton</p>
       </div>
+
+      {/* Movement Guide Modal */}
+      {selectedMovement && (
+        <MovementGuide exercise={selectedMovement} onClose={() => setSelectedMovement(null)} />
+      )}
     </div>
   );
 }

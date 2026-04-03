@@ -1,0 +1,92 @@
+{
+  "name": "ExerciseLibrary",
+  "type": "object",
+  "properties": {
+    "exercise_name": {
+      "type": "string",
+      "title": "Exercise Name"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Forge",
+        "Charge",
+        "Combat",
+        "Recovery"
+      ],
+      "title": "Movement Category"
+    },
+    "muscle_groups": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Primary Muscle Groups"
+    },
+    "app_prompt": {
+      "type": "string",
+      "title": "In-App Form Cue"
+    },
+    "form_cues": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Detailed Form Checkpoints"
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Exercise Image URL"
+    },
+    "video_url": {
+      "type": "string",
+      "title": "Form Video URL"
+    },
+    "video_duration_seconds": {
+      "type": "number",
+      "title": "Video Duration (seconds)"
+    },
+    "breathing_cue": {
+      "type": "string",
+      "title": "Breathing Pattern"
+    },
+    "safety_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Injury Prevention Notes"
+    },
+    "bjj_carryover": {
+      "type": "string",
+      "title": "BJJ Carry-Over / Sport Relevance"
+    },
+    "progression_notes": {
+      "type": "string",
+      "title": "Progression Cues"
+    }
+  },
+  "required": [
+    "exercise_name",
+    "category",
+    "app_prompt"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
