@@ -133,11 +133,38 @@
         "endurance"
       ],
       "title": "Vellera Track"
+    },
+    "shoulder_to_waist_ratio": {
+      "type": "number",
+      "title": "Shoulder-to-Waist Ratio (Aesthetic Tracking)",
+      "description": "Primary Zulu metric: target 1.3+"
+    },
+    "whoop_correlation_strength_gain": {
+      "type": "number",
+      "title": "Whoop-Strength Correlation (lbs)",
+      "description": "6-week strength gains vs recovery score"
+    },
+    "cognitive_output_score": {
+      "type": "number",
+      "title": "Post-Training Cognitive Output (0-100)",
+      "description": "PhD/deep work productivity post-session"
+    },
+    "goal_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Target Goal Date",
+      "description": "Competition or personal milestone date"
+    },
+    "weight_kg": {
+      "type": "number",
+      "title": "Current Weight (kg)"
     }
   },
   "required": [],
   "rls": {
-    "create": {},
+    "create": {
+      "created_by": "{{user.email}}"
+    },
     "read": {
       "$or": [
         {

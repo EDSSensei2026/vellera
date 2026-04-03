@@ -10,6 +10,9 @@ Deno.serve(async (req) => {
     }
 
     const today = new Date().toISOString().split("T")[0];
+    const hour = new Date().getHours();
+    const isMorning = hour >= 5 && hour < 12;
+    const isEvening = hour >= 17 && hour < 21;
 
     // Get latest biometric log (Whoop recovery)
     const biometrics = await base44.entities.BiometricLog.filter(
@@ -31,21 +34,33 @@ Deno.serve(async (req) => {
     const recoveryScore = bio.recovery_score || 50;
     const amStrain = bio.training_load || 0;
 
-    // Recovery Gate Logic
+    // Recovery Gate Logic with Contextual Triggers
     let recoveryStatus, pmClearance, notification;
 
     if (recoveryScore > 67) {
       recoveryStatus = "green";
       pmClearance = "combat_approved";
-      notification = "✅ GREEN ZONE: Cleared for Combat. AM +2.5% load. Go compete.";
+      notification = isMorning 
+        ? "🔥 AM FORGE: Your strength is the shield for your family. Push for them."
+        : isEvening 
+        ? "✅ GREEN ZONE: Cleared for Combat. Assess Strain vs. Capacity. Go compete."
+        : "✅ GREEN ZONE: Cleared for Combat. AM +2.5% load.";
     } else if (recoveryScore >= 34) {
       recoveryStatus = "yellow";
       pmClearance = "drills_only";
-      notification = "⚠️ YELLOW ZONE: Technical Restraint. PM drills only (no live rolling). AM load -15%.";
+      notification = isMorning
+        ? "⚠️ YELLOW MORNING: Maintenance load. Drills only PM. Tactical discipline over ego."
+        : isEvening
+        ? "⚠️ YELLOW EVENING: Drills only (no live rolling). Preserve capacity."
+        : "⚠️ YELLOW ZONE: Technical Restraint. PM drills only.";
     } else {
       recoveryStatus = "red";
       pmClearance = "shield_recovery";
-      notification = "🛑 RED ZONE: Shield Recovery activated. Cancel AM lift. PM rest.";
+      notification = isMorning
+        ? "🛑 SHIELD RECOVERY: Cancel AM lift. Wisdom is knowing when to decompress."
+        : isEvening
+        ? "🛑 RED ZONE: Complete rest. Recovery is a tactical decision for the long game."
+        : "🛑 RED ZONE: Shield Recovery activated. Cancel AM lift. PM rest.";
     }
 
     // Log decision to PlanAdjustment if Red
@@ -77,7 +92,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    console.log(`[Zulu Daily Check] ${user.email} | Recovery: ${recoveryScore}% | Status: ${recoveryStatus.toUpperCase()} | AM Strain: ${amStrain}`);
+    console.log(`[Zulu Daily Check v2.0] ${user.email} | Recovery: ${recoveryScore}% | Status: ${recoveryStatus.toUpperCase()} | AM Strain: ${amStrain} | Trigger: ${isMorning ? 'AM' : isEvening ? 'PM' : 'DAILY'}`);
 
     return Response.json({
       success: true,

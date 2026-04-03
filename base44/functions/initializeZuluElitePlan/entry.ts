@@ -114,10 +114,15 @@ Deno.serve(async (req) => {
       base_intensity_level: "Advanced",
       auto_adjust_enabled: true,
       notes: "AM Phase (05:00): The Forge - Strength & Aesthetic | PM Phase (18:00): The Combat - BJJ/MMA Skill. Whoop 5.0 Recovery Gating: Green >67% (+2.5% load), Yellow 34-66% (-15% load, drills only), Red <34% (Shield Recovery, rest).",
+      motivational_metadata: {
+        am_trigger: "Your strength is the shield for Shauntze, your son, and Emerging Defense Solutions. Push for them.",
+        pm_trigger: "Assess Strain vs. Capacity. A wise protector stays healthy to defend. Tactical discipline over ego.",
+        recovery_trigger: "Wisdom is knowing when to decompress. Recovery is a tactical decision for the long game."
+      },
       weeks,
     });
 
-    console.log(`[Zulu Elite v1.2] Created for ${user.email}: ${plan.id}`);
+    console.log(`[Zulu Elite v2.0] Created for ${user.email}: ${plan.id}`);
 
     return Response.json({
       success: true,
@@ -126,7 +131,7 @@ Deno.serve(async (req) => {
       start_date: plan.start_date,
       end_date: plan.end_date,
       phases: "AM (05:00) | PM (18:00)",
-      message: "Zulu Elite v1.2 initialized. Connect Whoop 5.0 for recovery gating. Daily check at 17:00 compares AM strain vs recovery capacity.",
+      message: "Zulu Elite v2.0 initialized. Motivational triggers active. Connect Whoop 5.0 for recovery gating. Daily check at 17:00 compares AM strain vs recovery capacity.",
     });
   } catch (error) {
     console.error('[Zulu Elite Plan Error]', error.message);
