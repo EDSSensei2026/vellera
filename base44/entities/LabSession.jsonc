@@ -1,0 +1,140 @@
+{
+  "name": "LabSession",
+  "type": "object",
+  "properties": {
+    "athlete_email": {
+      "type": "string",
+      "title": "Athlete Email"
+    },
+    "session_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Lab Session Date"
+    },
+    "session_time": {
+      "type": "string",
+      "title": "Session Time (HH:MM)"
+    },
+    "coach_name": {
+      "type": "string",
+      "title": "Coach Name",
+      "default": "Colin Eaton"
+    },
+    "primary_focus": {
+      "type": "string",
+      "enum": [
+        "Lower Body",
+        "Upper Body",
+        "Full Body",
+        "Explosive Power",
+        "Injury Assessment"
+      ],
+      "title": "Primary Focus"
+    },
+    "is_live_programmed": {
+      "type": "boolean",
+      "title": "Coach Live Adjusted Programming",
+      "default": true,
+      "description": "If true, PM session defers to Colin's notes"
+    },
+    "exercises_performed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "sets": {
+            "type": "number"
+          },
+          "reps": {
+            "type": "number"
+          },
+          "weight_lbs": {
+            "type": "number"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "Exercises & Prescription"
+    },
+    "perceived_exertion": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 10,
+      "title": "Perceived Exertion (RPE)"
+    },
+    "form_quality": {
+      "type": "string",
+      "enum": [
+        "Perfect",
+        "Good",
+        "Fair",
+        "Poor"
+      ],
+      "title": "Overall Form Quality"
+    },
+    "override_note": {
+      "type": "string",
+      "title": "Coach Override Note for PM",
+      "description": "e.g., 'Reduce intensity\u2014shoulder stress detected'"
+    }
+  },
+  "required": [
+    "athlete_email",
+    "session_date",
+    "primary_focus"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "created_by": "colin@example.com"
+        },
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "data.athlete_email": "{{user.email}}"
+        },
+        {
+          "created_by": "colin@example.com"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "colin@example.com"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "name": "CoachFeedback",
+  "type": "object",
+  "properties": {
+    "athlete_email": {
+      "type": "string",
+      "title": "Athlete Email"
+    },
+    "coach_name": {
+      "type": "string",
+      "title": "Coach Name",
+      "default": "Colin Eaton"
+    },
+    "session_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Session Date"
+    },
+    "session_type": {
+      "type": "string",
+      "enum": [
+        "Lab",
+        "BJJ",
+        "Recovery",
+        "Strength",
+        "Conditioning"
+      ],
+      "title": "Session Type"
+    },
+    "intensity_level": {
+      "type": "string",
+      "enum": [
+        "Low",
+        "Moderate",
+        "High",
+        "Max"
+      ],
+      "title": "Intensity Level"
+    },
+    "coach_notes": {
+      "type": "string",
+      "title": "Coach's Feedback Notes"
+    },
+    "injury_observations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Injury/Pain Observations",
+      "description": "e.g., 'Left shoulder tight', 'Right knee sensitive'"
+    },
+    "recommended_adjustments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "exercise": {
+            "type": "string"
+          },
+          "adjustment": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "Recommended Load/Volume Adjustments"
+    },
+    "next_session_override": {
+      "type": "string",
+      "enum": [
+        "Shield Recovery",
+        "Standard",
+        "Elevated"
+      ],
+      "title": "Override for Next AM Session",
+      "default": "Standard"
+    },
+    "joint_integrity_check": {
+      "type": "object",
+      "properties": {
+        "knee_status": {
+          "type": "string",
+          "enum": [
+            "Clear",
+            "Monitor",
+            "Rest Required"
+          ]
+        },
+        "back_status": {
+          "type": "string",
+          "enum": [
+            "Clear",
+            "Monitor",
+            "Rest Required"
+          ]
+        },
+        "shoulder_status": {
+          "type": "string",
+          "enum": [
+            "Clear",
+            "Monitor",
+            "Rest Required"
+          ]
+        }
+      },
+      "title": "Joint Integrity Assessment"
+    }
+  },
+  "required": [
+    "athlete_email",
+    "session_date",
+    "session_type"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "created_by": "colin@example.com"
+        },
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "data.athlete_email": "{{user.email}}"
+        },
+        {
+          "created_by": "colin@example.com"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "colin@example.com"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

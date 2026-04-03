@@ -63,6 +63,7 @@ const MyCoaches = lazy(() => import('./pages/MyCoaches'));
 const RetentionAnalytics = lazy(() => import('./pages/RetentionAnalytics'));
 const ZuluWarrior = lazy(() => import('./pages/ZuluWarrior'));
 const ZuluShred = lazy(() => import('./pages/ZuluShred'));
+const ZuluWarriorv4 = lazy(() => import('./pages/ZuluWarriorv4'));
 
 const LoadingSpinner = () => (
   <div className="fixed inset-0 flex items-center justify-center bg-commander-dark z-50">
@@ -161,6 +162,7 @@ const AuthenticatedApp = () => {
       <Route path="/retention" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><RetentionAnalytics /></Suspense></PageTransition>} />
       <Route path="/zulu" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ZuluWarrior /></Suspense></PageTransition>} />
       <Route path="/shred" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ZuluShred /></Suspense></PageTransition>} />
+      <Route path="/zulu-v4" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ZuluWarriorv4 /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>
