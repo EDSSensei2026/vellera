@@ -369,8 +369,8 @@ export default function Landing() {
               <p className="font-bold mb-4">Connect</p>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li>
-                  <a href="https://x.com/vellerapp" target="_blank" rel="noopener noreferrer" className="hover:text-vellera-blue transition">
-                    X (Twitter)
+                  <a href="https://www.facebook.com/share/18NyHszzDX/" target="_blank" rel="noopener noreferrer" className="hover:text-vellera-blue transition">
+                    Facebook
                   </a>
                 </li>
                 <li>
