@@ -284,6 +284,10 @@ export default function Dashboard() {
           <span className="text-white text-sm font-medium">👥 Training Squads</span>
           <ChevronRight className="w-4 h-4 text-commander-muted" />
         </Link>
+        <Link to="/search-console" className="col-span-2 bg-commander-surface border border-green-900 rounded-xl p-3 flex items-center justify-between hover:border-green-500 transition-all">
+          <span className="text-white text-sm font-medium">🔍 Search Performance</span>
+          <ChevronRight className="w-4 h-4 text-commander-muted" />
+        </Link>
       </div>
 
       {/* Recent Sessions */}

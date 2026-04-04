@@ -82,6 +82,7 @@ const LoadingSpinner = () => (
     <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
   </div>
 );
+const SearchConsoleDashboard = lazy(() => import('./pages/SearchConsoleDashboard'));
 // Add page imports here
 
 const PublicApp = () => (
@@ -187,6 +188,7 @@ const AuthenticatedApp = () => {
       <Route path="/belt-progression" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BeltProgressionDashboard /></Suspense></PageTransition>} />
       <Route path="/stats" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><StatsDashboard /></Suspense></PageTransition>} />
       <Route path="/nutrition" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><NutritionTracker /></Suspense></PageTransition>} />
+      <Route path="/search-console" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SearchConsoleDashboard /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>
