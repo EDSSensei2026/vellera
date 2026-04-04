@@ -22,6 +22,7 @@ import { toast } from "sonner";
 // import AdaptiveWorkoutDashboard from "../components/AdaptiveWorkoutDashboard";
 // import AchievementsWidget from "../components/AchievementsWidget";
 import { Droplets, Flame, Moon, Heart, Zap, ChevronRight } from "lucide-react";
+import MorningReadinessAlert from "../components/MorningReadinessAlert";
 import { Link } from "react-router-dom";
 
 // User can set custom goal date in settings
@@ -151,6 +152,7 @@ export default function Dashboard() {
 
   return (
     <div ref={containerRef} className="p-4 space-y-4 max-w-lg mx-auto pb-24 safe-area-top overflow-auto h-screen">
+      <MorningReadinessAlert />
       {/* Refresh Indicator */}
       {refreshing && (
         <div className="fixed top-16 left-1/2 transform -translate-x-1/2 z-40">
