@@ -91,6 +91,9 @@ const InstructorOrgDashboard = lazy(() => import('./pages/InstructorOrgDashboard
 const StudentMobileHome = lazy(() => import('./pages/StudentMobileHome'));
 const ReferralPortal = lazy(() => import('./pages/ReferralPortal'));
 const CoachShowcase = lazy(() => import('./pages/CoachShowcase'));
+const HybridAthlete = lazy(() => import('./pages/HybridAthlete'));
+const BJJStrengthConditioning = lazy(() => import('./pages/BJJStrengthConditioning'));
+const ExecutiveFitnessDefense = lazy(() => import('./pages/ExecutiveFitnessDefense'));
 // Add page imports here
 
 const PublicApp = () => (
@@ -205,6 +208,9 @@ const AuthenticatedApp = () => {
       <Route path="/submit-video" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><StudentMobileHome /></Suspense></PageTransition>} />
       <Route path="/referral" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ReferralPortal /></Suspense></PageTransition>} />
       <Route path="/coach/:coachId" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><CoachShowcase /></Suspense></PageTransition>} />
+      <Route path="/hybrid-athlete" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><HybridAthlete /></Suspense></PageTransition>} />
+      <Route path="/bjj-strength-conditioning" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BJJStrengthConditioning /></Suspense></PageTransition>} />
+      <Route path="/executive-fitness-defense" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ExecutiveFitnessDefense /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>

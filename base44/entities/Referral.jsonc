@@ -18,6 +18,11 @@
       "type": "string",
       "title": "Unique Referral Code"
     },
+    "coach_code": {
+      "type": "string",
+      "title": "Coach Referral Code",
+      "description": "When coach brings 5 students, unlocks org tier"
+    },
     "referral_link": {
       "type": "string",
       "title": "Full Referral URL"
@@ -61,6 +66,22 @@
       "type": "string",
       "format": "date-time",
       "title": "Reward Claim Date"
+    },
+    "student_count": {
+      "type": "number",
+      "title": "Total Students Referred",
+      "default": 0
+    },
+    "org_tier_unlocked": {
+      "type": "boolean",
+      "title": "Organization Tier Unlocked",
+      "default": false,
+      "description": "Unlocked when student_count >= 5"
+    },
+    "org_tier_expiry": {
+      "type": "string",
+      "format": "date",
+      "title": "Org Tier Expiry (3 months free)"
     },
     "notes": {
       "type": "string",

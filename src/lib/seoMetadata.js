@@ -94,6 +94,9 @@ ${routes.map(route => `
 // Key landing pages for SEO
 export const SEO_ROUTES = [
   { path: '/', priority: 1.0 },
+  { path: '/hybrid-athlete', priority: 0.95, keywords: 'hybrid training, strength conditioning, functional fitness' },
+  { path: '/bjj-strength-conditioning', priority: 0.9, keywords: 'BJJ strength training, grappling S&C, martial arts conditioning' },
+  { path: '/executive-fitness-defense', priority: 0.9, keywords: 'executive fitness, tactical training, situational awareness' },
   { path: '/coaching/martial-arts', priority: 0.9 },
   { path: '/coaching/strength', priority: 0.9 },
   { path: '/coaching/conditioning', priority: 0.8 },
