@@ -93,6 +93,7 @@ export default function AnalyzeTechnique() {
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState(null);
   const [savedId, setSavedId] = useState(null);
+  const [actionData, setActionData] = useState(null);
 
   const isVideo = file?.type?.startsWith("video/");
 
@@ -208,6 +209,14 @@ Return ONLY valid JSON:
         },
       });
 
+      // Run HF action recognition in parallel
+      const actionRes = await base44.functions.invoke('actionRecognition', {
+        video_url: file_url,
+        session_type: sessionType,
+      }).catch(() => ({ data: null }));
+
+      if (actionRes.data) setActionData(actionRes.data);
+
       // Save to VideoVault
       const saved = await base44.entities.VideoVault.create({
         title: title.trim(),
@@ -221,6 +230,14 @@ Return ONLY valid JSON:
         notes: notes.trim() || null,
         analyzed: true,
       });
+
+      // Run HF action recognition in parallel
+      const hfActionRes = await base44.functions.invoke('actionRecognition', {
+        video_url: file_url,
+        session_type: sessionType,
+      }).catch(() => ({ data: null }));
+
+      if (hfActionRes.data) setActionData(hfActionRes.data);
 
       setResult(analysis);
       setSavedId(saved.id);
@@ -411,11 +428,34 @@ Return ONLY valid JSON:
               </div>
             )}
 
-            {/* Saved badge */}
-            {savedId && (
-              <div className="flex items-center gap-2 bg-green-950/40 border border-green-800 rounded-xl px-4 py-3">
-                <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
-                <p className="text-green-300 text-sm">Analysis saved to your Film Vault</p>
+            {/* HF Action Recognition */}
+            {actionData && (
+              <div className="bg-vellera-green/10 border border-vellera-green/30 rounded-xl p-4 space-y-3">
+                <p className="text-vellera-green text-xs font-bold uppercase tracking-wider">🎬 Action Recognition (Hugging Face)</p>
+                <div className="space-y-2">
+                  {actionData.primary_actions?.map((action, i) => (
+                    <div key={i} className="border-b border-vellera-green/20 pb-2 last:border-0">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="text-white font-bold text-sm">{action.name}</p>
+                          <p className="text-commander-muted text-xs">Parts: {action.body_parts_involved?.join(", ")}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-vellera-green font-bold text-sm">{action.efficiency_score}</p>
+                          <p className="text-commander-muted text-xs">Efficiency</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {actionData.action_recommendations?.length > 0 && (
+                  <div className="bg-vellera-blue/10 rounded-lg p-2 mt-2">
+                    <p className="text-vellera-blue text-xs font-bold mb-1">Next Steps:</p>
+                    {actionData.action_recommendations.map((rec, i) => (
+                      <p key={i} className="text-white text-xs">• {rec}</p>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 

@@ -76,6 +76,7 @@ const AISparringAdvisor = lazy(() => import('./pages/AISparringAdvisor'));
 const BeltProgressionDashboard = lazy(() => import('./pages/BeltProgressionDashboard'));
 const StatsDashboard = lazy(() => import('./pages/StatsDashboard'));
 const NutritionTracker = lazy(() => import('./pages/NutritionTracker'));
+const RecoveryPredictor = lazy(() => import('./pages/RecoveryPredictor'));
 
 const LoadingSpinner = () => (
   <div className="fixed inset-0 flex items-center justify-center bg-commander-dark z-50">
@@ -189,6 +190,7 @@ const AuthenticatedApp = () => {
       <Route path="/belt-progression" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BeltProgressionDashboard /></Suspense></PageTransition>} />
       <Route path="/stats" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><StatsDashboard /></Suspense></PageTransition>} />
       <Route path="/nutrition" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><NutritionTracker /></Suspense></PageTransition>} />
+      <Route path="/recovery-predictor" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><RecoveryPredictor /></Suspense></PageTransition>} />
       <Route path="/search-console" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SearchConsoleDashboard /></Suspense></PageTransition>} />
       <Route path="/member-onboarding" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MemberOnboarding /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
