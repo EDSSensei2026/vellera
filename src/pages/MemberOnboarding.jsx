@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import {
   ArrowLeft, ClipboardList, ExternalLink, RefreshCw, Loader2,
-  Users, Copy, Check, Zap, ChevronDown, ChevronUp, CheckCircle2, AlertCircle
+  Users, Copy, Check, Zap, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, Database
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -81,6 +81,9 @@ export default function MemberOnboarding() {
   const [copied, setCopied] = useState(false);
   const [user, setUser] = useState(null);
   const [batchResult, setBatchResult] = useState(null);
+  const [airtableBaseId, setAirtableBaseId] = useState('');
+  const [syncingAirtable, setSyncingAirtable] = useState(false);
+  const [airtableResult, setAirtableResult] = useState(null);
 
   useEffect(() => {
     const init = async () => {
@@ -113,6 +116,18 @@ export default function MemberOnboarding() {
     const res = await base44.functions.invoke("generatePlansFromTypeform", {});
     setBatchResult(res.data);
     setGeneratingAll(false);
+  };
+
+  const syncToAirtable = async () => {
+    if (!airtableBaseId.trim()) {
+      alert('Please enter your Airtable Base ID');
+      return;
+    }
+    setSyncingAirtable(true);
+    setAirtableResult(null);
+    const res = await base44.functions.invoke("syncTypeformToAirtable", { baseId: airtableBaseId });
+    setAirtableResult(res.data);
+    setSyncingAirtable(false);
   };
 
   const copyLink = () => {
@@ -248,12 +263,34 @@ export default function MemberOnboarding() {
             </div>
           )}
 
-          {!isAdmin && (
-            <div className="bg-commander-surface border border-commander-border rounded-xl p-4 text-center">
-              <p className="text-commander-muted text-sm">Share the link above with new recruits. Admins can generate personalized training plans from responses.</p>
+          {/* Sync to Airtable Section */}
+          <div className="bg-commander-surface border border-commander-border rounded-xl p-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <Database className="w-4 h-4 text-vellera-green" />
+              <p className="text-white font-bold text-sm">Sync to Airtable</p>
             </div>
-          )}
+            <p className="text-commander-muted text-xs">Export all Typeform responses to your Airtable base for centralized tracking.</p>
+            <input type="text" placeholder="Base ID (from airtable.com/appXXXXXX...)" value={airtableBaseId} onChange={e => setAirtableBaseId(e.target.value)}
+              className="w-full bg-gray-900 border border-commander-border rounded-lg px-3 py-2 text-white text-sm" />
+            <button onClick={syncToAirtable} disabled={syncingAirtable || !airtableBaseId.trim()}
+              className="w-full bg-vellera-green/20 border border-vellera-green text-vellera-green rounded-lg py-2.5 text-sm font-bold hover:bg-vellera-green/30 transition-all flex items-center justify-center gap-2 disabled:opacity-50">
+              {syncingAirtable ? <Loader2 className="w-4 h-4 animate-spin" /> : <Database className="w-4 h-4" />}
+              {syncingAirtable ? "Syncing..." : "Sync to Airtable"}
+            </button>
+            {airtableResult?.error && (
+              <div className="bg-red-900/30 border border-red-700 rounded-lg p-3 text-red-300 text-xs">{airtableResult.error}</div>
+            )}
+            {airtableResult?.message && (
+              <div className="bg-vellera-green/10 border border-vellera-green/40 rounded-lg p-3 text-vellera-green text-xs font-bold">✅ {airtableResult.message}</div>
+            )}
+          </div>
         </>
+      )}
+
+      {!isAdmin && (
+        <div className="bg-commander-surface border border-commander-border rounded-xl p-4 text-center">
+          <p className="text-commander-muted text-sm">Share the link above with new recruits. Admins can generate personalized training plans from responses.</p>
+        </div>
       )}
     </div>
   );
