@@ -330,15 +330,15 @@ export default function Landing() {
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div>
               <p className="font-bold text-vellera-blue mb-4">Vellera</p>
-              <p className="text-sm text-gray-400">Your pace. Your progress.</p>
+              <p className="text-sm text-gray-400">Training for every path. Built for discipline.</p>
             </div>
 
             <div>
-              <p className="font-bold mb-4">Links</p>
+              <p className="font-bold mb-4">Resources</p>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li>
-                  <a href="#" className="hover:text-vellera-blue transition">
-                    About EDS
+                  <a href="https://cyberdojosensai.org" target="_blank" rel="noopener noreferrer" className="hover:text-vellera-blue transition">
+                    Cyberdo Jo Sensai
                   </a>
                 </li>
                 <li>
@@ -358,7 +358,7 @@ export default function Landing() {
                   </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-vellera-blue transition">
+                  <a href="mailto:hello@vellera.io" className="hover:text-vellera-blue transition">
                     Contact
                   </a>
                 </li>
@@ -366,15 +366,15 @@ export default function Landing() {
             </div>
 
             <div>
-              <p className="font-bold mb-4">Follow</p>
+              <p className="font-bold mb-4">Connect</p>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li>
-                  <a href="#" className="hover:text-vellera-blue transition">
-                    Twitter / X
+                  <a href="https://x.com/vellerapp" target="_blank" rel="noopener noreferrer" className="hover:text-vellera-blue transition">
+                    X (Twitter)
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-vellera-blue transition">
+                  <a href="https://instagram.com/vellera" target="_blank" rel="noopener noreferrer" className="hover:text-vellera-blue transition">
                     Instagram
                   </a>
                 </li>
