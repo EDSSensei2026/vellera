@@ -74,6 +74,7 @@ const PhysiqueTrackerPage = lazy(() => import('./pages/PhysiqueTrackerPage'));
 const SkillRoadmapPage = lazy(() => import('./pages/SkillRoadmapPage'));
 const AISparringAdvisor = lazy(() => import('./pages/AISparringAdvisor'));
 const BeltProgressionDashboard = lazy(() => import('./pages/BeltProgressionDashboard'));
+const StatsDashboard = lazy(() => import('./pages/StatsDashboard'));
 
 const LoadingSpinner = () => (
   <div className="fixed inset-0 flex items-center justify-center bg-commander-dark z-50">
@@ -183,6 +184,7 @@ const AuthenticatedApp = () => {
       <Route path="/skill-roadmap" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SkillRoadmapPage /></Suspense></PageTransition>} />
       <Route path="/sparring-advisor" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><AISparringAdvisor /></Suspense></PageTransition>} />
       <Route path="/belt-progression" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BeltProgressionDashboard /></Suspense></PageTransition>} />
+      <Route path="/stats" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><StatsDashboard /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>
