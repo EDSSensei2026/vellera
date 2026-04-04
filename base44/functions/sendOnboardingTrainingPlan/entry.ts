@@ -119,8 +119,39 @@ Deno.serve(async (req) => {
     const result = await sendGmailMessage(gmailAccessToken, rawMessage);
     console.log(`Training plan emailed to ${recruitEmail}`);
 
+    // Notify coach
+    const coachHtmlBody = `
+<html>
+  <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h2 style="color: #00E5FF;">📋 Training Plan Generated</h2>
+      <p>A new training plan has been generated and sent to a recruit:</p>
+      <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 15px 0;">
+        <p><strong>Recruit:</strong> ${recruitName}</p>
+        <p><strong>Email:</strong> ${recruitEmail}</p>
+        <p><strong>Fitness Level:</strong> ${typeformData.fitness_level || 'Not specified'}</p>
+        <p><strong>Primary Disciplines:</strong> ${typeformData.disciplines || 'Not specified'}</p>
+        <p><strong>Goals:</strong> ${typeformData.goals || 'Not specified'}</p>
+      </div>
+      <p>The personalized 4-week training plan has been sent to the recruit. Monitor their progress in the Vellera dashboard.</p>
+    </div>
+  </body>
+</html>
+    `;
+
+    const coachEmail = 'colin@example.com'; // Update with actual coach email
+    const coachSubject = `[Vellera] Training Plan Generated for ${recruitName}`;
+    const coachRawMessage = buildMimeEmail('noreply@vellera.io', coachEmail, coachSubject, coachHtmlBody);
+
+    try {
+      await sendGmailMessage(gmailAccessToken, coachRawMessage);
+      console.log(`Coach notification sent to ${coachEmail}`);
+    } catch (err) {
+      console.warn(`Failed to notify coach: ${err.message}`);
+    }
+
     return Response.json({
-      message: `Training plan sent to ${recruitEmail}`,
+      message: `Training plan sent to ${recruitEmail} and coach notified`,
       messageId: result.id,
     });
   } catch (error) {
