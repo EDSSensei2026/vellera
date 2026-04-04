@@ -1,0 +1,112 @@
+{
+  "name": "SkillRoadmap",
+  "type": "object",
+  "properties": {
+    "technique_name": {
+      "type": "string",
+      "title": "Technique Name"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Guard Retention",
+        "Sweeps",
+        "Submissions",
+        "Escapes",
+        "Positional Control",
+        "Footwork",
+        "Defense"
+      ],
+      "title": "Category"
+    },
+    "belt_level": {
+      "type": "string",
+      "enum": [
+        "White",
+        "Blue",
+        "Purple",
+        "Brown",
+        "Black"
+      ],
+      "title": "Target Belt Level",
+      "default": "White"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Not Started",
+        "Introduced",
+        "Drilling",
+        "Sparring",
+        "Mastered"
+      ],
+      "title": "Mastery Status",
+      "default": "Not Started"
+    },
+    "session_count": {
+      "type": "number",
+      "title": "Times Practiced",
+      "default": 0
+    },
+    "last_practiced": {
+      "type": "string",
+      "format": "date",
+      "title": "Last Practiced"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Personal Notes"
+    },
+    "is_custom": {
+      "type": "boolean",
+      "title": "Custom Technique (user-added)",
+      "default": false
+    }
+  },
+  "required": [
+    "technique_name",
+    "category",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

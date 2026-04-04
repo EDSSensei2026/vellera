@@ -71,6 +71,7 @@ const MealPlanner = lazy(() => import('./pages/MealPlanner'));
 const HydrationTracker = lazy(() => import('./pages/HydrationTracker'));
 const MobilityRoutinePage = lazy(() => import('./pages/MobilityRoutinePage'));
 const PhysiqueTrackerPage = lazy(() => import('./pages/PhysiqueTrackerPage'));
+const SkillRoadmapPage = lazy(() => import('./pages/SkillRoadmapPage'));
 
 const LoadingSpinner = () => (
   <div className="fixed inset-0 flex items-center justify-center bg-commander-dark z-50">
@@ -177,6 +178,7 @@ const AuthenticatedApp = () => {
       <Route path="/hydration" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><HydrationTracker /></Suspense></PageTransition>} />
       <Route path="/mobility" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MobilityRoutinePage /></Suspense></PageTransition>} />
       <Route path="/physique" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PhysiqueTrackerPage /></Suspense></PageTransition>} />
+      <Route path="/skill-roadmap" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SkillRoadmapPage /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>
