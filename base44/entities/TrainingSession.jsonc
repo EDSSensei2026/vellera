@@ -17,7 +17,10 @@
         "S&C Strength",
         "S&C Zone2",
         "Home Mobility",
-        "Open Mat"
+        "Open Mat",
+        "BJJ/Grappling",
+        "Striking/MMA",
+        "Strength & Conditioning"
       ],
       "title": "Session Type"
     },
@@ -119,6 +122,10 @@
       "type": "string",
       "title": "Session Notes"
     },
+    "notes": {
+      "type": "string",
+      "title": "Notes"
+    },
     "xp_awarded_technique": {
       "type": "string",
       "title": "XP Awarded To Technique"
@@ -127,10 +134,55 @@
       "type": "number",
       "title": "XP Amount",
       "default": 5
+    },
+    "google_event_id": {
+      "type": "string",
+      "title": "Google Calendar Event ID"
     }
   },
   "required": [
     "date",
     "session_type"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
 }

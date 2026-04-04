@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { ChevronLeft, ChevronRight, CalendarDays } from "lucide-react";
+import CalendarSyncWidget from "../components/CalendarSyncWidget";
 import { toast } from "sonner";
 
 const SESSION_COLORS = {
@@ -199,6 +200,9 @@ export default function TrainingCalendar() {
         </DragDropContext>
       )}
 
+      {/* Google Calendar Sync */}
+      <CalendarSyncWidget />
+
       {/* Day detail panel */}
       {selected && (() => {
         const daySessions = sessionMap[selected] || [];
@@ -222,7 +226,7 @@ export default function TrainingCalendar() {
                     <div className={`w-2 h-2 rounded-full ${SESSION_COLORS[s.session_type] || "bg-gray-500"}`} />
                     <div>
                       <p className="text-white text-sm font-medium">{s.session_type}</p>
-                      <p className="text-commander-muted text-xs">{s.duration_minutes ? `${s.duration_minutes} min` : ""}{s.intensity ? ` · Intensity ${s.intensity}/10` : ""}</p>
+                      <p className="text-commander-muted text-xs">{s.duration_minutes ? `${s.duration_minutes} min` : ""}{s.intensity ? ` · Intensity ${s.intensity}/10` : ""}{s.google_event_id ? " · 📅 Calendar" : ""}</p>
                     </div>
                   </div>
                 ))}

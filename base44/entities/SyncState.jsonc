@@ -1,0 +1,44 @@
+{
+  "name": "SyncState",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "title": "State Key"
+    },
+    "sync_token": {
+      "type": "string",
+      "title": "Google Calendar Sync Token"
+    },
+    "last_synced": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last Synced At"
+    }
+  },
+  "required": [
+    "key"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
