@@ -1,0 +1,114 @@
+{
+  "name": "MobilityRoutine",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Date"
+    },
+    "intensity": {
+      "type": "string",
+      "enum": [
+        "High",
+        "Moderate",
+        "Low"
+      ],
+      "title": "Training Intensity"
+    },
+    "recovery_score": {
+      "type": "number",
+      "title": "Whoop Recovery Score"
+    },
+    "focus_areas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Target Areas"
+    },
+    "exercises": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "duration_seconds": {
+            "type": "number"
+          },
+          "sets": {
+            "type": "number"
+          },
+          "cue": {
+            "type": "string"
+          },
+          "bjj_benefit": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "Exercise Flow"
+    },
+    "total_minutes": {
+      "type": "number",
+      "title": "Total Duration (min)",
+      "default": 10
+    },
+    "warrior_note": {
+      "type": "string",
+      "title": "Warrior Note"
+    },
+    "completed": {
+      "type": "boolean",
+      "title": "Completed",
+      "default": false
+    }
+  },
+  "required": [
+    "date",
+    "intensity"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
