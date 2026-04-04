@@ -1,0 +1,109 @@
+{
+  "name": "PhysiqueTracker",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Date"
+    },
+    "photo_url": {
+      "type": "string",
+      "title": "Progress Photo URL"
+    },
+    "weight_lbs": {
+      "type": "number",
+      "title": "Weight (lbs)"
+    },
+    "body_fat_pct": {
+      "type": "number",
+      "title": "Body Fat %"
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "Shred",
+        "Maintain",
+        "Build"
+      ],
+      "title": "Phase",
+      "default": "Shred"
+    },
+    "pose": {
+      "type": "string",
+      "enum": [
+        "Front",
+        "Side",
+        "Back",
+        "Flex"
+      ],
+      "title": "Pose / Angle",
+      "default": "Front"
+    },
+    "bjj_belt": {
+      "type": "string",
+      "enum": [
+        "White",
+        "Blue",
+        "Purple",
+        "Brown",
+        "Black"
+      ],
+      "title": "BJJ Belt at Time of Photo",
+      "default": "White"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Notes / Observations"
+    },
+    "week_number": {
+      "type": "number",
+      "title": "Week Number (since protocol start)"
+    }
+  },
+  "required": [
+    "date",
+    "photo_url"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
