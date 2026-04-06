@@ -1,0 +1,102 @@
+{
+  "name": "ClinicalMessage",
+  "type": "object",
+  "properties": {
+    "from_email": {
+      "type": "string",
+      "title": "Sender Email"
+    },
+    "to_email": {
+      "type": "string",
+      "title": "Recipient Email"
+    },
+    "thread_id": {
+      "type": "string",
+      "title": "Thread ID",
+      "description": "Sorted canonical pair: 'emailA::emailB' (alphabetical) for thread grouping"
+    },
+    "content": {
+      "type": "string",
+      "title": "Message Content"
+    },
+    "message_type": {
+      "type": "string",
+      "enum": [
+        "text",
+        "clinical_note",
+        "assessment_ref",
+        "schedule_ref"
+      ],
+      "title": "Message Type",
+      "default": "text"
+    },
+    "attachment_url": {
+      "type": "string",
+      "title": "Attachment URL"
+    },
+    "is_read": {
+      "type": "boolean",
+      "title": "Read",
+      "default": false
+    },
+    "is_private_clinical": {
+      "type": "boolean",
+      "title": "Private Clinical Message",
+      "default": true,
+      "description": "When true, coaches with role != practitioner cannot read this thread"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Sent At"
+    }
+  },
+  "required": [
+    "from_email",
+    "to_email",
+    "content",
+    "thread_id"
+  ],
+  "rls": {
+    "create": {
+      "data.from_email": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.from_email": "{{user.email}}"
+        },
+        {
+          "data.to_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.from_email": "{{user.email}}"
+        },
+        {
+          "data.to_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.from_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

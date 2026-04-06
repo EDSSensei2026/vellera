@@ -4,7 +4,7 @@
   "properties": {
     "user_email": {
       "type": "string",
-      "title": "Patient / Athlete Email"
+      "title": "User Email (Patient / Athlete)"
     },
     "log_date": {
       "type": "string",
@@ -13,59 +13,76 @@
     },
     "pain_vas": {
       "type": "number",
-      "title": "Pain Score \u2014 VAS (0 = No Pain, 10 = Worst Pain)",
+      "title": "Pain (VAS 0-10)",
       "minimum": 0,
       "maximum": 10,
-      "description": "Visual Analogue Scale validated for clinical pain tracking"
+      "default": 0,
+      "description": "Visual Analogue Scale: 0 = No pain, 10 = Worst imaginable"
     },
     "pain_location": {
       "type": "string",
-      "title": "Pain Location (body area)"
+      "title": "Pain Location / Body Region"
     },
     "mood_score": {
       "type": "number",
-      "title": "Mood (1 = Very Low, 5 = Excellent)",
+      "title": "Mood (1-5)",
       "minimum": 1,
-      "maximum": 5
+      "maximum": 5,
+      "default": 3,
+      "description": "1=Very Low, 3=Neutral, 5=Excellent"
     },
     "sleep_hours": {
       "type": "number",
-      "title": "Sleep Duration (hours)"
+      "title": "Sleep Duration (hours)",
+      "minimum": 0,
+      "maximum": 24
     },
     "sleep_quality": {
       "type": "number",
-      "title": "Sleep Quality (1 = Poor, 5 = Excellent)",
+      "title": "Sleep Quality (1-5)",
       "minimum": 1,
-      "maximum": 5
+      "maximum": 5,
+      "default": 3
     },
-    "fatigue_score": {
+    "energy_level": {
       "type": "number",
-      "title": "Fatigue (1 = Exhausted, 5 = Fully Energised)",
+      "title": "Energy Level (1-5)",
       "minimum": 1,
-      "maximum": 5
+      "maximum": 5,
+      "default": 3
     },
     "readiness_score": {
       "type": "number",
-      "title": "Training Readiness (0-100)",
-      "minimum": 0,
-      "maximum": 100
+      "title": "Readiness to Train (1-10)",
+      "minimum": 1,
+      "maximum": 10
     },
     "symptoms": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "enum": [
+          "swelling",
+          "stiffness",
+          "fatigue",
+          "headache",
+          "nausea",
+          "dizziness",
+          "shortness_of_breath",
+          "other"
+        ]
       },
-      "title": "Active Symptoms",
-      "description": "e.g. ['swelling', 'stiffness', 'headache']"
+      "title": "Reported Symptoms"
     },
     "notes": {
       "type": "string",
-      "title": "Patient Notes"
+      "title": "Daily Notes"
     },
     "flagged": {
       "type": "boolean",
-      "title": "Clinician Flag for Review",
-      "default": false
+      "title": "Flagged for Clinician Review",
+      "default": false,
+      "description": "Auto-flagged if pain_vas >= 7 or multiple concerning symptoms"
     }
   },
   "required": [
@@ -80,6 +97,17 @@
       "$or": [
         {
           "data.user_email": "{{user.email}}"
+        },
+        {
+          "data.user_email": {
+            "$in": {
+              "collection": "Schedule",
+              "field": "data.patient_email",
+              "filter": {
+                "data.practitioner_email": "{{user.email}}"
+              }
+            }
+          }
         },
         {
           "user_condition": {

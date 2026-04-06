@@ -13,22 +13,18 @@
         "team_practice",
         "rehab_session",
         "assessment",
-        "game",
-        "recovery"
+        "other"
       ],
       "title": "Event Type",
       "default": "clinic_appointment"
     },
-    "organizer_email": {
+    "practitioner_email": {
       "type": "string",
-      "title": "Organizer Email (Coach / Clinician)"
+      "title": "Practitioner / Coach Email"
     },
-    "participant_emails": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "title": "Participant Emails"
+    "patient_email": {
+      "type": "string",
+      "title": "Patient / Athlete Email"
     },
     "start_datetime": {
       "type": "string",
@@ -42,24 +38,7 @@
     },
     "location": {
       "type": "string",
-      "title": "Location"
-    },
-    "org_id": {
-      "type": "string",
-      "title": "Organization ID"
-    },
-    "notes": {
-      "type": "string",
-      "title": "Session Notes"
-    },
-    "conflict_detected": {
-      "type": "boolean",
-      "title": "Conflict Detected",
-      "default": false
-    },
-    "conflict_details": {
-      "type": "string",
-      "title": "Conflict Details"
+      "title": "Location / Room"
     },
     "status": {
       "type": "string",
@@ -67,28 +46,51 @@
         "scheduled",
         "confirmed",
         "cancelled",
-        "completed"
+        "completed",
+        "conflict"
       ],
       "title": "Status",
       "default": "scheduled"
     },
-    "radix44_share_code": {
+    "conflict_reason": {
       "type": "string",
-      "title": "Radix-44 Share Code (QR-safe)"
+      "title": "Conflict Reason (AI-detected)"
+    },
+    "ai_suggested": {
+      "type": "boolean",
+      "title": "AI Auto-Scheduled",
+      "default": false
+    },
+    "ai_alt_slots": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "title": "AI-Suggested Alternative Slots"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Session Notes"
+    },
+    "org_id": {
+      "type": "string",
+      "title": "Organization ID"
     }
   },
   "required": [
     "title",
     "event_type",
-    "organizer_email",
-    "start_datetime",
-    "end_datetime"
+    "start_datetime"
   ],
   "rls": {
     "create": {
       "$or": [
         {
-          "data.organizer_email": "{{user.email}}"
+          "data.practitioner_email": "{{user.email}}"
+        },
+        {
+          "data.patient_email": "{{user.email}}"
         },
         {
           "user_condition": {
@@ -100,14 +102,10 @@
     "read": {
       "$or": [
         {
-          "data.organizer_email": "{{user.email}}"
+          "data.practitioner_email": "{{user.email}}"
         },
         {
-          "data.participant_emails": {
-            "$in": [
-              "{{user.email}}"
-            ]
-          }
+          "data.patient_email": "{{user.email}}"
         },
         {
           "user_condition": {
@@ -119,7 +117,7 @@
     "update": {
       "$or": [
         {
-          "data.organizer_email": "{{user.email}}"
+          "data.practitioner_email": "{{user.email}}"
         },
         {
           "user_condition": {
@@ -131,7 +129,7 @@
     "delete": {
       "$or": [
         {
-          "data.organizer_email": "{{user.email}}"
+          "data.practitioner_email": "{{user.email}}"
         },
         {
           "user_condition": {
