@@ -1,242 +1,238 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { ArrowLeft, TrendingUp, Users, DollarSign, CheckCircle, AlertTriangle, Shield, RefreshCw, Loader2 } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Users, DollarSign, CheckCircle, AlertTriangle, Activity, Building2, Shield, BarChart3 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const STATUS_STYLES = {
-  active: 'bg-vellera-green/20 text-vellera-green border border-vellera-green/30',
-  paused: 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30',
-  closed: 'bg-red-500/20 text-red-400 border border-red-500/30',
-};
-
-const HEALTH_STYLES = {
-  healthy: 'text-vellera-green',
-  at_risk: 'text-yellow-400',
-  critical: 'text-red-400',
-};
-
-function KPICard({ label, value, sub, icon: Icon, iconColor }) {
+// ─── Bento Card primitives ────────────────────────────────────────────────────
+function BentoCard({ children, className = '', span = '' }) {
   return (
-    <div className="bg-commander-surface border border-commander-border rounded-2xl p-5 flex flex-col gap-3">
-      <div className="flex items-center justify-between">
-        <p className="text-commander-muted text-xs uppercase tracking-widest font-bold">{label}</p>
-        <div className={`w-8 h-8 rounded-lg bg-commander-dark flex items-center justify-center`}>
-          <Icon className={`w-4 h-4 ${iconColor}`} />
-        </div>
-      </div>
-      <p className="text-white text-3xl font-black leading-none">{value}</p>
-      {sub && <p className="text-commander-muted text-xs">{sub}</p>}
+    <div className={`bg-commander-surface border border-commander-border rounded-2xl p-5 ${span} ${className}`}>
+      {children}
     </div>
   );
 }
 
-function OrgCard({ org }) {
-  const healthColor = org.health_score >= 75 ? 'bg-vellera-green' : org.health_score >= 50 ? 'bg-yellow-500' : 'bg-red-500';
+function StatLabel({ children }) {
+  return <p className="text-commander-muted text-xs uppercase tracking-widest font-bold mb-1">{children}</p>;
+}
 
+function StatValue({ children, color = 'text-white' }) {
+  return <p className={`text-4xl font-black ${color}`}>{children}</p>;
+}
+
+function StatusBadge({ status }) {
+  const map = {
+    active:   'bg-vellera-green/20 text-vellera-green border-vellera-green/40',
+    paused:   'bg-yellow-500/20 text-yellow-400 border-yellow-500/40',
+    closed:   'bg-red-500/20 text-red-400 border-red-500/40',
+    healthy:  'bg-vellera-green/20 text-vellera-green border-vellera-green/40',
+    at_risk:  'bg-yellow-500/20 text-yellow-400 border-yellow-500/40',
+    critical: 'bg-red-500/20 text-red-400 border-red-500/40',
+  };
   return (
-    <div className="bg-commander-surface border border-commander-border rounded-2xl p-5 space-y-4 hover:border-vellera-blue/50 transition-colors">
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <p className="text-white font-bold">{org.org_name}</p>
-          <p className="text-commander-muted text-xs mt-0.5">{org.location || 'No location'}</p>
-        </div>
-        <span className={`text-xs font-bold uppercase px-2 py-1 rounded-lg whitespace-nowrap ${STATUS_STYLES[org.status] || STATUS_STYLES.paused}`}>
-          {org.status}
-        </span>
-      </div>
+    <span className={`text-xs uppercase font-bold px-2 py-0.5 rounded border ${map[status] || 'bg-gray-700 text-gray-300 border-gray-600'}`}>
+      {status?.replace('_', ' ')}
+    </span>
+  );
+}
 
-      <div className="grid grid-cols-2 gap-3">
-        <div className="bg-commander-dark rounded-xl p-3">
-          <p className="text-commander-muted text-xs uppercase tracking-wider mb-1">Students</p>
-          <p className="text-white text-xl font-black">{org.student_roster_count ?? 0}</p>
-        </div>
-        <div className="bg-commander-dark rounded-xl p-3">
-          <p className="text-commander-muted text-xs uppercase tracking-wider mb-1">Revenue</p>
-          <p className="text-white text-xl font-black">${(org.monthly_revenue_usd ?? 0).toLocaleString()}</p>
-        </div>
-      </div>
-
-      <div className="space-y-1.5">
-        <div className="flex justify-between text-xs">
-          <span className="text-commander-muted uppercase tracking-wider">Health</span>
-          <span className={`font-bold ${org.health_score >= 75 ? 'text-vellera-green' : org.health_score >= 50 ? 'text-yellow-400' : 'text-red-400'}`}>
-            {org.health_score ?? 0}%
-          </span>
-        </div>
-        <div className="w-full h-1.5 bg-commander-dark rounded-full overflow-hidden">
-          <div className={`h-full rounded-full transition-all ${healthColor}`} style={{ width: `${org.health_score ?? 0}%` }} />
-        </div>
-      </div>
-
-      {org.primary_instructor_email && (
-        <p className="text-commander-muted text-xs truncate">{org.primary_instructor_email}</p>
-      )}
+function HealthBar({ score }) {
+  const color = score >= 75 ? 'bg-vellera-green' : score >= 50 ? 'bg-yellow-500' : 'bg-red-500';
+  return (
+    <div className="w-full h-1.5 bg-gray-800 rounded-full overflow-hidden mt-2">
+      <div className={`h-full rounded-full ${color}`} style={{ width: `${score}%` }} />
     </div>
   );
 }
 
-function ActivityRow({ activity }) {
-  const statusStyle = {
-    approved: 'bg-vellera-green/20 text-vellera-green',
-    reviewed: 'bg-vellera-blue/20 text-vellera-blue',
-    submitted: 'bg-yellow-500/20 text-yellow-400',
-    needs_revision: 'bg-red-500/20 text-red-400',
-  }[activity.status] || 'bg-gray-800 text-gray-400';
-
-  return (
-    <div className="flex items-center justify-between py-3 border-b border-commander-border last:border-0 gap-3">
-      <div className="min-w-0 flex-1">
-        <p className="text-white text-sm font-semibold truncate">{activity.title || activity.activity_type}</p>
-        <p className="text-commander-muted text-xs mt-0.5">{activity.student_id} · {new Date(activity.timestamp).toLocaleString()}</p>
-      </div>
-      <span className={`text-xs font-bold uppercase px-2 py-1 rounded-lg shrink-0 ${statusStyle}`}>
-        {activity.status}
-      </span>
-    </div>
-  );
-}
-
+// ─── Main Dashboard ──────────────────────────────────────────────────────────
 export default function EDS_Executive_Dashboard() {
   const navigate = useNavigate();
   const [hub, setHub] = useState(null);
   const [orgs, setOrgs] = useState([]);
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [scanning, setScanning] = useState(false);
-  const [scanResult, setScanResult] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const init = async () => {
       const me = await base44.auth.me();
+      setUser(me);
       if (me?.role !== 'admin') { navigate('/'); return; }
 
-      const hubs = await base44.entities.EDS_Enterprise_Hub.list();
-      const hubRecord = hubs[0] || null;
-      setHub(hubRecord);
+      const hubs = await base44.entities.EDS_Enterprise_Hub.list('-created_date', 1);
+      const h = hubs[0] || null;
+      setHub(h);
 
-      const [orgResults, allActivities] = await Promise.all([
-        hubRecord
-          ? base44.entities.Operational_Businesses.filter({ parent_company_id: hubRecord.id })
-          : Promise.resolve([]),
-        base44.entities.Activity_Logs.list('-timestamp', 20),
-      ]);
+      if (h) {
+        const orgResults = await base44.entities.Operational_Businesses.filter({ parent_company_id: h.id });
+        setOrgs(orgResults);
+      }
 
-      setOrgs(orgResults);
+      const allActivities = await base44.entities.Activity_Logs.list('-timestamp', 10);
       setActivities(allActivities);
       setLoading(false);
     };
     init();
   }, [navigate]);
 
-  const runSecurityScan = async () => {
-    setScanning(true);
-    setScanResult(null);
-    const res = await base44.functions.invoke('securityScan', {});
-    setScanResult(res.data);
-    setScanning(false);
-  };
-
   if (loading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-commander-dark">
-        <Loader2 className="w-8 h-8 animate-spin text-vellera-blue" />
+        <div className="w-8 h-8 border-4 border-vellera-blue border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
-  const totalStudents = orgs.reduce((s, o) => s + (o.student_roster_count ?? 0), 0);
-  const totalRevenue = orgs.reduce((s, o) => s + (o.monthly_revenue_usd ?? 0), 0);
-  const avgHealth = orgs.length
-    ? (orgs.reduce((s, o) => s + (o.health_score ?? 0), 0) / orgs.length).toFixed(0)
-    : 0;
+  if (!user || user.role !== 'admin') {
+    return <div className="p-8 text-center text-red-400 font-bold">Access Denied — Admins Only</div>;
+  }
+
+  const totalStudents = orgs.reduce((s, o) => s + (o.student_roster_count || 0), 0);
+  const totalRevenue  = orgs.reduce((s, o) => s + (o.monthly_revenue_usd  || 0), 0);
+  const avgHealth     = orgs.length ? Math.round(orgs.reduce((s, o) => s + (o.health_score || 0), 0) / orgs.length) : 0;
+  const activeOrgs    = orgs.filter(o => o.status === 'active').length;
 
   return (
-    <div className="min-h-screen bg-commander-dark p-4 md:p-6 space-y-6 pb-24">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="text-commander-muted hover:text-white transition p-1">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <div>
-            <h1 className="text-white text-2xl md:text-3xl font-black tracking-tight">EDS Executive</h1>
-            <p className="text-commander-muted text-xs uppercase tracking-widest mt-0.5">
-              {hub?.business_name ?? 'Global Management'}
-            </p>
-          </div>
-        </div>
-        <button
-          onClick={runSecurityScan}
-          disabled={scanning}
-          className="flex items-center gap-2 bg-commander-surface border border-commander-border hover:border-vellera-blue text-white text-xs font-bold px-3 py-2 rounded-xl transition-colors disabled:opacity-50"
-        >
-          {scanning ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Shield className="w-3.5 h-3.5 text-vellera-blue" />}
-          {scanning ? 'Scanning...' : 'Security Scan'}
+    <div className="min-h-screen bg-commander-dark p-4 md:p-8 pb-24">
+      {/* ── Header ── */}
+      <div className="flex items-center gap-3 mb-8">
+        <button onClick={() => navigate(-1)} className="text-commander-muted hover:text-white transition p-1">
+          <ArrowLeft className="w-5 h-5" />
         </button>
+        <div>
+          <h1 className="text-white text-2xl font-black tracking-tight flex items-center gap-2">
+            <Shield className="w-5 h-5 text-vellera-blue" />
+            EDS Executive Dashboard
+          </h1>
+          <p className="text-commander-muted text-xs uppercase tracking-widest mt-0.5">
+            {hub?.business_name || 'Emerging Defense Solutions'} · Global View
+          </p>
+        </div>
       </div>
 
-      {/* Security Scan Result */}
-      {scanResult && (
-        <div className={`rounded-2xl border p-4 space-y-3 ${scanResult.summary.deploy_safe ? 'bg-vellera-green/10 border-vellera-green/30' : 'bg-red-900/20 border-red-700/50'}`}>
-          <div className="flex items-center gap-2">
-            {scanResult.summary.deploy_safe
-              ? <CheckCircle className="w-5 h-5 text-vellera-green" />
-              : <AlertTriangle className="w-5 h-5 text-red-400" />}
-            <p className="text-white font-black text-sm">
-              {scanResult.summary.deploy_safe ? 'Deploy Safe ✓' : `${scanResult.summary.total_findings} Issue(s) Found`}
-            </p>
-            <p className="text-commander-muted text-xs ml-auto">{scanResult.summary.passed_checks} checks passed</p>
+      {/* ── Bento Grid ── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-auto">
+
+        {/* Row 1: KPI tiles */}
+        <BentoCard>
+          <StatLabel>Total Students</StatLabel>
+          <StatValue color="text-vellera-green">{totalStudents}</StatValue>
+          <p className="text-commander-muted text-xs mt-1">{orgs.length} orgs</p>
+        </BentoCard>
+
+        <BentoCard>
+          <StatLabel>Monthly Revenue</StatLabel>
+          <StatValue color="text-vellera-blue">${(totalRevenue / 1000).toFixed(1)}K</StatValue>
+          <p className="text-commander-muted text-xs mt-1">
+            {hub?.revenue_target_usd ? `Target $${(hub.revenue_target_usd / 12000).toFixed(1)}K/mo` : 'No target set'}
+          </p>
+        </BentoCard>
+
+        <BentoCard>
+          <StatLabel>Portfolio Health</StatLabel>
+          <StatValue color={avgHealth >= 75 ? 'text-vellera-green' : avgHealth >= 50 ? 'text-yellow-400' : 'text-red-400'}>
+            {avgHealth}%
+          </StatValue>
+          <HealthBar score={avgHealth} />
+        </BentoCard>
+
+        <BentoCard>
+          <StatLabel>Portfolio Status</StatLabel>
+          <div className="mt-2">
+            <StatusBadge status={hub?.health_status || 'healthy'} />
           </div>
-          {scanResult.findings.map((f, i) => (
-            <div key={i} className="bg-commander-dark rounded-xl p-3 text-xs space-y-0.5">
-              <p className={`font-bold uppercase tracking-wider ${f.severity === 'HIGH' ? 'text-red-400' : f.severity === 'MEDIUM' ? 'text-yellow-400' : 'text-commander-muted'}`}>
-                [{f.severity}] {f.entity}
-              </p>
-              <p className="text-white">{f.issue}</p>
+          <p className="text-commander-muted text-xs mt-2">{activeOrgs}/{orgs.length} orgs active</p>
+        </BentoCard>
+
+        {/* Row 2: Organizations table — spans full width */}
+        <BentoCard span="col-span-2 md:col-span-4">
+          <div className="flex items-center gap-2 mb-4">
+            <Building2 className="w-4 h-4 text-vellera-blue" />
+            <h2 className="text-white font-black text-sm uppercase tracking-wider">Sub-Organizations</h2>
+            <span className="ml-auto text-commander-muted text-xs">{orgs.length} linked</span>
+          </div>
+
+          {orgs.length === 0 ? (
+            <p className="text-commander-muted text-sm text-center py-6">No sub-organizations linked yet.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-commander-border text-left">
+                    {['Organization', 'Location', 'Students', 'Revenue', 'Health', 'Status'].map(h => (
+                      <th key={h} className="pb-2 px-2 text-commander-muted text-xs uppercase tracking-wider font-bold">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-commander-border">
+                  {orgs.map(org => (
+                    <tr key={org.id} className="hover:bg-gray-800/40 transition">
+                      <td className="py-3 px-2">
+                        <p className="text-white font-bold">{org.org_name}</p>
+                        <p className="text-commander-muted text-xs">{org.primary_instructor_email}</p>
+                      </td>
+                      <td className="py-3 px-2 text-commander-muted text-xs">{org.location || '—'}</td>
+                      <td className="py-3 px-2 text-white font-bold">{org.student_roster_count || 0}</td>
+                      <td className="py-3 px-2 text-white font-bold">${(org.monthly_revenue_usd || 0).toLocaleString()}</td>
+                      <td className="py-3 px-2">
+                        <p className="text-xs text-commander-muted">{org.health_score || 0}%</p>
+                        <HealthBar score={org.health_score || 0} />
+                      </td>
+                      <td className="py-3 px-2"><StatusBadge status={org.status} /></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </BentoCard>
+
+        {/* Row 3: Activity feed — 2 cols | Stats summary — 2 cols */}
+        <BentoCard span="col-span-2 md:col-span-3">
+          <div className="flex items-center gap-2 mb-4">
+            <Activity className="w-4 h-4 text-vellera-green" />
+            <h2 className="text-white font-black text-sm uppercase tracking-wider">Recent Activity</h2>
+          </div>
+          <div className="space-y-2">
+            {activities.length === 0 && (
+              <p className="text-commander-muted text-sm text-center py-4">No activity logs yet.</p>
+            )}
+            {activities.map(a => (
+              <div key={a.id} className="flex items-start justify-between border-b border-commander-border pb-2 last:border-0">
+                <div>
+                  <p className="text-white text-sm font-semibold">{a.title || a.activity_type}</p>
+                  <p className="text-commander-muted text-xs">{a.student_id} · {a.activity_type}</p>
+                </div>
+                <div className="flex flex-col items-end gap-1">
+                  <StatusBadge status={a.status} />
+                  {a.performance_score != null && (
+                    <span className="text-xs text-vellera-blue font-bold">{a.performance_score}%</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </BentoCard>
+
+        <BentoCard span="col-span-2 md:col-span-1" className="flex flex-col gap-4">
+          <div className="flex items-center gap-2 mb-2">
+            <BarChart3 className="w-4 h-4 text-vellera-blue" />
+            <h2 className="text-white font-black text-sm uppercase tracking-wider">Breakdown</h2>
+          </div>
+          {[
+            { label: 'Submitted',  value: activities.filter(a => a.status === 'submitted').length,  color: 'text-yellow-400' },
+            { label: 'Reviewed',   value: activities.filter(a => a.status === 'reviewed').length,   color: 'text-vellera-blue' },
+            { label: 'Approved',   value: activities.filter(a => a.status === 'approved').length,   color: 'text-vellera-green' },
+            { label: 'Needs Work', value: activities.filter(a => a.status === 'needs_revision').length, color: 'text-red-400' },
+          ].map(({ label, value, color }) => (
+            <div key={label} className="flex items-center justify-between">
+              <p className="text-commander-muted text-xs uppercase tracking-wider">{label}</p>
+              <p className={`font-black text-lg ${color}`}>{value}</p>
             </div>
           ))}
-        </div>
-      )}
+        </BentoCard>
 
-      {/* Bento KPI Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <KPICard label="Total Students" value={totalStudents} sub={`${orgs.length} org${orgs.length !== 1 ? 's' : ''}`} icon={Users} iconColor="text-vellera-green" />
-        <KPICard label="Monthly Revenue" value={`$${(totalRevenue / 1000).toFixed(1)}K`} sub={hub?.revenue_target_usd ? `Target $${(hub.revenue_target_usd / 12000).toFixed(1)}K/mo` : ''} icon={DollarSign} iconColor="text-vellera-blue" />
-        <KPICard label="Portfolio Health" value={`${avgHealth}%`} sub="Average across all orgs" icon={TrendingUp} iconColor="text-vellera-green" />
-        <KPICard
-          label="Status"
-          value={hub?.health_status ? hub.health_status.charAt(0).toUpperCase() + hub.health_status.slice(1) : 'Unknown'}
-          sub={hub?.last_updated ? `Updated ${new Date(hub.last_updated).toLocaleDateString()}` : 'Never updated'}
-          icon={CheckCircle}
-          iconColor={HEALTH_STYLES[hub?.health_status] ?? 'text-commander-muted'}
-        />
-      </div>
-
-      {/* Bento Main Grid */}
-      <div className="grid md:grid-cols-3 gap-4">
-        {/* Org Cards — spans 2 cols */}
-        <div className="md:col-span-2 space-y-3">
-          <p className="text-white font-black text-lg">Sub-Organizations</p>
-          <div className="grid sm:grid-cols-2 gap-4">
-            {orgs.map(org => <OrgCard key={org.id} org={org} />)}
-            {orgs.length === 0 && (
-              <div className="col-span-2 bg-commander-surface border border-commander-border rounded-2xl p-8 text-center">
-                <p className="text-commander-muted text-sm">No sub-organizations linked yet.</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Activity Feed — 1 col */}
-        <div className="space-y-3">
-          <p className="text-white font-black text-lg">Recent Activity</p>
-          <div className="bg-commander-surface border border-commander-border rounded-2xl p-4">
-            {activities.length === 0 && (
-              <p className="text-commander-muted text-sm text-center py-4">No activity yet.</p>
-            )}
-            {activities.map(a => <ActivityRow key={a.id} activity={a} />)}
-          </div>
-        </div>
       </div>
     </div>
   );
