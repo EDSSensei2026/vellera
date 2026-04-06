@@ -1,0 +1,167 @@
+{
+  "name": "TeamSchedule",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Event Title"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "team_practice",
+        "clinic_visit",
+        "game",
+        "rehab_session",
+        "assessment",
+        "recovery_day",
+        "strength_conditioning"
+      ],
+      "title": "Event Type",
+      "default": "team_practice"
+    },
+    "team_id": {
+      "type": "string",
+      "title": "Team / Org ID"
+    },
+    "organizer_email": {
+      "type": "string",
+      "title": "Organizer Email (Coach / Clinician)"
+    },
+    "participant_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Participant Emails"
+    },
+    "start_datetime": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Start Date & Time"
+    },
+    "end_datetime": {
+      "type": "string",
+      "format": "date-time",
+      "title": "End Date & Time"
+    },
+    "location": {
+      "type": "string",
+      "title": "Location / Venue"
+    },
+    "is_medical": {
+      "type": "boolean",
+      "title": "Medical / Clinical Event (Restricted to Clinicians)",
+      "default": false,
+      "description": "When true, medical_notes are hidden from coaches"
+    },
+    "medical_notes": {
+      "type": "string",
+      "title": "Medical Notes (Clinician-Only \u2014 Hidden from Coaches)"
+    },
+    "attendance_notes": {
+      "type": "string",
+      "title": "Attendance Notes (Visible to Coaches)"
+    },
+    "conflict_detected": {
+      "type": "boolean",
+      "title": "Double-Booking Conflict Detected",
+      "default": false
+    },
+    "conflict_details": {
+      "type": "string",
+      "title": "Conflict Details"
+    },
+    "conflicting_event_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Conflicting Event IDs"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "confirmed",
+        "cancelled",
+        "completed"
+      ],
+      "title": "Status",
+      "default": "scheduled"
+    },
+    "created_by_role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "coach",
+        "clinician"
+      ],
+      "title": "Created By Role"
+    }
+  },
+  "required": [
+    "title",
+    "event_type",
+    "organizer_email",
+    "start_datetime",
+    "end_datetime"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "data.participant_emails": {
+            "$in": [
+              "{{user.email}}"
+            ]
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.organizer_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -9,6 +9,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AnimatePresence } from 'framer-motion';
 import PageTransition from './components/PageTransition';
 import TabStackLayout from './components/TabStackLayout';
+import RecoveryAlertBanner from './components/RecoveryAlertBanner';
 
 const Landing = lazy(() => import('./pages/Landing'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
@@ -244,6 +245,7 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
+          <RecoveryAlertBanner />
           <RootApp />
         </Router>
         <Toaster />

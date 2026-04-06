@@ -1,0 +1,47 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "user",
+        "coach",
+        "clinician"
+      ],
+      "title": "Role",
+      "default": "user"
+    },
+    "user_physical_ability": {
+      "type": "string",
+      "enum": [
+        "full_mobility",
+        "limited_mobility",
+        "seated_only",
+        "post_surgery",
+        "chronic_pain",
+        "elderly",
+        "pregnancy",
+        "cardiac"
+      ],
+      "title": "Physical Ability / Accessibility Level",
+      "default": "full_mobility",
+      "description": "Used to auto-display seated or low-impact exercise modifications"
+    },
+    "accessibility_preferences": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "high_contrast",
+          "large_text",
+          "reduced_motion",
+          "screen_reader",
+          "keyboard_only"
+        ]
+      },
+      "title": "Accessibility Preferences"
+    }
+  }
+}

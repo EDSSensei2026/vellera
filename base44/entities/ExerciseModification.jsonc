@@ -1,0 +1,103 @@
+{
+  "name": "ExerciseModification",
+  "type": "object",
+  "properties": {
+    "exercise_id": {
+      "type": "string",
+      "title": "Source Exercise ID (ExerciseLibrary)"
+    },
+    "exercise_name": {
+      "type": "string",
+      "title": "Exercise Name"
+    },
+    "modification_type": {
+      "type": "string",
+      "enum": [
+        "seated",
+        "low_impact",
+        "upper_body_only",
+        "resistance_band",
+        "wall_supported",
+        "aquatic"
+      ],
+      "title": "Modification Type"
+    },
+    "modified_name": {
+      "type": "string",
+      "title": "Modified Exercise Name"
+    },
+    "description": {
+      "type": "string",
+      "title": "Modification Instructions"
+    },
+    "equipment_needed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Equipment Needed"
+    },
+    "ability_tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "wheelchair",
+          "limited_mobility",
+          "post_surgery",
+          "chronic_pain",
+          "elderly",
+          "pregnancy",
+          "cardiac",
+          "general"
+        ]
+      },
+      "title": "Applicable Ability Tags"
+    },
+    "intensity_reduction_pct": {
+      "type": "number",
+      "title": "Intensity Reduction (%)",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 40
+    },
+    "video_url": {
+      "type": "string",
+      "title": "Demo Video URL"
+    },
+    "safety_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Safety Notes"
+    },
+    "approved_by": {
+      "type": "string",
+      "title": "Clinician Email (Approved By)"
+    }
+  },
+  "required": [
+    "exercise_name",
+    "modification_type",
+    "description"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
