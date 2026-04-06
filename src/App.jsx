@@ -12,6 +12,8 @@ import TabStackLayout from './components/TabStackLayout';
 import RecoveryAlertBanner from './components/RecoveryAlertBanner';
 
 const Landing = lazy(() => import('./pages/Landing'));
+const BetaRequestForm = lazy(() => import('./pages/BetaRequestForm'));
+const BetaOnboarding = lazy(() => import('./pages/BetaOnboarding'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const Welcome = lazy(() => import('./pages/Welcome'));
@@ -105,6 +107,7 @@ const PublicApp = () => (
     <Routes>
       <Route path="/" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Landing /></Suspense></PageTransition>} />
       <Route path="/landing" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Landing /></Suspense></PageTransition>} />
+      <Route path="/beta-request" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BetaRequestForm /></Suspense></PageTransition>} />
       <Route path="/terms" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TermsOfService /></Suspense></PageTransition>} />
       <Route path="/privacy" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PrivacyPolicy /></Suspense></PageTransition>} />
       <Route path="/auth" element={<Auth />} />
@@ -140,6 +143,8 @@ const AuthenticatedApp = () => {
     <AnimatePresence mode="wait">
       <Routes>
       <Route path="/landing" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Landing /></Suspense></PageTransition>} />
+      <Route path="/beta-request" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BetaRequestForm /></Suspense></PageTransition>} />
+      <Route path="/beta-onboarding" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BetaOnboarding /></Suspense></PageTransition>} />
       <Route path="/terms" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TermsOfService /></Suspense></PageTransition>} />
       <Route path="/privacy" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PrivacyPolicy /></Suspense></PageTransition>} />
       <Route path="/welcome" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Welcome /></Suspense></PageTransition>} />

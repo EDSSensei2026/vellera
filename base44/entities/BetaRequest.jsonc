@@ -1,0 +1,80 @@
+{
+  "name": "BetaRequest",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "title": "Email Address"
+    },
+    "full_name": {
+      "type": "string",
+      "title": "Full Name"
+    },
+    "primary_goal": {
+      "type": "string",
+      "enum": [
+        "Strength & Power",
+        "BJJ & Combat Sports",
+        "CrossFit & Conditioning",
+        "General Fitness",
+        "Bodybuilding",
+        "Endurance",
+        "Tactical / First Responder"
+      ],
+      "title": "Primary Fitness Goal"
+    },
+    "why_interested": {
+      "type": "string",
+      "title": "Why are you interested in Vellera?",
+      "description": "Tell us what draws you to the app"
+    },
+    "requested_date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Request Date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "title": "Request Status",
+      "default": "pending"
+    },
+    "approved_date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Approval Date (if approved)"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Admin Notes"
+    }
+  },
+  "required": [
+    "email",
+    "full_name",
+    "primary_goal",
+    "why_interested"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

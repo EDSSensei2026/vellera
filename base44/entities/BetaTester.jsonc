@@ -1,0 +1,167 @@
+{
+  "name": "BetaTester",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "title": "Email Address"
+    },
+    "full_name": {
+      "type": "string",
+      "title": "Full Name"
+    },
+    "trial_start_date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Trial Start Date"
+    },
+    "trial_end_date": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Trial End Date (30 days from start)"
+    },
+    "primary_goal": {
+      "type": "string",
+      "enum": [
+        "Strength & Power",
+        "BJJ & Combat Sports",
+        "CrossFit & Conditioning",
+        "General Fitness",
+        "Bodybuilding",
+        "Endurance",
+        "Tactical / First Responder"
+      ],
+      "title": "Primary Fitness Goal"
+    },
+    "biography": {
+      "type": "string",
+      "title": "Brief Bio / Background"
+    },
+    "fitness_experience": {
+      "type": "string",
+      "enum": [
+        "Beginner (< 1 year)",
+        "Intermediate (1-3 years)",
+        "Advanced (3-7 years)",
+        "Elite (7+ years)"
+      ],
+      "title": "Fitness Experience Level"
+    },
+    "what_will_you_use_for": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Strength Training",
+          "Combat Sports (BJJ/MMA/Boxing)",
+          "Conditioning",
+          "Recovery Tracking",
+          "Nutrition",
+          "Biometric Integration",
+          "Coaching Others",
+          "Personal Progression"
+        ]
+      },
+      "title": "What will you use Vellera for?"
+    },
+    "feedback_focus_areas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Areas you'd like to give feedback on",
+      "description": "e.g., 'AI Coach', 'Mobile Experience', 'Form Analysis'"
+    },
+    "device_testing": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Web Browser",
+          "iPhone",
+          "Android",
+          "Desktop",
+          "Tablet"
+        ]
+      },
+      "title": "Devices you'll test on"
+    },
+    "consent_data_collection": {
+      "type": "boolean",
+      "title": "I consent to my training data being used to improve Vellera",
+      "description": "HIPAA-compliant. Your data remains private and is never shared without explicit consent."
+    },
+    "consent_contact": {
+      "type": "boolean",
+      "title": "I consent to being contacted about beta feedback and improvements",
+      "default": true
+    },
+    "trial_status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed",
+        "extended",
+        "converted_to_paid"
+      ],
+      "title": "Trial Status",
+      "default": "active"
+    },
+    "feedback_submitted": {
+      "type": "boolean",
+      "title": "Beta Feedback Submitted",
+      "default": false
+    },
+    "notes": {
+      "type": "string",
+      "title": "Tester Notes / Feedback Summary"
+    }
+  },
+  "required": [
+    "email",
+    "full_name",
+    "trial_start_date",
+    "primary_goal",
+    "biography",
+    "fitness_experience",
+    "what_will_you_use_for",
+    "consent_data_collection",
+    "consent_contact"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

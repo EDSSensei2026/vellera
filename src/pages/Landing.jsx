@@ -128,12 +128,12 @@ export default function Landing() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={() => base44.auth.redirectToLogin('/dashboard')}
+                <Link
+                  to="/beta-request"
                   className="px-8 py-4 bg-gradient-to-r from-vellera-blue to-vellera-green text-black font-black rounded-xl text-lg hover:shadow-2xl hover:shadow-vellera-blue/30 transition-all flex items-center justify-center gap-2"
                 >
-                  Start Free Trial <ChevronRight className="w-5 h-5" />
-                </button>
+                  Join Beta (Invite-Only) <ChevronRight className="w-5 h-5" />
+                </Link>
                 <button disabled className="px-8 py-4 bg-gray-800 text-gray-400 font-bold rounded-xl text-lg cursor-not-allowed flex items-center justify-center gap-2">
                   📱 Coming to App Stores
                 </button>
@@ -517,10 +517,16 @@ export default function Landing() {
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-5xl font-black mb-4">Ready to Own Your Training?</h2>
           <p className="text-gray-400 text-lg mb-10">Join athletes who train smarter with AI coaching, real biometric data, and full control over their health data.</p>
-          <button onClick={() => base44.auth.redirectToLogin('/dashboard')} className="px-10 py-5 bg-gradient-to-r from-vellera-blue to-vellera-green text-black font-black rounded-2xl text-xl hover:shadow-2xl hover:shadow-vellera-blue/40 transition-all">
-            Start Your 7-Day Free Trial
-          </button>
-          <p className="text-gray-500 text-sm mt-4">✨ No credit card required · All features included · Cancel anytime</p>
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+            <Link to="/beta-request" className="px-10 py-5 bg-gradient-to-r from-vellera-blue to-vellera-green text-black font-black rounded-2xl text-lg hover:shadow-2xl hover:shadow-vellera-blue/40 transition-all">
+              Request Beta Access
+            </Link>
+            <span className="text-gray-500 text-sm">or</span>
+            <button onClick={() => base44.auth.redirectToLogin('/dashboard')} className="px-10 py-5 bg-gray-800 text-white font-black rounded-2xl text-lg hover:bg-gray-700 transition-all border border-gray-700">
+              Sign In
+            </button>
+          </div>
+          <p className="text-gray-500 text-sm mt-4">✨ 30-day free trial · No credit card required · Cancel anytime</p>
         </div>
       </section>
 
