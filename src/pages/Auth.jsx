@@ -1,154 +1,77 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
-import { Shield, ArrowRight } from "lucide-react";
+import { ArrowRight, Zap } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Auth() {
-  const navigate = useNavigate();
-  const [mode, setMode] = useState("signin"); // signin | signup
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    fullName: "",
-  });
 
-  const handleSignIn = async (e) => {
-    e.preventDefault();
-    if (!formData.email || !formData.password) {
-      toast.error("Email and password required");
-      return;
-    }
-
+  const handleSignIn = async () => {
     setLoading(true);
-    try {
-      // Note: Base44 handles auth internally via the platform
-      // This redirects to the platform's login
-      await base44.auth.redirectToLogin();
-    } catch (err) {
-      toast.error("Sign in failed: " + err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-    if (!formData.email || !formData.password || !formData.fullName) {
-      toast.error("All fields required");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      // Note: Base44 handles user creation via the platform
-      // This redirects to the platform's signup
-      await base44.auth.redirectToLogin();
-    } catch (err) {
-      toast.error("Sign up failed: " + err.message);
-    } finally {
-      setLoading(false);
-    }
+    await base44.auth.redirectToLogin('/dashboard');
   };
 
   return (
-    <div className="w-full h-screen bg-gradient-to-b from-commander-dark via-gray-900 to-commander-dark flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-vellera-dark flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-vellera-blue/10 rounded-full blur-3xl pointer-events-none" />
+
       {/* Logo */}
-      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-vellera-blue to-vellera-green flex items-center justify-center mb-8">
-        <Shield className="w-8 h-8 text-vellera-dark" />
+      <div className="mb-8 text-center">
+        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-vellera-blue to-vellera-green flex items-center justify-center mx-auto mb-4 shadow-lg shadow-vellera-blue/30">
+          <Zap className="w-10 h-10 text-vellera-dark" strokeWidth={3} />
+        </div>
+        <h1 className="text-white text-4xl font-black tracking-tight">Vellera</h1>
+        <p className="text-commander-muted text-sm mt-1">Hybrid Athlete Training Platform</p>
       </div>
 
-      {/* Branding */}
-      <h1 className="text-white text-4xl font-black text-center mb-2">Apex Forge</h1>
-      <p className="text-commander-muted text-center mb-8">Train. Compete. Dominate.</p>
-
-      {/* Auth Form */}
-      <div className="w-full max-w-md bg-commander-surface border border-commander-border rounded-2xl p-6 space-y-6">
-        {/* Mode Toggle */}
-        <div className="flex bg-gray-800 border border-commander-border rounded-lg overflow-hidden">
-          <button
-            onClick={() => setMode("signin")}
-            className={`flex-1 py-3 text-sm font-bold transition-all min-h-[44px] ${
-              mode === "signin"
-                ? "bg-commander-red text-white"
-                : "text-commander-muted hover:text-white"
-            }`}
-          >
-            Sign In
-          </button>
-          <button
-            onClick={() => setMode("signup")}
-            className={`flex-1 py-3 text-sm font-bold transition-all min-h-[44px] ${
-              mode === "signup"
-                ? "bg-commander-red text-white"
-                : "text-commander-muted hover:text-white"
-            }`}
-          >
-            Sign Up
-          </button>
+      {/* Card */}
+      <div className="w-full max-w-sm bg-commander-surface border border-commander-border rounded-2xl p-8 space-y-6 shadow-2xl">
+        <div className="text-center">
+          <h2 className="text-white text-2xl font-black">Welcome Back</h2>
+          <p className="text-commander-muted text-sm mt-1">Sign in to access your training dashboard</p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={mode === "signin" ? handleSignIn : handleSignUp} className="space-y-4">
-          {mode === "signup" && (
-            <div>
-              <label className="text-xs text-commander-muted block mb-2 font-semibold">Full Name</label>
-              <input
-                type="text"
-                value={formData.fullName}
-                onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                placeholder="Enter your name"
-                className="w-full bg-gray-800 border border-commander-border rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-commander-red min-h-[44px]"
-              />
-            </div>
+        <button
+          onClick={handleSignIn}
+          disabled={loading}
+          className="w-full py-4 rounded-xl font-black text-base flex items-center justify-center gap-3 transition-all min-h-[52px] disabled:opacity-60"
+          style={{ background: 'linear-gradient(135deg, #00E5FF, #CCFF00)', color: '#121212' }}
+        >
+          {loading ? (
+            <span className="flex items-center gap-2">
+              <div className="w-4 h-4 border-2 border-vellera-dark border-t-transparent rounded-full animate-spin" />
+              Redirecting...
+            </span>
+          ) : (
+            <>
+              Sign In to Vellera
+              <ArrowRight className="w-5 h-5" strokeWidth={3} />
+            </>
           )}
+        </button>
 
-          <div>
-            <label className="text-xs text-commander-muted block mb-2 font-semibold">Email</label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              placeholder="your@email.com"
-              className="w-full bg-gray-800 border border-commander-border rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-commander-red min-h-[44px]"
-            />
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-commander-border" />
           </div>
-
-          <div>
-            <label className="text-xs text-commander-muted block mb-2 font-semibold">Password</label>
-            <input
-              type="password"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              placeholder="••••••••"
-              className="w-full bg-gray-800 border border-commander-border rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-commander-red min-h-[44px]"
-            />
+          <div className="relative flex justify-center">
+            <span className="px-3 bg-commander-surface text-commander-muted text-xs uppercase tracking-wider">New to Vellera?</span>
           </div>
+        </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-commander-red text-white rounded-lg py-3 font-bold text-sm hover:bg-red-700 transition-all disabled:opacity-60 min-h-[44px] flex items-center justify-center gap-2 mt-6"
-          >
-            {loading ? "Loading..." : mode === "signin" ? "Sign In" : "Create Account"}
-            {!loading && <ArrowRight className="w-4 h-4" />}
-          </button>
-        </form>
-
-        {/* Platform Auth Notice */}
-        <div className="bg-gray-800 border border-commander-border rounded-lg p-3">
-          <p className="text-xs text-commander-muted text-center">
-            Authentication handled by Base44 platform. Redirecting to secure login.
+        <div className="text-center">
+          <p className="text-commander-muted text-xs leading-relaxed">
+            Create your account via the sign-in page — select <span className="text-vellera-blue font-semibold">"Sign Up"</span> after clicking above.
           </p>
         </div>
       </div>
 
-      {/* Demo Info */}
-      <div className="mt-8 text-center max-w-md">
-        <p className="text-commander-muted text-xs">
-          After signing in, complete your profile to set up your training goals and personal stats.
-        </p>
+      {/* Footer */}
+      <div className="mt-8 flex gap-4 text-xs text-commander-muted">
+        <Link to="/" className="hover:text-white transition">← Back to Home</Link>
+        <Link to="/privacy" className="hover:text-white transition">Privacy Policy</Link>
+        <Link to="/terms" className="hover:text-white transition">Terms</Link>
       </div>
     </div>
   );
