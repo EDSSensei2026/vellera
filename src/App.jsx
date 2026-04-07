@@ -100,6 +100,7 @@ const ExecutiveFitnessDefense = lazy(() => import('./pages/ExecutiveFitnessDefen
 const EDS_Executive_Dashboard = lazy(() => import('./pages/EDS_Executive_Dashboard'));
 const ClinicalDashboard = lazy(() => import('./pages/ClinicalDashboard'));
 const ClinicalLogisticsHub = lazy(() => import('./pages/ClinicalLogisticsHub'));
+const BetaAccessManager = lazy(() => import('./pages/BetaAccessManager'));
 // Add page imports here
 
 const PublicApp = () => (
@@ -225,6 +226,7 @@ const AuthenticatedApp = () => {
       <Route path="/logistics" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ClinicalLogisticsHub /></Suspense></PageTransition>} />
       <Route path="/clinical" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ClinicalDashboard /></Suspense></PageTransition>} />
       <Route path="/eds-dashboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><EDS_Executive_Dashboard /></Suspense></PageTransition>} />
+      <Route path="/beta-manager" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BetaAccessManager /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>
