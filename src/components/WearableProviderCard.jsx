@@ -7,10 +7,11 @@ export default function WearableProviderCard({ provider, token, onRefresh }) {
   const [syncing, setSyncing] = useState(false);
 
   const PROVIDERS = {
-    strava: { label: "Strava", emoji: "🚴", color: "border-orange-600", accent: "text-orange-400", bg: "bg-orange-950/30", startFn: "stravaOAuthStart", syncFn: "stravaSync" },
-    google_fit: { label: "Google Fit", emoji: "💚", color: "border-green-600", accent: "text-green-400", bg: "bg-green-950/30", startFn: "googleFitOAuthStart", syncFn: "googleFitSync" },
-    fitbit: { label: "Fitbit", emoji: "💙", color: "border-blue-600", accent: "text-blue-400", bg: "bg-blue-950/30", startFn: "fitbitOAuthStart", syncFn: "fitbitSync" },
-    polar: { label: "Polar", emoji: "❤️", color: "border-red-600", accent: "text-red-400", bg: "bg-red-950/30", startFn: "polarOAuthStart", syncFn: "polarSync" },
+    strava:     { label: "Strava",     emoji: "🚴", color: "border-orange-600", accent: "text-orange-400", bg: "bg-orange-950/30", startFn: "stravaOAuthStart", syncFn: "stravaSync" },
+    google_fit: { label: "Google Fit", emoji: "💚", color: "border-green-600",  accent: "text-green-400",  bg: "bg-green-950/30",  startFn: "googleFitOAuthStart", syncFn: "googleFitSync" },
+    fitbit:     { label: "Fitbit",     emoji: "💙", color: "border-blue-600",  accent: "text-blue-400",  bg: "bg-blue-950/30",  startFn: "fitbitOAuthStart",  syncFn: "fitbitSync" },
+    polar:      { label: "Polar",      emoji: "❤️", color: "border-red-600",   accent: "text-red-400",   bg: "bg-red-950/30",   startFn: "polarOAuthStart",   syncFn: "polarSync" },
+    whoop:      { label: "Whoop",      emoji: "⚡",  color: "border-yellow-600", accent: "text-yellow-400", bg: "bg-yellow-950/30", startFn: "whoopOAuthStart",   syncFn: "whoopSync" },
   };
 
   const cfg = PROVIDERS[provider];

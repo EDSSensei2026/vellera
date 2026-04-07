@@ -1,14 +1,26 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import WearableProviderCard from "../components/WearableProviderCard";
-import { Activity, RefreshCw, Loader2 } from "lucide-react";
+import WearablesBiometricsChart from "../components/WearablesBiometricsChart";
+import { Activity, RefreshCw, Loader2, ToggleLeft, ToggleRight } from "lucide-react";
 
-const PROVIDERS = ["strava", "google_fit", "fitbit", "polar"];
+const PROVIDERS = ["fitbit", "strava", "polar", "whoop"];
+
+const PROVIDER_META = {
+  fitbit: { syncFn: "fitbitSync" },
+  strava: { syncFn: "stravaSync" },
+  polar:  { syncFn: "polarSync" },
+  whoop:  { syncFn: "whoopSync" },
+};
 
 export default function WearablesHub() {
   const [tokens, setTokens] = useState({});
   const [loading, setLoading] = useState(true);
   const [syncingAll, setSyncingAll] = useState(false);
+  const [syncEnabled, setSyncEnabled] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("wearable_sync_enabled") || "{}"); }
+    catch { return {}; }
+  });
 
   const fetchTokens = async () => {
     setLoading(true);
@@ -21,19 +33,29 @@ export default function WearablesHub() {
 
   useEffect(() => { fetchTokens(); }, []);
 
+  const toggleSync = (provider) => {
+    setSyncEnabled(prev => {
+      const next = { ...prev, [provider]: !prev[provider] };
+      localStorage.setItem("wearable_sync_enabled", JSON.stringify(next));
+      return next;
+    });
+  };
+
   const syncAll = async () => {
     setSyncingAll(true);
-    const syncFns = { strava: "stravaSync", google_fit: "googleFitSync", fitbit: "fitbitSync", polar: "polarSync" };
-    const connected = PROVIDERS.filter(p => tokens[p]);
-    await Promise.all(connected.map(p => base44.functions.invoke(syncFns[p], {}).catch(() => {})));
+    const active = PROVIDERS.filter(p => tokens[p] && syncEnabled[p] !== false);
+    await Promise.all(active.map(p =>
+      base44.functions.invoke(PROVIDER_META[p].syncFn, {}).catch(() => {})
+    ));
     await fetchTokens();
     setSyncingAll(false);
   };
 
   const connectedCount = PROVIDERS.filter(p => tokens[p]).length;
+  const enabledCount = PROVIDERS.filter(p => tokens[p] && syncEnabled[p] !== false).length;
 
   return (
-    <div className="p-4 space-y-4 max-w-lg mx-auto pb-24 safe-area-top">
+    <div className="p-4 space-y-5 max-w-lg mx-auto pb-24 safe-area-top">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -42,7 +64,7 @@ export default function WearablesHub() {
           </div>
           <div>
             <h1 className="text-white font-black text-lg">Wearables Hub</h1>
-            <p className="text-commander-muted text-xs">{connectedCount} of {PROVIDERS.length} connected</p>
+            <p className="text-commander-muted text-xs">{connectedCount} connected · {enabledCount} syncing</p>
           </div>
         </div>
         {connectedCount > 0 && (
@@ -57,47 +79,56 @@ export default function WearablesHub() {
         )}
       </div>
 
-      {/* Status bar */}
-      <div className="bg-commander-surface border border-commander-border rounded-xl p-3">
-        <div className="flex gap-1 mb-2">
-          {PROVIDERS.map(p => (
-            <div key={p} className={`flex-1 h-2 rounded-full ${tokens[p] ? "bg-green-500" : "bg-gray-700"}`} />
-          ))}
-        </div>
-        <p className="text-commander-muted text-xs">
-          {connectedCount === 0
-            ? "Connect wearables to auto-sync biometric data into your dashboard."
-            : `${connectedCount} provider${connectedCount > 1 ? "s" : ""} syncing — data flows into BiometricLog automatically.`}
-        </p>
-      </div>
+      {/* Biometrics Chart */}
+      <WearablesBiometricsChart />
 
-      {/* Provider Cards */}
-      {loading ? (
-        <div className="space-y-3">
-          {PROVIDERS.map(p => (
-            <div key={p} className="h-24 bg-commander-surface border border-commander-border rounded-xl animate-pulse" />
-          ))}
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {PROVIDERS.map(p => (
-            <WearableProviderCard
-              key={p}
-              provider={p}
-              token={tokens[p] || null}
-              onRefresh={fetchTokens}
-            />
-          ))}
-        </div>
-      )}
+      {/* Device Cards with sync toggle */}
+      <div>
+        <p className="text-white font-black text-sm mb-3 uppercase tracking-wider">Connected Devices</p>
+        {loading ? (
+          <div className="space-y-3">
+            {PROVIDERS.map(p => (
+              <div key={p} className="h-24 bg-commander-surface border border-commander-border rounded-xl animate-pulse" />
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {PROVIDERS.map(p => {
+              const isConnected = !!tokens[p];
+              const isEnabled = syncEnabled[p] !== false;
+              return (
+                <div key={p}>
+                  <WearableProviderCard
+                    provider={p}
+                    token={tokens[p] || null}
+                    onRefresh={fetchTokens}
+                  />
+                  {isConnected && (
+                    <div className="flex items-center justify-between px-4 py-2 bg-gray-900/60 border-x border-b border-commander-border rounded-b-xl -mt-1">
+                      <span className="text-xs text-gray-400">Auto-sync enabled</span>
+                      <button
+                        onClick={() => toggleSync(p)}
+                        className={`flex items-center gap-1.5 text-xs font-bold transition-all ${isEnabled ? "text-vellera-green" : "text-gray-600"}`}
+                      >
+                        {isEnabled ? <ToggleRight className="w-5 h-5" /> : <ToggleLeft className="w-5 h-5" />}
+                        {isEnabled ? "On" : "Off"}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
       {/* Info */}
       <div className="bg-commander-surface border border-commander-border rounded-xl p-4 text-xs text-commander-muted space-y-1">
         <p className="text-white font-bold text-sm mb-2">📡 How it works</p>
         <p>• Connect each provider once via OAuth — no passwords stored.</p>
-        <p>• "Sync Now" pulls the last 7 days of activity, heart rate, sleep & calories.</p>
-        <p>• All data writes into your BiometricLog and powers your Recovery & Dashboard widgets.</p>
-        <p>• Whoop is managed separately on the Dashboard.</p>
+        <p>• Toggle auto-sync per device using the switch below each card.</p>
+        <p>• "Sync All" pulls the last 7 days from all enabled devices.</p>
+        <p>• HRV, resting HR, and training strain feed directly into the chart above.</p>
       </div>
     </div>
   );
