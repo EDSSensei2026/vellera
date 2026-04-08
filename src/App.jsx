@@ -10,6 +10,7 @@ import { AnimatePresence } from 'framer-motion';
 import PageTransition from './components/PageTransition';
 import TabStackLayout from './components/TabStackLayout';
 import RecoveryAlertBanner from './components/RecoveryAlertBanner';
+import GlobalHomeButton from './components/GlobalHomeButton';
 
 const Landing = lazy(() => import('./pages/Landing'));
 const BetaRequestForm = lazy(() => import('./pages/BetaRequestForm'));
@@ -265,6 +266,7 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <RecoveryAlertBanner />
+          <GlobalHomeButton />
           <RootApp />
         </Router>
         <Toaster />
