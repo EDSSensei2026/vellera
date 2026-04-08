@@ -11,6 +11,7 @@ import PageTransition from './components/PageTransition';
 import TabStackLayout from './components/TabStackLayout';
 import RecoveryAlertBanner from './components/RecoveryAlertBanner';
 import GlobalHomeButton from './components/GlobalHomeButton';
+import BetaGate from './components/BetaGate';
 
 const Landing = lazy(() => import('./pages/Landing'));
 const BetaRequestForm = lazy(() => import('./pages/BetaRequestForm'));
@@ -267,7 +268,9 @@ function App() {
         <Router>
           <RecoveryAlertBanner />
           <GlobalHomeButton />
-          <RootApp />
+          <BetaGate>
+            <RootApp />
+          </BetaGate>
         </Router>
         <Toaster />
       </QueryClientProvider>
