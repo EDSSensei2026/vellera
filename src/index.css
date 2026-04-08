@@ -4,33 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CRITICAL: Enforce strict dark mode as default for Android/iOS compliance per Base44 guidelines */
-body, html {
-  color-scheme: dark !important;
-  background-color: #121212 !important;
-  color: #ffffff !important;
-}
-
-/* Prevent light mode override globally */
-:root {
-  color-scheme: dark !important;
-  --force-dark: 1;
-}
-
-/* Prevent system light mode preference from affecting the app */
-@media (prefers-color-scheme: light) {
-  :root {
-    color-scheme: dark !important;
-    --background: 7 0% 7%;
-    --foreground: 0 0% 95%;
-  }
-}
-
-/* Android-specific enforcement */
-@supports (padding: max(0px)) {
-  html {
-    color-scheme: dark !important;
-  }
+html, body {
+  color-scheme: dark;
+  background-color: #121212;
+  color: #ffffff;
 }
 
 :root {
@@ -117,6 +94,16 @@ body, html {
 .bg-vellera-blue { background-color: #00E5FF; }
 .bg-vellera-green { background-color: #CCFF00; }
 .bg-vellera-dark { background-color: #121212; }
+
+@layer utilities {
+  .safe-top    { padding-top:    env(safe-area-inset-top); }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+  .safe-left   { padding-left:   env(safe-area-inset-left); }
+  .safe-right  { padding-right:  env(safe-area-inset-right); }
+
+  .pb-safe { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
+  .pt-safe { padding-top:    max(0.75rem, env(safe-area-inset-top)); }
+}
 
 @layer base {
   /* WCAG 2.1 AA — Global focus indicators */

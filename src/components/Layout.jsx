@@ -84,7 +84,7 @@ export default function Layout() {
       </button>
 
       {/* Top Header */}
-      <header className="bg-commander-surface/95 backdrop-blur border-b border-commander-border px-4 py-3 flex items-center justify-between sticky top-0 z-50 relative z-50">
+      <header className="bg-commander-surface/95 backdrop-blur border-b border-commander-border px-4 py-3 flex items-center justify-between sticky top-0 z-50 pt-safe">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-commander-red rounded-lg flex items-center justify-center">
             <Shield className="w-4 h-4 text-white" />
@@ -110,7 +110,7 @@ export default function Layout() {
       </main>
 
       {/* Bottom Nav - 5 tabs */}
-      <nav className="bg-commander-surface/95 backdrop-blur border-t border-commander-border px-2 py-2 fixed bottom-0 left-0 right-0 z-50 safe-area-bottom">
+      <nav className="bg-commander-surface/95 backdrop-blur border-t border-commander-border px-2 py-2 fixed bottom-0 left-0 right-0 z-50 pb-safe">
         <div className="flex justify-around">
           {PRIMARY_NAV.map(({ path, label, icon: Icon, glow }) => {
             const active = pathname === path;
