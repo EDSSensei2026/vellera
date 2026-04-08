@@ -139,6 +139,9 @@ export default function AdminDashboard() {
             <Link to="/beta-manager" className="flex items-center gap-2 px-4 py-2 bg-vellera-blue/10 border border-vellera-blue/30 text-vellera-blue text-sm font-bold rounded-xl hover:bg-vellera-blue/20 transition">
               Beta Manager <ChevronRight className="w-4 h-4" />
             </Link>
+            <Link to="/approvals" className="flex items-center gap-2 px-4 py-2 bg-yellow-900/20 border border-yellow-700/40 text-yellow-400 text-sm font-bold rounded-xl hover:bg-yellow-900/30 transition">
+              Approvals <ChevronRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
 

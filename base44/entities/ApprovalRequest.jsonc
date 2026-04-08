@@ -1,0 +1,137 @@
+{
+  "name": "ApprovalRequest",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Request Title"
+    },
+    "description": {
+      "type": "string",
+      "title": "What needs approval?"
+    },
+    "requested_by": {
+      "type": "string",
+      "title": "Requested By (email or agent name)"
+    },
+    "requester_type": {
+      "type": "string",
+      "enum": [
+        "ai_agent",
+        "user",
+        "system"
+      ],
+      "title": "Requester Type",
+      "default": "user"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "data_change",
+        "user_access",
+        "beta_approval",
+        "content_publish",
+        "system_action",
+        "financial",
+        "other"
+      ],
+      "title": "Category",
+      "default": "other"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "urgent"
+      ],
+      "title": "Priority",
+      "default": "medium"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected",
+        "deferred"
+      ],
+      "title": "Status",
+      "default": "pending"
+    },
+    "payload": {
+      "type": "string",
+      "title": "Action Payload (JSON)",
+      "description": "The action data to execute upon approval"
+    },
+    "reviewed_by": {
+      "type": "string",
+      "title": "Reviewed By (admin email)"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Reviewed At"
+    },
+    "admin_notes": {
+      "type": "string",
+      "title": "Admin Notes / Reason"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Expires At (auto-reject after)"
+    },
+    "auto_approve_after_hours": {
+      "type": "number",
+      "title": "Auto-approve after N hours (0 = never)",
+      "default": 0
+    },
+    "related_entity": {
+      "type": "string",
+      "title": "Related Entity Name"
+    },
+    "related_entity_id": {
+      "type": "string",
+      "title": "Related Entity ID"
+    },
+    "executed": {
+      "type": "boolean",
+      "title": "Action Executed After Approval",
+      "default": false
+    }
+  },
+  "required": [
+    "title",
+    "description",
+    "requested_by",
+    "requester_type",
+    "category"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "data.requested_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
