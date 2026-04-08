@@ -49,8 +49,9 @@ const MORE_NAV = [
   { path: "/calendar", label: "Calendar", icon: CalendarDays },
   { path: "/prep", label: "Pre-Workout Prep", icon: Zap },
   { path: "/supplements", label: "Supplement Stack", icon: Shield },
-  { path: "/prep", label: "Prep & Supps", icon: Zap },
   { path: "/settings", label: "Settings", icon: Shield },
+  { path: "/admin", label: "⚙️ Admin Dashboard", icon: Shield },
+  { path: "/approvals", label: "🛡️ Approvals", icon: Shield },
 ];
 
 // Tab stack component - keeps its own scroll position and state
