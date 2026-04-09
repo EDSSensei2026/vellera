@@ -112,7 +112,7 @@ export default function AdaptiveExerciseCard({ exerciseName, exerciseId, childre
                   <div className="flex items-center justify-between mb-1">
                     <p className="text-white font-bold text-xs">{mod.modified_name || mod.exercise_name}</p>
                     <span className="text-xs text-vellera-blue bg-vellera-blue/20 px-2 py-0.5 rounded capitalize">
-                      {mod.modification_type.replace('_', ' ')}
+                      {mod.modification_type.replace(/_/g, ' ')}
                     </span>
                   </div>
                   <p className="text-gray-300 text-xs leading-relaxed">{mod.description}</p>

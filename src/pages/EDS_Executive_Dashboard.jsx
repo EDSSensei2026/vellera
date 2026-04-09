@@ -31,7 +31,7 @@ function StatusBadge({ status }) {
   };
   return (
     <span className={`text-xs uppercase font-bold px-2 py-0.5 rounded border ${map[status] || 'bg-gray-700 text-gray-300 border-gray-600'}`}>
-      {status?.replace('_', ' ')}
+      {status?.replace(/_/g, ' ')}
     </span>
   );
 }

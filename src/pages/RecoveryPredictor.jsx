@@ -104,7 +104,7 @@ export default function RecoveryPredictor() {
               <p className="text-xs text-commander-muted uppercase tracking-widest mb-2">Key Indicators</p>
               {Object.entries(prediction.key_indicators).map(([key, val]) => (
                 <div key={key} className="border-b border-commander-border/50 pb-2 last:border-0 last:pb-0">
-                  <p className="text-white text-xs font-bold capitalize">{key.replace('_', ' ')}</p>
+                  <p className="text-white text-xs font-bold capitalize">{key.replace(/_/g, ' ')}</p>
                   <p className="text-commander-muted text-xs">{val}</p>
                 </div>
               ))}

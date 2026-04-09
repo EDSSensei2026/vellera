@@ -77,7 +77,7 @@ export default function VelleraBackground() {
         if (particle.trail.length > 1) {
           for (let i = 0; i < particle.trail.length - 1; i++) {
             const trailOpacity = (i / particle.trail.length) * particle.opacity;
-            ctx.strokeStyle = particle.color.replace(")", `, ${trailOpacity})`).replace("rgb", "rgba");
+            ctx.strokeStyle = particle.color.replace(/\)/g, `, ${trailOpacity})`).replace(/rgb/g, "rgba");
             ctx.lineWidth = particle.size * 0.5;
             ctx.lineCap = "round";
             ctx.beginPath();
@@ -88,7 +88,7 @@ export default function VelleraBackground() {
         }
 
         // Draw particle
-        ctx.fillStyle = particle.color.replace(")", `, ${particle.opacity})`).replace("rgb", "rgba");
+        ctx.fillStyle = particle.color.replace(/\)/g, `, ${particle.opacity})`).replace(/rgb/g, "rgba");
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fill();
@@ -102,8 +102,8 @@ export default function VelleraBackground() {
           particle.y,
           particle.size * 3
         );
-        glowGradient.addColorStop(0, particle.color.replace(")", `, ${particle.opacity * 0.6})`).replace("rgb", "rgba"));
-        glowGradient.addColorStop(1, particle.color.replace(")", ", 0)").replace("rgb", "rgba"));
+        glowGradient.addColorStop(0, particle.color.replace(/\)/g, `, ${particle.opacity * 0.6})`).replace(/rgb/g, "rgba"));
+        glowGradient.addColorStop(1, particle.color.replace(/\)/g, ", 0)").replace(/rgb/g, "rgba"));
         ctx.fillStyle = glowGradient;
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size * 3, 0, Math.PI * 2);

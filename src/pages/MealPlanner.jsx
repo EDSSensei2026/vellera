@@ -229,7 +229,7 @@ Return JSON matching this schema exactly:
             >
               <p className="text-xl">{val.emoji}</p>
               <p className={`text-xs font-bold mt-1 ${dayType === key ? "text-vellera-blue" : "text-white"}`}>
-                {val.label.replace("-Carb Day", "")}
+                {val.label.replace(/-Carb Day/g, "")}
               </p>
               <p className="text-commander-muted text-xs">{val.carbs}g carbs</p>
             </button>

@@ -52,7 +52,7 @@ function MacroBar({ label, actual, target, color, unit = "g", icon: Icon }) {
       </div>
       <div className="w-full bg-gray-800 rounded-full h-2">
         <div
-          className={`h-2 rounded-full transition-all ${over ? "bg-red-500" : color.replace("text-", "bg-")}`}
+          className={`h-2 rounded-full transition-all ${over ? "bg-red-500" : color.replace(/text-/g, "bg-")}`}
           style={{ width: `${pct}%` }}
         />
       </div>
