@@ -8,7 +8,7 @@ import { Shield, Users, Lock } from "lucide-react";
  * instead of the app content. Passes through if under the limit or on error.
  */
 export default function BetaGate({ children }) {
-  const [status, setStatus] = useState("loading"); // "loading" | "open" | "closed"
+  const [status, setStatus] = useState("open"); // start open — check runs in background
   const [spotsLeft, setSpotsLeft] = useState(null);
 
   useEffect(() => {
@@ -16,21 +16,12 @@ export default function BetaGate({ children }) {
       .then((res) => {
         const { is_open, spots_remaining } = res.data;
         setSpotsLeft(spots_remaining);
-        setStatus(is_open ? "open" : "closed");
+        if (!is_open) setStatus("closed");
       })
       .catch(() => {
         // Fail open — don't block users if the function errors
-        setStatus("open");
       });
   }, []);
-
-  if (status === "loading") {
-    return (
-      <div className="fixed inset-0 bg-commander-dark flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-vellera-blue border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
 
   if (status === "closed") {
     return (
