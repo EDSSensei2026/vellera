@@ -20,6 +20,7 @@ const AREA_RISK = {
 export default function InjuryPatternAnalytics() {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [tracked, setTracked] = useState(false);
 
   useEffect(() => {
     base44.entities.TrainingSession.list("-date", 30).then(s => {
@@ -27,6 +28,18 @@ export default function InjuryPatternAnalytics() {
       setLoading(false);
     });
   }, []);
+
+  useEffect(() => {
+    if (!loading && !tracked) {
+      setTracked(true);
+      base44.analytics.track({
+        eventName: "injury_analytics_viewed",
+        properties: {
+          session_count: sessions.length,
+        },
+      });
+    }
+  }, [loading, tracked, sessions.length]);
 
   if (loading) return null;
 
@@ -74,18 +87,7 @@ export default function InjuryPatternAnalytics() {
 
   const totalInjuryFlags = Object.values(injuryCounts).reduce((a, b) => a + b, 0);
 
-  // Track view
-  useEffect(() => {
-    if (!loading) {
-      base44.analytics.track({
-        eventName: "injury_analytics_viewed",
-        properties: {
-          active_alerts: activeAlerts.length,
-          total_injury_flags_14d: totalInjuryFlags,
-        },
-      });
-    }
-  }, [loading]);
+
 
   return (
     <div className="space-y-3">

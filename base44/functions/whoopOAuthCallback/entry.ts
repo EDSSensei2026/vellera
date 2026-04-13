@@ -105,7 +105,7 @@ Deno.serve(async (req) => {
 
   return new Response(
     `<html><head><title>Connected</title></head><body><script>
-      if (window.opener) { window.opener.postMessage('whoop_connected', 'https://vellera.app'); window.close(); }
+      if (window.opener) { window.opener.postMessage('whoop_connected', '*'); window.close(); }
       else { window.location.href = '/'; }
     </script><p>Whoop connected! You can close this tab.</p></body></html>`,
     { headers: { "Content-Type": "text/html; charset=utf-8" } }
