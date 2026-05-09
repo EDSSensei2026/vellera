@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
+import HFPerformanceAnalysis from "../components/HFPerformanceAnalysis";
 
 const C = {
   bg:"#0a0e1a", card:"#111827", border:"#1f2937",
@@ -217,6 +218,9 @@ export default function WellnessDashboard() {
               </div>
             </div>
           )}
+
+          {/* HF AI Analysis */}
+          <HFPerformanceAnalysis logs={logs} />
 
           {/* Notes */}
           {latest.notes&&(
