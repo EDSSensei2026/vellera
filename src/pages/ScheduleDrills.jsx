@@ -141,26 +141,6 @@ export default function ScheduleDrills() {
     }));
   };
 
-  const applyIntensityPlan = (level) => {
-    const plan = INTENSITY_DRILL_MAP[level];
-    if (!plan) return;
-    setIntensityMode(level);
-    // Build sessions from the recommended drills for this intensity
-    const newSessions = plan.drills.map((drillLabel, i) => {
-      const found = DRILL_PRESETS.find(p => p.label === drillLabel);
-      return {
-        id: Date.now() + i,
-        preset: drillLabel,
-        title: drillLabel,
-        description: found?.description || "",
-        startDateTime: getDefaultDatetime(1, 6 + i * 2), // stagger start times
-        duration: found?.duration || 45,
-      };
-    });
-    setSessions(newSessions);
-    toast.success(`Loaded ${plan.label} intensity plan — ${newSessions.length} drills`);
-  };
-
   const handleSchedule = async () => {
     const payload = sessions.map(s => ({
       title: s.title || s.preset,
@@ -196,38 +176,12 @@ export default function ScheduleDrills() {
             <h1 className="text-white text-xl font-black">Schedule Drill Sessions</h1>
             <p className="text-commander-muted text-xs">Martial arts, EP & tactical drills → Google Calendar</p>
           </div>
-        </div>
-
-        {/* Intensity Plan Selector */}
-        <div className="bg-commander-surface border border-commander-border rounded-xl p-4 space-y-3">
-          <div className="flex items-center gap-2">
-            <Shield className="w-4 h-4 text-amber-400" />
-            <p className="text-white font-black text-sm">Auto-Load by Intensity</p>
-            <span className="text-xs text-commander-muted">— fills sessions with matched EP drills</span>
-          </div>
-          <div className="grid grid-cols-3 gap-2">
-            {Object.entries(INTENSITY_DRILL_MAP).map(([key, plan]) => {
-              const Icon = plan.icon;
-              const active = intensityMode === key;
-              return (
-                <button
-                  key={key}
-                  onClick={() => applyIntensityPlan(key)}
-                  className={`flex flex-col items-center gap-1.5 rounded-xl border py-3 px-2 transition-all ${plan.border} ${active ? plan.activeBg : plan.bg} hover:opacity-90`}
-                >
-                  <Icon className={`w-5 h-5 ${plan.color}`} />
-                  <span className={`text-xs font-black ${plan.color}`}>{plan.label}</span>
-                  <span className="text-xs text-commander-muted text-center leading-tight hidden sm:block">{plan.description}</span>
-                </button>
-              );
-            })}
-          </div>
-          {intensityMode && (
-            <div className={`rounded-lg px-3 py-2 text-xs ${INTENSITY_DRILL_MAP[intensityMode].bg} border ${INTENSITY_DRILL_MAP[intensityMode].border}`}>
-              <span className={`font-bold ${INTENSITY_DRILL_MAP[intensityMode].color}`}>{INTENSITY_DRILL_MAP[intensityMode].label} Plan: </span>
-              <span className="text-gray-300">{INTENSITY_DRILL_MAP[intensityMode].description} — {INTENSITY_DRILL_MAP[intensityMode].drills.length} drills queued</span>
-            </div>
-          )}
+          <button
+            onClick={() => navigate("/ep-tactical")}
+            className="flex items-center gap-1 text-xs bg-amber-900/40 border border-amber-700/50 text-amber-400 font-bold px-3 py-1.5 rounded-lg hover:bg-amber-800/50 transition-all shrink-0"
+          >
+            <Shield className="w-3.5 h-3.5" /> Mastery
+          </button>
         </div>
 
         {/* Sessions */}
