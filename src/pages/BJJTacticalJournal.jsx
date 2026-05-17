@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { ArrowLeft, Plus, Search, Trash2, ChevronDown } from "lucide-react";
+import { ArrowLeft, Plus, Search, Trash2, ChevronDown, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import EPMasteryTracker from "../components/EPMasteryTracker";
 
 export default function BJJTacticalJournal() {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ export default function BJJTacticalJournal() {
   const [filteredEntries, setFilteredEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [showEPTracker, setShowEPTracker] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedId, setExpandedId] = useState(null);
 
@@ -146,12 +148,21 @@ export default function BJJTacticalJournal() {
           </button>
           <h1 className="text-white text-2xl font-black">BJJ Tactical Journal</h1>
         </div>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-vellera-blue text-commander-dark p-2 rounded-lg hover:bg-vellera-green transition-all"
-        >
-          <Plus className="w-5 h-5" />
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowEPTracker(!showEPTracker)}
+            title="EP Mastery Tracker"
+            className={`p-2 rounded-lg border transition-all ${showEPTracker ? "bg-amber-500 border-amber-400 text-black" : "border-amber-700/50 bg-amber-900/30 text-amber-400 hover:bg-amber-800/40"}`}
+          >
+            <Shield className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="bg-vellera-blue text-commander-dark p-2 rounded-lg hover:bg-vellera-green transition-all"
+          >
+            <Plus className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
       {/* Search */}
@@ -165,6 +176,11 @@ export default function BJJTacticalJournal() {
           className="w-full bg-commander-surface border border-commander-border rounded-lg pl-10 pr-3 py-2 text-white placeholder-commander-muted text-sm focus:outline-none focus:border-vellera-blue"
         />
       </div>
+
+      {/* EP Mastery Tracker */}
+      {showEPTracker && (
+        <EPMasteryTracker entries={entries} />
+      )}
 
       {/* New Entry Form */}
       {showForm && (
