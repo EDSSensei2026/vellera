@@ -167,32 +167,19 @@ Deno.serve(async (req) => {
 
   console.log(`Found ${allItems.length} changed events, ${completedTraining.length} completed training events`);
 
-  // Fetch today's biometric log (service role, most recent entry for today)
+  // Fetch today's biometrics for enriched messaging (admin service role)
   const today = now.toISOString().split('T')[0];
-  let biometrics = null;
+  let todayBiometrics = null;
   try {
     const bioLogs = await base44.asServiceRole.entities.BiometricLog.filter({ date: today });
-    if (bioLogs.length > 0) {
-      const b = bioLogs[0];
-      biometrics = {
-        recovery_pct: b.recovery_pct ?? null,
-        hrv: b.hrv ?? null,
-        resting_hr: b.rhr ?? null,       // entity field is 'rhr'
-        sleep_performance: b.sleep_performance ?? null,
-        body_battery: b.body_battery ?? null,
-        strain: b.strain ?? null,
-      };
-      console.log(`Biometrics found for ${today}: recovery=${biometrics.recovery_pct}%, HRV=${biometrics.hrv}ms`);
-    } else {
-      console.log(`No biometric log found for ${today} — alerts will use generic recovery message`);
-    }
-  } catch (err) {
-    console.error('Failed to fetch biometrics:', err.message);
+    if (bioLogs.length > 0) todayBiometrics = bioLogs[0];
+  } catch (e) {
+    console.log('Biometric fetch skipped:', e.message);
   }
 
   // Create a recovery alert for each completed training event
   for (const event of completedTraining) {
-    const message = getRecoveryMessage(event, biometrics);
+    const message = getRecoveryMessage(event, todayBiometrics);
     const alertKey = `recovery_${event.id}_${event.end?.dateTime}`;
 
     // Avoid duplicate alerts

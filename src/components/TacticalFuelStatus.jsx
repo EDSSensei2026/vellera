@@ -168,6 +168,25 @@ export default function TacticalFuelStatus({ caloriesToday = 0, date }) {
             </div>
           )}
 
+          {/* Macro targets for sessions */}
+          {drills.length > 0 && (
+            <div className="space-y-1 pt-1">
+              <p className="text-commander-muted text-xs uppercase tracking-widest">Recommended Pre-Session Macros</p>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { label: "Carbs", value: `${Math.round(totalDrillCalories * 0.45 / 4)}g`, color: "text-yellow-400" },
+                  { label: "Protein", value: `${Math.round(totalDrillCalories * 0.25 / 4)}g`, color: "text-orange-400" },
+                  { label: "Fat", value: `${Math.round(totalDrillCalories * 0.30 / 9)}g`, color: "text-blue-400" },
+                ].map(({ label, value, color }) => (
+                  <div key={label} className="bg-gray-900/60 rounded-lg p-2 text-center">
+                    <p className={`font-black text-sm ${color}`}>{value}</p>
+                    <p className="text-commander-muted text-xs">{label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Drill list */}
           {drills.length > 0 && (
             <div className="space-y-2">
