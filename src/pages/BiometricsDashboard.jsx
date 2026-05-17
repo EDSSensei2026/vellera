@@ -258,6 +258,74 @@ export default function BiometricsDashboard() {
               </div>
             </div>
 
+            {/* Load Handling: Recovery + HRV vs Training Intensity */}
+            {biometrics.length > 0 && (
+              <div className="bg-commander-surface border border-commander-border rounded-xl p-4 space-y-4">
+                <h2 className="text-white font-bold flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-blue-400" /> Load Handling: Recovery & HRV vs Intensity
+                </h2>
+
+                <div className="w-full h-56">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ComposedChart data={biometrics.sort((a, b) => a.date.localeCompare(b.date)).map((log, idx) => ({
+                      date: new Date(log.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                      recovery: log.recovery_pct ?? null,
+                      hrv: Math.round((log.hrv || 0) / 10), // Scale HRV down for visibility
+                      intensity: Math.min(100, Math.round(((log.gas_level || 0) / 10))), // Normalized intensity proxy
+                    }))} margin={{ top: 4, right: 4, left: -16, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                      <XAxis dataKey="date" stroke="#888" fontSize={10} tick={{ fill: '#888' }} />
+                      <YAxis stroke="#888" fontSize={10} domain={[0, 100]} tick={{ fill: '#888' }} />
+                      <Tooltip
+                        contentStyle={{ backgroundColor: "#1a1a1a", border: "1px solid #333", borderRadius: "8px", fontSize: 12 }}
+                        labelStyle={{ color: "#fff" }}
+                        formatter={(val, name) => {
+                          if (name === "HRV (scaled)") return [`${Math.round(val * 10)} ms`, name];
+                          return [`${val}%`, name];
+                        }}
+                      />
+                      <Legend wrapperStyle={{ fontSize: 11 }} />
+                      <Area
+                        type="monotone"
+                        dataKey="recovery"
+                        fill="#00E5FF22"
+                        stroke="#00E5FF"
+                        strokeWidth={2.5}
+                        dot={false}
+                        name="Recovery %"
+                        connectNulls
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="hrv"
+                        stroke="#CCFF00"
+                        strokeWidth={2}
+                        dot={false}
+                        name="HRV (scaled)"
+                        connectNulls
+                      />
+                      <Bar
+                        dataKey="intensity"
+                        fill="#f59e0b55"
+                        stroke="#f59e0b"
+                        strokeWidth={1}
+                        name="Training Intensity %"
+                        radius={[2, 2, 0, 0]}
+                      />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+
+                <div className="bg-gray-800/50 rounded-lg p-3 text-xs text-gray-300 space-y-1">
+                  <p className="font-semibold text-white mb-1">💡 Load Handling Pattern</p>
+                  <p>
+                    <span className="text-blue-400 font-bold">Recovery %</span> should stay elevated even on high-intensity days (<span className="text-amber-400 font-bold">▌</span>).
+                    If <span className="text-vellera-green font-bold">HRV</span> drops while intensity climbs, you may be accumulating fatigue faster than you can recover. Adjust training load or prioritize sleep.
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Recovery & Sleep vs Tactical Intensity */}
             {tacticalOverlayData.length > 0 && (
               <div className="bg-commander-surface border border-commander-border rounded-xl p-4 space-y-4">
