@@ -248,6 +248,7 @@ const AuthenticatedApp = () => {
       <Route path="/wellness-dashboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WellnessDashboard /></Suspense></PageTransition>} />
       <Route path="/body-goal-planner" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BodyGoalPlanner /></Suspense></PageTransition>} />
       <Route path="/schedule-drills" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ScheduleDrills /></Suspense></PageTransition>} />
+      <Route path="/ep-tactical" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><EPTacticalDashboard /></Suspense></PageTransition>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
     </AnimatePresence>
