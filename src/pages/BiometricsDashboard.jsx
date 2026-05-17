@@ -4,8 +4,9 @@ import { ArrowLeft, Loader2, AlertCircle, TrendingDown, TrendingUp } from "lucid
 import { useNavigate } from "react-router-dom";
 import { 
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, 
-  Tooltip, ResponsiveContainer, Legend 
+  Tooltip, ResponsiveContainer, Legend, ComposedChart, Area
 } from "recharts";
+import { Shield } from "lucide-react";
 
 export default function BiometricsDashboard() {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export default function BiometricsDashboard() {
   const [trainingLoadData, setTrainingLoadData] = useState([]);
   const [recoveryInsights, setRecoveryInsights] = useState(null);
   const [user, setUser] = useState(null);
+  const [tacticalOverlayData, setTacticalOverlayData] = useState([]);
 
   useEffect(() => {
     const loadBiometrics = async () => {
@@ -33,6 +35,29 @@ export default function BiometricsDashboard() {
         }
 
         setBiometrics(logs);
+
+        // Fetch last 30 days of training sessions for tactical intensity
+        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        const sessions = await base44.entities.TrainingSession.filter({ created_by: currentUser.email }, "-date", 60);
+        const recentSessions = sessions.filter(s => s.date >= thirtyDaysAgo);
+
+        // Map sessions by date → intensity score (duration as proxy, capped at 100)
+        const sessionByDate = {};
+        for (const s of recentSessions) {
+          const d = s.date;
+          const intensity = Math.min(100, Math.round(((s.duration_minutes || 0) / 120) * 100));
+          sessionByDate[d] = Math.max(sessionByDate[d] || 0, intensity);
+        }
+
+        // Build overlay: biometric log + training intensity per day
+        const sortedLogs = [...logs].sort((a, b) => a.date.localeCompare(b.date));
+        const overlay = sortedLogs.map(log => ({
+          date: new Date(log.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+          recovery: log.recovery_pct ?? null,
+          sleep: log.sleep_performance ?? null,
+          intensity: sessionByDate[log.date] ?? null,
+        })).filter(d => d.recovery !== null || d.sleep !== null);
+        setTacticalOverlayData(overlay);
 
         // Process HRV trend
         const hrvData = logs.reverse().map(log => ({
@@ -232,6 +257,64 @@ export default function BiometricsDashboard() {
                 <p>Aim for high training days followed by adequate recovery. Spike in load without recovery increase risks overtraining.</p>
               </div>
             </div>
+
+            {/* Recovery & Sleep vs Tactical Intensity */}
+            {tacticalOverlayData.length > 0 && (
+              <div className="bg-commander-surface border border-commander-border rounded-xl p-4 space-y-4">
+                <h2 className="text-white font-bold flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-amber-400" /> Recovery & Sleep vs Tactical Intensity (30 Days)
+                </h2>
+
+                <div className="w-full h-56">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ComposedChart data={tacticalOverlayData} margin={{ top: 4, right: 4, left: -16, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                      <XAxis dataKey="date" stroke="#888" fontSize={10} tick={{ fill: '#888' }} />
+                      <YAxis stroke="#888" fontSize={10} domain={[0, 100]} tick={{ fill: '#888' }} />
+                      <Tooltip
+                        contentStyle={{ backgroundColor: "#1a1a1a", border: "1px solid #333", borderRadius: "8px", fontSize: 12 }}
+                        labelStyle={{ color: "#fff" }}
+                        formatter={(val, name) => [`${val}%`, name]}
+                      />
+                      <Legend wrapperStyle={{ fontSize: 11 }} />
+                      <Area
+                        type="monotone"
+                        dataKey="recovery"
+                        fill="#00E5FF22"
+                        stroke="#00E5FF"
+                        strokeWidth={2}
+                        dot={false}
+                        name="Recovery %"
+                        connectNulls
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="sleep"
+                        fill="#CCFF0015"
+                        stroke="#CCFF00"
+                        strokeWidth={2}
+                        dot={false}
+                        name="Sleep Performance %"
+                        connectNulls
+                      />
+                      <Bar
+                        dataKey="intensity"
+                        fill="#f59e0b55"
+                        stroke="#f59e0b"
+                        strokeWidth={1}
+                        name="Training Intensity %"
+                        radius={[2, 2, 0, 0]}
+                      />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+
+                <div className="bg-gray-800/50 rounded-lg p-3 text-xs text-gray-300 space-y-1">
+                  <p className="font-semibold text-white mb-1">💡 Tactical Readiness Pattern</p>
+                  <p>High intensity bars <span className="text-amber-400 font-bold">▌</span> followed by dips in recovery <span className="text-vellera-blue font-bold">—</span> or sleep <span className="text-vellera-green font-bold">—</span> indicate accumulated fatigue. Schedule rest days when both lines drop after back-to-back sessions.</p>
+                </div>
+              </div>
+            )}
 
             {/* Actionable Insights */}
             <div className="bg-vellera-blue/10 border border-vellera-blue/30 rounded-xl p-4 space-y-3">
