@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, Trash2, CalendarCheck, Loader2, ExternalLink, Check, AlertCircle, Shield, Zap, Battery, Flame } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, CalendarCheck, Loader2, ExternalLink, Check, AlertCircle, Shield, Zap, Battery, Flame, Save, Download } from "lucide-react";
 import { toast } from "sonner";
 
 const DRILL_PRESETS = [
@@ -94,6 +94,10 @@ function addMinutes(datetimeLocal, mins) {
 
 export default function ScheduleDrills() {
   const navigate = useNavigate();
+  const [templates, setTemplates] = useState([]);
+  const [loadingTemplates, setLoadingTemplates] = useState(true);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [templateName, setTemplateName] = useState("");
   const [sessions, setSessions] = useState([
     {
       id: 1,
@@ -107,6 +111,21 @@ export default function ScheduleDrills() {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
   const [intensityMode, setIntensityMode] = useState(null); // "low" | "moderate" | "high" | null
+
+  // Load templates on mount
+  useEffect(() => {
+    const loadTemplates = async () => {
+      try {
+        const tmpl = await base44.entities.DrillTemplate.list("-is_favorite", 20);
+        setTemplates(tmpl);
+      } catch {
+        // Silently fail if templates can't load
+      } finally {
+        setLoadingTemplates(false);
+      }
+    };
+    loadTemplates();
+  }, []);
 
   const addSession = () => {
     const id = Date.now();
@@ -139,6 +158,47 @@ export default function ScheduleDrills() {
       }
       return updated;
     }));
+  };
+
+  const handleSaveTemplate = async () => {
+    if (!templateName.trim()) {
+      toast.error("Enter a template name");
+      return;
+    }
+    try {
+      const drills = sessions.map(s => ({
+        title: s.title || s.preset,
+        description: s.description,
+        duration: s.duration,
+      }));
+      await base44.entities.DrillTemplate.create({
+        template_name: templateName,
+        drills,
+        is_favorite: false,
+      });
+      toast.success(`Template "${templateName}" saved!`);
+      setTemplateName("");
+      setShowSaveModal(false);
+      // Reload templates
+      const tmpl = await base44.entities.DrillTemplate.list("-is_favorite", 20);
+      setTemplates(tmpl);
+    } catch (err) {
+      toast.error("Failed to save template: " + err.message);
+    }
+  };
+
+  const handleLoadTemplate = (template) => {
+    // Map template drills to session format
+    const newSessions = template.drills.map((d, i) => ({
+      id: Date.now() + i,
+      preset: DRILL_PRESETS.find(p => p.label === d.title)?.label || "Custom",
+      title: d.title,
+      description: d.description,
+      startDateTime: getDefaultDatetime(i + 1),
+      duration: d.duration,
+    }));
+    setSessions(newSessions);
+    toast.success(`Loaded template: ${template.template_name}`);
   };
 
   const handleSchedule = async () => {
@@ -286,6 +346,28 @@ export default function ScheduleDrills() {
           </div>
         ))}
 
+        {/* Load Template */}
+        {templates.length > 0 && (
+          <div className="bg-commander-surface border border-commander-border rounded-xl p-4 space-y-3">
+            <p className="text-xs text-commander-muted uppercase tracking-widest">Load Template</p>
+            <div className="space-y-2">
+              {templates.map(t => (
+                <button
+                  key={t.id}
+                  onClick={() => handleLoadTemplate(t)}
+                  className="w-full text-left p-3 bg-gray-800 border border-gray-700 rounded-lg hover:border-vellera-blue transition-all flex items-center justify-between"
+                >
+                  <div>
+                    <p className="text-white text-sm font-bold">{t.template_name}</p>
+                    <p className="text-commander-muted text-xs">{t.drills.length} drill{t.drills.length !== 1 ? "s" : ""}</p>
+                  </div>
+                  <Download className="w-4 h-4 text-vellera-blue" />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Add session */}
         <button
           onClick={addSession}
@@ -294,18 +376,55 @@ export default function ScheduleDrills() {
           <Plus className="w-4 h-4" /> Add Another Session
         </button>
 
-        {/* Schedule button */}
-        <button
-          onClick={handleSchedule}
-          disabled={loading}
-          className="w-full py-4 bg-gradient-to-r from-vellera-blue to-vellera-green text-black font-black rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-all text-base"
-        >
-          {loading ? (
-            <><Loader2 className="w-5 h-5 animate-spin" /> Scheduling...</>
-          ) : (
-            <><CalendarCheck className="w-5 h-5" /> Add {sessions.length} Session{sessions.length !== 1 ? "s" : ""} to Google Calendar</>
-          )}
-        </button>
+        {/* Save Template Modal */}
+        {showSaveModal && (
+          <div className="bg-commander-surface border border-commander-border rounded-xl p-4 space-y-3">
+            <p className="text-white font-bold text-sm">Save Current Sessions as Template</p>
+            <input
+              type="text"
+              placeholder="e.g. Lab Morning Routine"
+              value={templateName}
+              onChange={(e) => setTemplateName(e.target.value)}
+              className="w-full bg-gray-800 border border-commander-border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-vellera-blue min-h-[44px]"
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={() => { setShowSaveModal(false); setTemplateName(""); }}
+                className="flex-1 py-2 px-3 bg-gray-800 border border-commander-border text-white rounded-lg text-sm font-bold hover:bg-gray-700 transition-all min-h-[44px]"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveTemplate}
+                className="flex-1 py-2 px-3 bg-vellera-green text-black rounded-lg text-sm font-bold hover:bg-opacity-90 transition-all flex items-center justify-center gap-2 min-h-[44px]"
+              >
+                <Save className="w-4 h-4" /> Save Template
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowSaveModal(true)}
+            className="flex-1 py-3 bg-amber-900/40 border border-amber-700/50 text-amber-400 font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-amber-800/40 transition-all text-sm min-h-[44px]"
+            title="Save current sessions as a reusable template"
+          >
+            <Save className="w-4 h-4" /> Save as Template
+          </button>
+          <button
+            onClick={handleSchedule}
+            disabled={loading}
+            className="flex-1 py-3 bg-gradient-to-r from-vellera-blue to-vellera-green text-black font-black rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-all text-sm min-h-[44px]"
+          >
+            {loading ? (
+              <><Loader2 className="w-4 h-4 animate-spin" /> Scheduling...</>
+            ) : (
+              <><CalendarCheck className="w-4 h-4" /> Schedule</>
+            )}
+          </button>
+        </div>
 
         {/* Results */}
         {results && (
