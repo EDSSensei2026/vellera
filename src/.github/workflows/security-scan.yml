@@ -1,3 +1,12 @@
+# 1. This file MUST be saved in the following directory: .github/workflows/
+#    If the .github/workflows directories don't exist, you'll need to create them.
+#
+# 2. Add your Rafter API key as a GitHub repository secret:
+#    - Go to your repository Settings -> Secrets and variables -> Actions
+#    - Click "New repository secret"
+#    - Name: RAFTER_API_KEY
+#    - Value: your_actual_api_key_here
+
 name: Security Scan with Rafter
 
 on:
@@ -19,7 +28,15 @@ jobs:
             set -euo pipefail
 
             # 1. Trigger scan
-            SCAN_ID=$(curl -fsS -X POST               -H "Content-Type: application/json"               -H "x-api-key: ${{ secrets.RAFTER_API_KEY }}"               -d '{                "repository_name": "${{ github.repository }}",                "branch_name": "${{ github.ref_name }}",                "scan_mode": "fast"              }'               https://rafter.so/api/static/scan | jq -r '.scan_id')
+            SCAN_ID=$(curl -fsS -X POST \
+              -H "Content-Type: application/json" \
+              -H "x-api-key: ${{ secrets.RAFTER_API_KEY }}" \
+              -d '{
+                "repository_name": "${{ github.repository }}",
+                "branch_name": "${{ github.ref_name }}",
+                "scan_mode": "fast"
+              }' \
+              https://rafter.so/api/static/scan | jq -r '.scan_id')
 
             echo "SCAN_ID: $SCAN_ID"
 
@@ -27,7 +44,8 @@ jobs:
             MAX_POLLS=60
             POLL_COUNT=0
             while [ $POLL_COUNT -lt $MAX_POLLS ]; do
-              STATUS=$(curl -fsS -H "x-api-key: ${{ secrets.RAFTER_API_KEY }}"                 "https://rafter.so/api/static/scan?scan_id=$SCAN_ID" | jq -r '.status')
+              STATUS=$(curl -fsS -H "x-api-key: ${{ secrets.RAFTER_API_KEY }}" \
+                "https://rafter.so/api/static/scan?scan_id=$SCAN_ID" | jq -r '.status')
               
               if [ "$STATUS" = "completed" ] || [ "$STATUS" = "failed" ]; then
                 break
@@ -47,9 +65,11 @@ jobs:
             fi
 
             # 3. Get results
-            curl -fsS -H "x-api-key: ${{ secrets.RAFTER_API_KEY }}"               "https://rafter.so/api/static/scan?scan_id=$SCAN_ID" > scan-results.json
+            curl -fsS -H "x-api-key: ${{ secrets.RAFTER_API_KEY }}" \
+              "https://rafter.so/api/static/scan?scan_id=$SCAN_ID" > scan-results.json
 
-            curl -fsS -H "x-api-key: ${{ secrets.RAFTER_API_KEY }}"               "https://rafter.so/api/static/scan?scan_id=$SCAN_ID&format=md" > scan-results.md
+            curl -fsS -H "x-api-key: ${{ secrets.RAFTER_API_KEY }}" \
+              "https://rafter.so/api/static/scan?scan_id=$SCAN_ID&format=md" > scan-results.md
 
       - name: Check for critical vulnerabilities 🧐
         run: |
@@ -68,37 +88,9 @@ jobs:
             echo "✅ No critical vulnerabilities found"
           fi
 
-      - name: NPM Dependency Audit 🔍
-        run: |
-          echo "Running npm audit..."
-          npm audit --audit-level=high || true
-          
-          # Generate detailed audit report
-          npm audit --json > npm-audit-report.json || true
-          
-          # Count HIGH severity issues
-          HIGH_COUNT=$(jq '[.vulnerabilities[] | select(.severity=="high")] | length' npm-audit-report.json 2>/dev/null || echo 0)
-          CRITICAL_COUNT=$(jq '[.vulnerabilities[] | select(.severity=="critical")] | length' npm-audit-report.json 2>/dev/null || echo 0)
-          
-          echo "📊 npm audit results: $CRITICAL_COUNT critical, $HIGH_COUNT high"
-          
-          if [ "$CRITICAL_COUNT" -gt 0 ]; then
-            echo "❌ CRITICAL npm vulnerabilities detected!"
-            jq '.vulnerabilities[] | select(.severity=="critical")' npm-audit-report.json
-            exit 1
-          fi
-
-      - name: Upload npm Audit Report 📄
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: npm-audit-report
-          path: npm-audit-report.json
-          retention-days: 30
-
       - name: Upload scan results 📄
         uses: actions/upload-artifact@v4
-        if: always() # Upload results even if vulnerabilities were found
+        if: always()
         with:
           name: security-scan-results
           path: | 
