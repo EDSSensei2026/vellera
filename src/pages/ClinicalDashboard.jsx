@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { calculateBeighton, calculateLEFS, LEFS_ITEMS, LEFS_RATING_LABELS } from '../lib/clinicalScoring';
-import { ClipboardList, Download, Plus, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Loader2 } from 'lucide-react';
+import { ClipboardList, Download, Plus, AlertTriangle, CheckCircle2, Loader2 } from 'lucide-react';
 import BackButton from '../components/BackButton';
 import { toast } from 'sonner';
 

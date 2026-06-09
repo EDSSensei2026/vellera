@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Trophy, Star, Zap, Target } from "lucide-react";
+import { Trophy } from "lucide-react";
 
 const BADGE_CONFIG = {
   first_session: { name: "First Steps", icon: "🥋", desc: "Logged your first session", rarity: "common" },

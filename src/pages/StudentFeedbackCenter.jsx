@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import BackButton from "../components/BackButton";
-import { MessageSquare, Award, TrendingUp, AlertCircle, CheckCircle } from "lucide-react";
+import { MessageSquare, TrendingUp, AlertCircle, CheckCircle } from "lucide-react";
 
 export default function StudentFeedbackCenter() {
   const [studentProfile, setStudentProfile] = useState(null);

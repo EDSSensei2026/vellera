@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { ArrowLeft, TrendingUp, Users, DollarSign, CheckCircle, AlertTriangle, Activity, Building2, Shield, BarChart3 } from 'lucide-react';
+import { ArrowLeft, Activity, Building2, Shield, BarChart3 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 // ─── Bento Card primitives ────────────────────────────────────────────────────

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Lock, Check, Zap } from "lucide-react";
+import { Lock, Check } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 export default function PricingSection() {

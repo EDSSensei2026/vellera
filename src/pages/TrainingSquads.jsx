@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
-import { Users, Trophy, MessageSquare, Plus, LogIn, Copy, ChevronDown, ChevronUp, ThumbsUp, Share2, Flame, Clock } from "lucide-react";
+import { MessageSquare, Plus, LogIn, Copy, ThumbsUp, Share2 } from "lucide-react";
 import BackButton from "../components/BackButton";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────

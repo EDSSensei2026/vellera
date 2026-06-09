@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import {
   CheckCircle, XCircle, Clock, AlertTriangle, Bot, User, Zap,
-  ArrowLeft, Filter, RefreshCw, Send, ChevronDown, ChevronUp, Shield
+  ArrowLeft, RefreshCw, Send, ChevronDown, ChevronUp, Shield
 } from "lucide-react";
 import { toast } from "sonner";
 

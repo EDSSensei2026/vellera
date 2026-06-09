@@ -35,7 +35,6 @@ export default function Auth() {
         <button
           onClick={handleSignIn}
           disabled={loading}
-          className="w-full py-4 rounded-xl font-black text-base flex items-center justify-center gap-3 transition-all min-h-[52px] disabled:opacity-60"
           className="w-full py-4 rounded-xl font-black text-base flex items-center justify-center gap-3 transition-all min-h-[52px] disabled:opacity-60 bg-gradient-to-r from-vellera-blue to-vellera-green text-vellera-dark"
         >
           {loading ? (

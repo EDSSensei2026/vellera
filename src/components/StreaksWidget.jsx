@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, Award, Zap } from "lucide-react";
+import { Flame } from "lucide-react";
 
 const MILESTONES = [
   { days: 3,  label: "On Fire",       emoji: "🔥", color: "#f97316", glow: "#f9731640" },

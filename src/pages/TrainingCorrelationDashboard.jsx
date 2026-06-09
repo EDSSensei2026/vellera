@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import {
   ComposedChart, Line, Bar, Scatter, XAxis, YAxis, CartesianGrid,
   Tooltip, Legend, ResponsiveContainer, ReferenceLine, ScatterChart,
-  LineChart, BarChart
+  LineChart
 } from "recharts";
 
 const DAYS = 30;

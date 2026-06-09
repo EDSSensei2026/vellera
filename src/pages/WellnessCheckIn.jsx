@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { calculateLSI, batchLSI } from '../lib/lsiScoring';
 import WellnessTrendChart from '../components/WellnessTrendChart';
 import BackButton from '../components/BackButton';
-import { Heart, Plus, Loader2, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Heart, Loader2, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
 
 const SYMPTOM_OPTIONS = ['Swelling', 'Stiffness', 'Instability', 'Fatigue', 'Headache', 'Soreness', 'Tenderness'];

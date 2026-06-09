@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
-import { Camera, Loader2, ChevronDown, ChevronUp, Droplets, TrendingUp, TrendingDown, AlertTriangle, CheckCircle } from "lucide-react";
+import { Camera, Loader2, ChevronDown, ChevronUp, Droplets, AlertTriangle } from "lucide-react";
 import BackButton from "../components/BackButton";
 import FuelTrainingMatrix from "../components/FuelTrainingMatrix";
 import TacticalFuelStatus from "../components/TacticalFuelStatus";
-import { FormError } from "../components/FormValidation";
 import SelectDrawer from "../components/SelectDrawer";
 
 // Daily targets from Blueprint

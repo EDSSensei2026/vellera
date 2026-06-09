@@ -5,7 +5,7 @@ import {
   ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, Area, AreaChart, Legend, ReferenceLine
 } from "recharts";
-import { Activity, RefreshCw, Loader2, TrendingUp, Heart, Moon, Zap, ArrowLeft, AlertCircle } from "lucide-react";
+import { Activity, RefreshCw, Loader2, Heart, Moon, Zap, ArrowLeft, AlertCircle } from "lucide-react";
 
 const RANGES = [
   { label: "7D",  days: 7 },

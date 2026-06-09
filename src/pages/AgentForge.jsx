@@ -3,7 +3,6 @@ import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
 import { Save, Trash2, Zap, Mic, CheckCircle, Loader2 } from "lucide-react";
 import BackButton from "../components/BackButton";
-import { Link } from "react-router-dom";
 
 const VOICE_OPTIONS = [
   { id: "deep_male",         label: "Deep Male",           desc: "Commanding, authoritative",     emoji: "🗣️" },

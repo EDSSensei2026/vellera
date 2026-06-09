@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { X, Check, Lock } from "lucide-react";
-import { Link } from "react-router-dom";
 import PricingCard from "../components/PricingCard";
 import SubscriptionCheckout from "../components/SubscriptionCheckout";
 

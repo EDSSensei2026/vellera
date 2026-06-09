@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { ArrowLeft, TrendingDown, Flame, Zap, Heart } from "lucide-react";
+import { ArrowLeft, TrendingDown, Flame, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 export default function ZuluShred() {
   const navigate = useNavigate();

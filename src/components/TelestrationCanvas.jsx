@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Pen, Trash2, Undo2, Download } from 'lucide-react';
+import { Trash2, Undo2, Download } from 'lucide-react';
 
 /**
  * TelestrationCanvas: Draw annotations over video frame

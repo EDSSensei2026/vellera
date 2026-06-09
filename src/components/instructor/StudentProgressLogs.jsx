@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { CheckCircle2, Clock, AlertCircle, ChevronRight, MessageSquare, Loader2 } from 'lucide-react';
+import { CheckCircle2, ChevronRight, MessageSquare, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const STATUS_CONFIG = {

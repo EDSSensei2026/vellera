@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Copy, Check, Gift, Users, TrendingUp } from 'lucide-react';
-import { toast } from 'sonner';
 import BackButton from '../components/BackButton';
 
 export default function ReferralPortal() {

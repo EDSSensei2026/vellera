@@ -1,0 +1,45 @@
+name: Production Build & Security Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  audit-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js Environment
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Run Security Audit
+      # This checks for known vulnerabilities in package.json dependencies
+      run: npm audit --audit-level=high
+
+    - name: Lint Code
+      run: npm run lint --if-present
+
+    - name: Compile Production Build
+      # Ensure your Base44/Airtable environment variables are injected here if needed
+      env:
+        VITE_AIRTABLE_BASE_ID: ${{ secrets.VITE_AIRTABLE_BASE_ID }}
+        VITE_BASE44_API_KEY: ${{ secrets.VITE_BASE44_API_KEY }}
+      run: npm run build
+
+    - name: Upload Build Artifacts
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: production-dist
+        path: dist/

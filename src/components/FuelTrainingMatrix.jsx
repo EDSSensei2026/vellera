@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { CheckCircle2, XCircle, Minus, Flame, Dumbbell, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 
 const DAYS = 30;
 

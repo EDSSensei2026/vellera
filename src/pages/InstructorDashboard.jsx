@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { Users, FileText, MessageSquare, BarChart3, Plus, ChevronRight } from "lucide-react";
+import { Users, FileText, MessageSquare, ChevronRight } from "lucide-react";
 import BackButton from "../components/BackButton";
 import { Link } from "react-router-dom";
 

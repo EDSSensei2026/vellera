@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Flame, Droplets, Zap, Shield, Star, Target, Apple, Dumbbell, ChevronDown, ChevronUp } from "lucide-react";
+import { Target, ChevronDown, ChevronUp } from "lucide-react";
 import BackButton from "../components/BackButton";
 
 // ─── ATHLETE PROFILES ───────────────────────────────────────────

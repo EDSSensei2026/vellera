@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { ArrowLeft, Users, MessageSquare, FileText, Award, Plus } from "lucide-react";
+import { ArrowLeft, Users, MessageSquare, FileText, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import TrackBadge from "../components/TrackBadge";
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Loader2, TrendingUp, Heart, Zap, Award, Download } from "lucide-react";
+import { ArrowLeft, Loader2, TrendingUp, Heart, Zap, Award } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis } from "recharts";
 import { toast } from "sonner";
 

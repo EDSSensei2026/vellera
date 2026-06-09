@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { User, ChevronDown, ChevronUp, Plus, CheckCircle2, Loader2 } from 'lucide-react';
+import { User, ChevronDown, ChevronUp, Plus, Loader2 } from 'lucide-react';
 import AssignProgramModal from './AssignProgramModal';
 
 export default function StudentRoster({ students, coachEmail, orgId }) {

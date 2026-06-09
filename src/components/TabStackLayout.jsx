@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import DrillTimer from "./DrillTimer";
 import VelleraBackground from "./VelleraBackground";
 import SpotifyPlayer from "./SpotifyPlayer";

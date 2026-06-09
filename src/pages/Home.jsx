@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Music, Zap, Flame, Shield, RotateCcw, CheckCircle, Clock } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Music, CheckCircle, Clock } from "lucide-react";
 
 export default function Home() {
   const [userName] = useState("Champion");

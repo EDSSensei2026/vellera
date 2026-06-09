@@ -3,8 +3,8 @@ import { base44 } from "@/api/base44Client";
 import { useNavigate, Link } from "react-router-dom";
 import BetaAgentChat from "../components/admin/BetaAgentChat";
 import {
-  Users, Clock, CheckCircle, XCircle, Activity, TrendingUp,
-  RefreshCw, Shield, BarChart3, Target, Flame, Calendar,
+  Users, Clock, Activity, TrendingUp,
+  RefreshCw, Shield, BarChart3, Target, Calendar,
   ChevronRight, AlertCircle, UserCheck, Mail, Loader2
 } from "lucide-react";
 import { toast } from "sonner";

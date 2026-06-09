@@ -20,7 +20,7 @@ import { usePullToRefresh } from "../hooks/usePullToRefresh";
 // import ReadinessCheckIn from "../components/ReadinessCheckIn";
 // import AdaptiveWorkoutDashboard from "../components/AdaptiveWorkoutDashboard";
 // import AchievementsWidget from "../components/AchievementsWidget";
-import { Droplets, Flame, Moon, Heart, Zap, ChevronRight } from "lucide-react";
+import { Droplets, ChevronRight } from "lucide-react";
 import MorningReadinessAlert from "../components/MorningReadinessAlert";
 import FuelDeficitWarning from "../components/FuelDeficitWarning";
 import BetaWelcomeModal from "../components/BetaWelcomeModal";

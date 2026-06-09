@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Shield, Users, Lock } from "lucide-react";
+import { Users, Lock } from "lucide-react";
 
 /**
  * BetaGate — wraps the authenticated app.

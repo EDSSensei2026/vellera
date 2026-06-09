@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Settings, LogOut, Edit2, Check, X } from "lucide-react";
+import { LogOut, Edit2, Check, X } from "lucide-react";
 import BackButton from "../components/BackButton";
 import { toast } from "sonner";
 import MomentumRing from "../components/MomentumRing";
 import StatsGrid from "../components/StatsGrid";
 import ActivityFeed from "../components/ActivityFeed";
-import { Link } from "react-router-dom";
 
 export default function Profile() {
   const [user, setUser] = useState(null);

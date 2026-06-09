@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
-import { Upload, Loader2, CheckCircle, AlertTriangle, Target, Dumbbell, ChevronDown, ChevronUp } from "lucide-react";
+import { Upload, Loader2, AlertTriangle, Target, ChevronDown, ChevronUp } from "lucide-react";
 import BackButton from "../components/BackButton";
 
 const SESSION_TYPES = [

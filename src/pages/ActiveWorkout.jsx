@@ -274,7 +274,7 @@ export default function ActiveWorkout({ workout: workoutProp }) {
   useEffect(() => {
     const timer = setTimeout(() => triggerAgent("start"), 1500);
     return () => clearTimeout(timer);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, []); // fire once on mount
 
   // ── Derived Display Values ───────────────────────────────────────────────────

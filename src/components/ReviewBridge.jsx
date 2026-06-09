@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Send, MessageCircle, Edit3, Maximize } from 'lucide-react';
+import { Send, MessageCircle, Edit3 } from 'lucide-react';
 import { toast } from 'sonner';
 import VideoTelestration from './VideoTelestration';
 import TelestrationCanvas from './TelestrationCanvas';

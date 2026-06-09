@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid } from "recharts";
-import { TrendingDown, TrendingUp, Scale } from "lucide-react";
+import { Scale } from "lucide-react";
 
 const START_WEIGHT = 250;
 const TARGET_WEIGHT = 230;

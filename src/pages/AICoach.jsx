@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
-import { Send, Loader2, Zap, Target, Calendar, MessageSquare, ChevronRight, RefreshCw } from "lucide-react";
+import { Send, Loader2, Zap, MessageSquare, ChevronRight, RefreshCw } from "lucide-react";
 import BackButton from "../components/BackButton";
 import ReactMarkdown from "react-markdown";
 

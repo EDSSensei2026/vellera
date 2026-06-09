@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { ArrowLeft, CheckCircle2, AlertCircle, Users, Calendar } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Users, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function ZuluWarriorv4() {

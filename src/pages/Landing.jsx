@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import BJJBadgesShowcase from "../components/BJJBadgesShowcase";
-import { ChevronRight, Zap, Shield, Lock, Eye, Database, ChevronLeft, Star, Check, Activity, Brain, Dumbbell, Heart, Users, BarChart3, Calendar, Video, Target, Award, Flame } from "lucide-react";
+import { ChevronRight, Shield, Lock, Eye, Database, ChevronLeft, Star, Activity, Brain, Dumbbell, Heart, Users, BarChart3, Calendar, Video, Target, Award, Flame } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // ─── App Screen Mockup ────────────────────────────────────────────────────────

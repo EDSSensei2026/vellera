@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { calculateLSI, LSI_THRESHOLDS } from '../lib/lsiScoring';
+import { calculateLSI } from '../lib/lsiScoring';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
 import {
-  Calendar, MessageSquare, Activity, AlertTriangle, CheckCircle2,
-  Plus, Send, Loader2, ChevronRight
+  Calendar, MessageSquare, Activity, AlertTriangle,
+  Plus, Send, Loader2
 } from 'lucide-react';
 import BackButton from '../components/BackButton';
 import { toast } from 'sonner';

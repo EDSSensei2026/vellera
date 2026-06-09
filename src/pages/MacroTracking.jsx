@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
 import BackButton from "../components/BackButton";
-import { Apple, Flame, TrendingDown, AlertTriangle, Plus } from "lucide-react";
+import { AlertTriangle, Plus } from "lucide-react";
 import TacticalFuelStatus from "../components/TacticalFuelStatus";
 
 const COMMON_FOODS = [

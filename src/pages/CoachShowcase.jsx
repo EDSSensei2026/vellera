@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Mail, MapPin, Award, Users, Calendar, MessageCircle } from 'lucide-react';
+import { Mail, Award, Users, Calendar, MessageCircle } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 
 /**

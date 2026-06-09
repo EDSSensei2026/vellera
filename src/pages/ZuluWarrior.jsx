@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { ArrowLeft, Flame, Shield, Zap, Heart, TrendingUp } from "lucide-react";
+import { ArrowLeft, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 export default function ZuluWarrior() {
   const navigate = useNavigate();

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
 import BackButton from "../components/BackButton";
-import { Trophy, Plus, Target, Calendar, Users } from "lucide-react";
+import { Trophy, Plus, Calendar, Users } from "lucide-react";
 
 const METRIC_LABELS = {
   total_sessions: "Total Sessions",

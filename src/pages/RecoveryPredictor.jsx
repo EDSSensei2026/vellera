@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Loader2, TrendingUp, TrendingDown, AlertTriangle, CheckCircle2, Heart } from 'lucide-react';
+import { Loader2, TrendingUp, TrendingDown, AlertTriangle, CheckCircle2, Heart } from 'lucide-react';
 import BackButton from '../components/BackButton';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 function RecoveryBadge({ score }) {
   if (score >= 80) return <div className="bg-green-900/40 border border-green-700 text-green-400 px-3 py-1.5 rounded-lg text-sm font-bold">Excellent</div>;

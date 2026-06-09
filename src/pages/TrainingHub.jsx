@@ -1,13 +1,8 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import BackButton from "../components/BackButton";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
+
+
 import { CheckCircle, Play } from "lucide-react";
 import { toast } from "sonner";
 

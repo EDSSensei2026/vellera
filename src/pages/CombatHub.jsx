@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Volume2, VolumeX, Zap, Flame, Grid3x3 } from "lucide-react";
+import { Volume2, VolumeX, Zap } from "lucide-react";
 
 export default function CombatHub() {
   const [anthemPlaying, setAnthemPlaying] = useState(false);

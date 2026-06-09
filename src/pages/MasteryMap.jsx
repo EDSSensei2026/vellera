@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, LineChart, Line } from "recharts";
-import { Zap, Target, TrendingUp, BookOpen, ChevronRight, Star } from "lucide-react";
+import { Target, TrendingUp } from "lucide-react";
 import BackButton from "../components/BackButton";
 
 const MASTERY_TIERS = [

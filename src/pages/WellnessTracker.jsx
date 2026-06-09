@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { Save, TrendingDown } from "lucide-react";
+import { Save } from "lucide-react";
 import { toast } from "sonner";
 
 export default function WellnessTracker() {

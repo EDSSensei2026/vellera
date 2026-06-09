@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import BackButton from "../components/BackButton";
-import { Trophy, Flame, Clock, Target } from "lucide-react";
+import { Flame, Clock, Target } from "lucide-react";
 
 const MEDAL_COLORS = {
   1: "text-yellow-400",

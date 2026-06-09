@@ -4,7 +4,7 @@ import { ArrowLeft, TrendingUp, Clock, Dumbbell, Scale, Instagram, Loader2, Chec
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import {
-  BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,
+  BarChart, Bar, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, Legend, ComposedChart, Area
 } from "recharts";
 

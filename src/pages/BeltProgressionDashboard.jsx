@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { ArrowLeft, Award, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import { BADGE_DEFINITIONS, computeBadges } from "../lib/bjjBadges";
+import { computeBadges } from "../lib/bjjBadges";
 
 const BELT_ORDER = ["White", "Blue", "Purple", "Brown", "Black"];
 

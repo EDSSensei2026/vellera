@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
-import { ArrowLeft, Upload, X, GitCompare, Camera, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
+import { ArrowLeft, Upload, X, Camera, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const PROTOCOL_START = new Date("2026-04-06");
