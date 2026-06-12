@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+const base44 = { auth: { me: async () => ({}), isAuthenticated: async () => false }, entities: { WellnessLog: { filter: async () => [] }, WearableToken: { filter: async () => [] } } };
 import { CheckCircle, RefreshCw, Unlink, Loader2, ToggleLeft, ToggleRight } from "lucide-react";
 
 const PROVIDER_CONFIG = {

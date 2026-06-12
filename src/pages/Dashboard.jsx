@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+const base44 = { auth: { me: async () => ({}), isAuthenticated: async () => false }, entities: { WellnessLog: { filter: async () => [] }, WearableToken: { filter: async () => [] } } };
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 // import SafetyValve from "../components/SafetyValve";

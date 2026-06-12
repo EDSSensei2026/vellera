@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+const base44 = { auth: { me: async () => ({}), isAuthenticated: async () => false }, entities: { WellnessLog: { filter: async () => [] }, WearableToken: { filter: async () => [] } } };
 import { useQuery } from "@tanstack/react-query";
 import { Users, FileText, MessageSquare, ChevronRight } from "lucide-react";
 import BackButton from "../components/BackButton";

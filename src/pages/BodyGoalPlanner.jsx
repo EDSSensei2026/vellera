@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+const base44 = { auth: { me: async () => ({}), isAuthenticated: async () => false }, entities: { WellnessLog: { filter: async () => [] }, WearableToken: { filter: async () => [] } } };
 import { Sparkles, Target, Dumbbell, Apple, Heart, Flame, ChevronRight, Loader2, RotateCcw, ImagePlus, X } from "lucide-react";
 import BackButton from "../components/BackButton";
 import BodyGoalPlanDisplay from "../components/BodyGoalPlanDisplay";

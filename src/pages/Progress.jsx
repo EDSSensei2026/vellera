@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import TrainingHeatmap from "../components/TrainingHeatmap";
-import { base44 } from "@/api/base44Client";
+const base44 = { auth: { me: async () => ({}), isAuthenticated: async () => false }, entities: { WellnessLog: { filter: async () => [] }, WearableToken: { filter: async () => [] } } };
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from "recharts";
 import { Star, Zap, TrendingUp } from "lucide-react";
 

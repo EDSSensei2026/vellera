@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import VideoModal from "../components/VideoModal";
-import { base44 } from "@/api/base44Client";
+const base44 = { auth: { me: async () => ({}), isAuthenticated: async () => false }, entities: { WellnessLog: { filter: async () => [] }, WearableToken: { filter: async () => [] } } };
 import { Plus, Star, PlayCircle, Map } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";

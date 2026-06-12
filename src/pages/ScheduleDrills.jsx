@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+const base44 = { auth: { me: async () => ({}), isAuthenticated: async () => false }, entities: { WellnessLog: { filter: async () => [] }, WearableToken: { filter: async () => [] } } };
 import { useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Plus, Trash2, CalendarCheck, Loader2, ExternalLink, Check, AlertCircle, Shield, Zap, Battery, Flame, Save, Download } from "lucide-react";
 import { toast } from "sonner";
