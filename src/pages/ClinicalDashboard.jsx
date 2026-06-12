@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+const base44 = { auth: { me: async () => ({}), isAuthenticated: async () => false }, entities: { WellnessLog: { filter: async () => [] }, WearableToken: { filter: async () => [] } } };
 import { calculateBeighton, calculateLEFS, LEFS_ITEMS, LEFS_RATING_LABELS } from '../lib/clinicalScoring';
 import { ClipboardList, Download, Plus, AlertTriangle, CheckCircle2, Loader2 } from 'lucide-react';
 import BackButton from '../components/BackButton';

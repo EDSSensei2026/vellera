@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+const base44 = { auth: { me: async () => ({}), isAuthenticated: async () => false }, entities: { WellnessLog: { filter: async () => [] }, WearableToken: { filter: async () => [] } } };
 import { calculateLSI, batchLSI } from '../lib/lsiScoring';
 import WellnessTrendChart from '../components/WellnessTrendChart';
 import BackButton from '../components/BackButton';

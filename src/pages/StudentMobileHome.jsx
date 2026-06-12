@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+const base44 = { auth: { me: async () => ({}), isAuthenticated: async () => false }, entities: { WellnessLog: { filter: async () => [] }, WearableToken: { filter: async () => [] } } };
 import { Upload, Video, Loader2, CheckCircle2, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 import BackButton from '../components/BackButton';

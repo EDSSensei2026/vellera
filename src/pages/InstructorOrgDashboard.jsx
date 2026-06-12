@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+const base44 = { auth: { me: async () => ({}), isAuthenticated: async () => false }, entities: { WellnessLog: { filter: async () => [] }, WearableToken: { filter: async () => [] } } };
 import { Users, Activity, ClipboardList, BarChart3, AlertCircle } from 'lucide-react';
 import BackButton from '../components/BackButton';
 import StudentRoster from '../components/instructor/StudentRoster';

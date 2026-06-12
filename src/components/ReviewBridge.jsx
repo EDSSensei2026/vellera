@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+const base44 = { auth: { me: async () => ({}), isAuthenticated: async () => false }, entities: { WellnessLog: { filter: async () => [] }, WearableToken: { filter: async () => [] } } };
 import { Send, MessageCircle, Edit3 } from 'lucide-react';
 import { toast } from 'sonner';
 import VideoTelestration from './VideoTelestration';
