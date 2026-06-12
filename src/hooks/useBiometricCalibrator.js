@@ -1,19 +1,7 @@
 import { useState, useEffect } from 'react';
 
-interface CalibrationInput {
-  currentWeight: number;
-  targetWeight: number;
-  avgHeartRate: number;
-}
-
-interface Recommendations {
-  targetCalories: number;
-  intensityLevel: 'Low' | 'Moderate' | 'High';
-  focusType: 'Cardio Core' | 'Hypertrophy' | 'Deficit Recovery';
-}
-
-export const useBiometricCalibrator = (metrics: CalibrationInput): Recommendations => {
-  const [recommendations, setRecommendations] = useState<Recommendations>({
+export const useBiometricCalibrator = (metrics) => {
+  const [recommendations, setRecommendations] = useState({
     targetCalories: 2000,
     intensityLevel: 'Moderate',
     focusType: 'Hypertrophy',
@@ -23,21 +11,21 @@ export const useBiometricCalibrator = (metrics: CalibrationInput): Recommendatio
     if (!metrics.currentWeight || !metrics.targetWeight) return;
 
     let targetCalories = 2000;
-    let intensityLevel: 'Low' | 'Moderate' | 'High' = 'Moderate';
-    let focusType: 'Cardio Core' | 'Hypertrophy' | 'Deficit Recovery' = 'Hypertrophy';
+    let intensityLevel = 'Moderate';
+    let focusType = 'Hypertrophy';
 
     const weightDifference = metrics.currentWeight - metrics.targetWeight;
 
-    // Weight delta calculations
+    // Weight adjustment engine
     if (weightDifference > 0) {
       targetCalories = Math.round(metrics.currentWeight * 24 * 0.85); // 15% caloric deficit
       focusType = 'Cardio Core';
     } else if (weightDifference < 0) {
-      targetCalories = Math.round(metrics.currentWeight * 24 * 1.15); // 15% caloric surplus
+      targetCalories = Math.round(metrics.currentWeight * 24 * 1.15); // 15% surplus
       focusType = 'Hypertrophy';
     }
 
-    // Cardiovascular threshold safety adjustments
+    // Cardiovascular safety pacing logic
     if (metrics.avgHeartRate > 100) {
       intensityLevel = 'Low'; 
       if (focusType === 'Cardio Core') focusType = 'Deficit Recovery';
