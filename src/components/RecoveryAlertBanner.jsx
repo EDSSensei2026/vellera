@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { base44 } from '@/api/base44Client';
 import { AlertTriangle, X, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,43 +16,51 @@ export default function RecoveryAlertBanner() {
 
   useEffect(() => {
     const check = async () => {
-      const authed = await base44.auth.isAuthenticated().catch(() => false);
-      if (!authed) return;
+      // Pulling state details from independent local storage blocks instead of dead SDK hooks
+      const localSession = localStorage.getItem('vellera_session');
+      if (!localSession) return;
 
-      const me = await base44.auth.me().catch(() => null);
-      if (!me) return;
+      try {
+        const me = JSON.parse(localSession);
+        if (!me || !me.email) return;
 
-      // Check today's WellnessLog readiness score
-      const today = new Date().toISOString().split('T')[0];
-      const logs = await base44.entities.WellnessLog.filter({
-        user_email: me.email,
-        log_date: today,
-      }).catch(() => []);
+        // 1. Check local device fallback wellness logs
+        const localLogs = localStorage.getItem('vellera_wellness_logs');
+        const logs = localLogs ? JSON.parse(localLogs) : [];
+        const today = new Date().toISOString().split('T')[0];
 
-      if (logs.length > 0) {
-        const log = logs[0];
-        const score = log.readiness_score ?? 100;
-        if (score < RECOVERY_THRESHOLD) {
-          setAlert({
-            score,
-            source: 'Wellness Log',
-            message: `Your readiness is critically low at ${score}%. High-intensity training today is not recommended.`,
-          });
-          return;
+        // Search for matching log entries for today's user metrics profile
+        const todayLog = logs.find(log => log.user_email === me.email && log.log_date === today);
+
+        if (todayLog) {
+          const score = todayLog.readiness_score ?? 100;
+          if (score < RECOVERY_THRESHOLD) {
+            setAlert({
+              score,
+              source: 'Wellness Log',
+              message: `Your readiness is critically low at ${score}%. High-intensity training today is not recommended.`,
+            });
+            return;
+          }
         }
-      }
 
-      // Also check WearableToken for Whoop recovery
-      const tokens = await base44.entities.WearableToken.filter({ user_email: me.email, provider: 'whoop' }).catch(() => []);
-      if (tokens[0]?.last_recovery_score != null) {
-        const whoopScore = tokens[0].last_recovery_score;
-        if (whoopScore < RECOVERY_THRESHOLD) {
-          setAlert({
-            score: whoopScore,
-            source: 'Whoop',
-            message: `Your Whoop Recovery Score is ${whoopScore}%. Strain today could extend your recovery window.`,
-          });
+        // 2. Fallback check for wearable tokens (e.g. simulated Whoop state telemetry)
+        const localTokens = localStorage.getItem('vellera_wearable_tokens');
+        const tokens = localTokens ? JSON.parse(localTokens) : [];
+        const whoopToken = tokens.find(t => t.user_email === me.email && t.provider === 'whoop');
+
+        if (whoopToken && whoopToken.last_recovery_score != null) {
+          const whoopScore = whoopToken.last_recovery_score;
+          if (whoopScore < RECOVERY_THRESHOLD) {
+            setAlert({
+              score: whoopScore,
+              source: 'Whoop',
+              message: `Your Whoop Recovery Score is ${whoopScore}%. Strain today could extend your recovery window.`,
+            });
+          }
         }
+      } catch (err) {
+        console.error('Local telemetry extraction failed:', err);
       }
     };
 
