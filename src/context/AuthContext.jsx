@@ -1,32 +1,15 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
-export type UserRole = 'USER' | 'TRAINER' | 'DOCTOR';
+const AuthContext = createContext(undefined);
 
-interface UserProfile {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  assignedClients?: string[]; // Used strictly for Trainers/Doctors
-}
-
-interface AuthContextType {
-  user: UserProfile | null;
-  login: (role: UserRole) => void;
-  logout: () => void;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserProfile | null>(() => {
-    // Check local storage so desktop and mobile web views persist logins
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('vellera_session');
     return saved ? JSON.parse(saved) : null;
   });
 
-  const login = (role: UserRole) => {
-    const mockUser: UserProfile = {
+  const login = (role) => {
+    const mockUser = {
       id: 'usr_9921',
       name: role === 'TRAINER' ? 'Coach Alexander' : 'Alex Johnson',
       email: 'alex@vellera.app',
