@@ -47,6 +47,7 @@ const WorkoutHistory = lazy(() => import('./pages/WorkoutHistory'));
 const AnalyzeTechnique = lazy(() => import('./pages/AnalyzeTechnique'));
 const TrainingSquads = lazy(() => import('./pages/TrainingSquads'));
 const WearablesHub = lazy(() => import('./pages/WearablesHub'));
+const Combat = lazy(() => import('./pages/CombatHub'));
 const TrainingCalendar = lazy(() => import('./pages/TrainingCalendar'));
 const MasteryMap = lazy(() => import('./pages/MasteryMap'));
 const PreWorkoutPrep = lazy(() => import('./pages/PreWorkoutPrep'));
@@ -88,6 +89,7 @@ const LoadingSpinner = () => (
     <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
   </div>
 );
+
 const SearchConsoleDashboard = lazy(() => import('./pages/SearchConsoleDashboard'));
 const MemberOnboarding = lazy(() => import('./pages/MemberOnboarding'));
 const CoachDashboard = lazy(() => import('./pages/CoachDashboard'));
@@ -130,10 +132,23 @@ const PublicApp = () => (
   </AnimatePresence>
 );
 
-const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+// 🔒 SECURITY GUARD: Restricts view paths dynamically by profile role attributes
+const ProtectedRoleRoute = ({ children, allowedRoles }) => {
+  const { user } = useAuth();
+  
+  // Gracefully fallback or cross-reference roles if custom-defined in your user meta data object
+  const currentRole = user?.role || localStorage.getItem('vellera_user_role') || 'USER';
+  
+  if (!allowedRoles.includes(currentRole)) {
+    // If a standard user steps into a trainer dashboard space, bump them back home safely
+    return <Navigate to="/home" replace />;
+  }
+  return children;
+};
 
-  // Show loading spinner while checking app public settings or auth
+const AuthenticatedApp = () => {
+  const { user, isLoadingAuth, isLoadingPublicSettings, authError } = useAuth();
+
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
@@ -142,119 +157,127 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Handle authentication errors
   if (authError) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      // Show login page
       return <Auth />;
     }
   }
 
-  // Render the main authenticated app
   return (
     <AnimatePresence mode="wait">
       <Routes>
-      <Route path="/landing" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Landing /></Suspense></PageTransition>} />
-      <Route path="/beta-request" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BetaRequestForm /></Suspense></PageTransition>} />
-      <Route path="/beta-onboarding" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BetaOnboarding /></Suspense></PageTransition>} />
-      <Route path="/terms" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TermsOfService /></Suspense></PageTransition>} />
-      <Route path="/privacy" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PrivacyPolicy /></Suspense></PageTransition>} />
-      <Route path="/welcome" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Welcome /></Suspense></PageTransition>} />
-      <Route path="/home" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Home /></Suspense></PageTransition>} />
-      <Route path="/workout" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ActiveWorkout /></Suspense></PageTransition>} />
-      <Route path="/" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Landing /></Suspense></PageTransition>} />
-      <Route element={<TabStackLayout />}>
-       <Route path="/dashboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Dashboard /></Suspense></PageTransition>} />
-       <Route path="/training" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingLog /></Suspense></PageTransition>} />
-       <Route path="/techniques" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TechniqueLibrary /></Suspense></PageTransition>} />
-        <Route path="/recovery" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Recovery /></Suspense></PageTransition>} />
-        <Route path="/competition" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Competition /></Suspense></PageTransition>} />
-        <Route path="/junior" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><JuniorTracker /></Suspense></PageTransition>} />
-        <Route path="/vault" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><VideoVault /></Suspense></PageTransition>} />
-        <Route path="/blueprint" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Blueprint /></Suspense></PageTransition>} />
-        <Route path="/food" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><FoodLog /></Suspense></PageTransition>} />
-        <Route path="/progress" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Progress /></Suspense></PageTransition>} />
-        <Route path="/partners" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SparringPartners /></Suspense></PageTransition>} />
-        <Route path="/hub" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingHub /></Suspense></PageTransition>} />
-        <Route path="/wellness" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WellnessTracker /></Suspense></PageTransition>} />
-        <Route path="/events" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><CompetitionsEvents /></Suspense></PageTransition>} />
-        <Route path="/settings" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Settings /></Suspense></PageTransition>} />
-        <Route path="/profile" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Profile /></Suspense></PageTransition>} />
-      </Route>
-      <Route path="/paywall" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Paywall /></Suspense></PageTransition>} />
-      <Route path="/investors" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><InvestorRelations /></Suspense></PageTransition>} />
-      <Route path="/coach" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><AICoach /></Suspense></PageTransition>} />
-      <Route path="/onboarding" element={<Suspense fallback={<LoadingSpinner />}><Onboarding /></Suspense>} />
-      <Route path="/forge" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><AgentForge /></Suspense></PageTransition>} />
-      <Route path="/workout-history" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WorkoutHistory /></Suspense></PageTransition>} />
-      <Route path="/analyze" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><AnalyzeTechnique /></Suspense></PageTransition>} />
-      <Route path="/squads" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingSquads /></Suspense></PageTransition>} />
-      <Route path="/wearables" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WearablesHub /></Suspense></PageTransition>} />
-      <Route path="/combat" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><CombatHub /></Suspense></PageTransition>} />
-      <Route path="/calendar" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingCalendar /></Suspense></PageTransition>} />
-      <Route path="/mastery-map" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MasteryMap /></Suspense></PageTransition>} />
-      <Route path="/prep" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PreWorkoutPrep /></Suspense></PageTransition>} />
-      <Route path="/supplements" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SupplementLog /></Suspense></PageTransition>} />
-      <Route path="/instructor" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><InstructorDashboard /></Suspense></PageTransition>} />
-      <Route path="/student-progress" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><StudentProgressTracking /></Suspense></PageTransition>} />
-      <Route path="/feedback" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><StudentFeedbackCenter /></Suspense></PageTransition>} />
-      <Route path="/challenges" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><CommunityChallenge /></Suspense></PageTransition>} />
-      <Route path="/lift-analysis" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><LiftAnalysis /></Suspense></PageTransition>} />
-      <Route path="/squad-challenges" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SquadChallenges /></Suspense></PageTransition>} />
-      <Route path="/macros" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MacroTracking /></Suspense></PageTransition>} />
-      <Route path="/leaderboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Leaderboard /></Suspense></PageTransition>} />
-      <Route path="/setup" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ProfileSetup /></Suspense></PageTransition>} />
-      <Route path="/training-dashboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PersonalizedTrainingDashboard /></Suspense></PageTransition>} />
-      <Route path="/biometrics" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BiometricsDashboard /></Suspense></PageTransition>} />
-      <Route path="/coach-hub" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><CoachHub /></Suspense></PageTransition>} />
-      <Route path="/my-coaches" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MyCoaches /></Suspense></PageTransition>} />
-      <Route path="/retention" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><RetentionAnalytics /></Suspense></PageTransition>} />
-      <Route path="/zulu" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ZuluWarrior /></Suspense></PageTransition>} />
-      <Route path="/shred" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ZuluShred /></Suspense></PageTransition>} />
-      <Route path="/zulu-v4" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ZuluWarriorv4 /></Suspense></PageTransition>} />
-      <Route path="/master-protocol" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ZuluMasterProtocol /></Suspense></PageTransition>} />
-      <Route path="/bjj-journal" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BJJTacticalJournal /></Suspense></PageTransition>} />
-      <Route path="/correlation" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingCorrelationDashboard /></Suspense></PageTransition>} />
-      <Route path="/meal-planner" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MealPlanner /></Suspense></PageTransition>} />
-      <Route path="/hydration" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><HydrationTracker /></Suspense></PageTransition>} />
-      <Route path="/mobility" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MobilityRoutinePage /></Suspense></PageTransition>} />
-      <Route path="/physique" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PhysiqueTrackerPage /></Suspense></PageTransition>} />
-      <Route path="/skill-roadmap" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SkillRoadmapPage /></Suspense></PageTransition>} />
-      <Route path="/sparring-advisor" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><AISparringAdvisor /></Suspense></PageTransition>} />
-      <Route path="/belt-progression" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BeltProgressionDashboard /></Suspense></PageTransition>} />
-      <Route path="/stats" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><StatsDashboard /></Suspense></PageTransition>} />
-      <Route path="/nutrition" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><NutritionTracker /></Suspense></PageTransition>} />
-      <Route path="/recovery-predictor" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><RecoveryPredictor /></Suspense></PageTransition>} />
-      <Route path="/search-console" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SearchConsoleDashboard /></Suspense></PageTransition>} />
-      <Route path="/member-onboarding" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MemberOnboarding /></Suspense></PageTransition>} />
-      <Route path="/coach-dashboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><CoachDashboard /></Suspense></PageTransition>} />
-      <Route path="/student-hub" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><StudentHub /></Suspense></PageTransition>} />
-      <Route path="/org-dashboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><InstructorOrgDashboard /></Suspense></PageTransition>} />
-      <Route path="/submit-video" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><StudentMobileHome /></Suspense></PageTransition>} />
-      <Route path="/referral" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ReferralPortal /></Suspense></PageTransition>} />
-      <Route path="/coach/:coachId" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><CoachShowcase /></Suspense></PageTransition>} />
-      <Route path="/hybrid-athlete" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><HybridAthlete /></Suspense></PageTransition>} />
-      <Route path="/bjj-strength-conditioning" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BJJStrengthConditioning /></Suspense></PageTransition>} />
-      <Route path="/executive-fitness-defense" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ExecutiveFitnessDefense /></Suspense></PageTransition>} />
-      <Route path="/logistics" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ClinicalLogisticsHub /></Suspense></PageTransition>} />
-      <Route path="/clinical" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ClinicalDashboard /></Suspense></PageTransition>} />
-      <Route path="/eds-dashboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><EDS_Executive_Dashboard /></Suspense></PageTransition>} />
-      <Route path="/beta-manager" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BetaAccessManager /></Suspense></PageTransition>} />
-      <Route path="/admin" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><AdminDashboard /></Suspense></PageTransition>} />
-      <Route path="/wearable-analytics" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WearableAnalytics /></Suspense></PageTransition>} />
-      <Route path="/approvals" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ApprovalWorkflow /></Suspense></PageTransition>} />
-      <Route path="/insights" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><InsightsDashboard /></Suspense></PageTransition>} />
-      <Route path="/manual-log" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ManualDataLogger /></Suspense></PageTransition>} />
-      <Route path="/wellness-dashboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WellnessDashboard /></Suspense></PageTransition>} />
-      <Route path="/body-goal-planner" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BodyGoalPlanner /></Suspense></PageTransition>} />
-      <Route path="/schedule-drills" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ScheduleDrills /></Suspense></PageTransition>} />
-      <Route path="/drill-templates" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><DrillTemplates /></Suspense></PageTransition>} />
-      <Route path="/monthly-report" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MonthlyReport /></Suspense></PageTransition>} />
-      <Route path="/ep-tactical" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><EPTacticalDashboard /></Suspense></PageTransition>} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
+        <Route path="/landing" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Landing /></Suspense></PageTransition>} />
+        <Route path="/beta-request" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BetaRequestForm /></Suspense></PageTransition>} />
+        <Route path="/beta-onboarding" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BetaOnboarding /></Suspense></PageTransition>} />
+        <Route path="/terms" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TermsOfService /></Suspense></PageTransition>} />
+        <Route path="/privacy" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PrivacyPolicy /></Suspense></PageTransition>} />
+        <Route path="/welcome" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Welcome /></Suspense></PageTransition>} />
+        <Route path="/home" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Home /></Suspense></PageTransition>} />
+        <Route path="/workout" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ActiveWorkout /></Suspense></PageTransition>} />
+        <Route path="/" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Landing /></Suspense></PageTransition>} />
+        
+        {/* Core Tab Navigation Stack Layout Frame */}
+        <Route element={<TabStackLayout />}>
+          <Route path="/dashboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Dashboard /></Suspense></PageTransition>} />
+          <Route path="/training" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingLog /></Suspense></PageTransition>} />
+          <Route path="/techniques" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TechniqueLibrary /></Suspense></PageTransition>} />
+          <Route path="/recovery" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Recovery /></Suspense></PageTransition>} />
+          <Route path="/competition" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Competition /></Suspense></PageTransition>} />
+          <Route path="/junior" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><JuniorTracker /></Suspense></PageTransition>} />
+          <Route path="/vault" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><VideoVault /></Suspense></PageTransition>} />
+          <Route path="/blueprint" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Blueprint /></Suspense></PageTransition>} />
+          <Route path="/food" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><FoodLog /></Suspense></PageTransition>} />
+          <Route path="/progress" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Progress /></Suspense></PageTransition>} />
+          <Route path="/partners" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SparringPartners /></Suspense></PageTransition>} />
+          <Route path="/hub" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingHub /></Suspense></PageTransition>} />
+          <Route path="/wellness" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WellnessTracker /></Suspense></PageTransition>} />
+          <Route path="/events" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><CompetitionsEvents /></Suspense></PageTransition>} />
+          <Route path="/settings" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Settings /></Suspense></PageTransition>} />
+          <Route path="/profile" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Profile /></Suspense></PageTransition>} />
+        </Route>
+
+        <Route path="/paywall" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Paywall /></Suspense></PageTransition>} />
+        <Route path="/investors" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><InvestorRelations /></Suspense></PageTransition>} />
+        <Route path="/coach" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><AICoach /></Suspense></PageTransition>} />
+        <Route path="/onboarding" element={<Suspense fallback={<LoadingSpinner />}><Onboarding /></Suspense>} />
+        <Route path="/forge" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><AgentForge /></Suspense></PageTransition>} />
+        <Route path="/workout-history" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WorkoutHistory /></Suspense></PageTransition>} />
+        <Route path="/analyze" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><AnalyzeTechnique /></Suspense></PageTransition>} />
+        <Route path="/squads" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingSquads /></Suspense></PageTransition>} />
+        <Route path="/wearables" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WearablesHub /></Suspense></PageTransition>} />
+        <Route path="/combat" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><CombatHub /></Suspense></PageTransition>} />
+        <Route path="/calendar" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingCalendar /></Suspense></PageTransition>} />
+        <Route path="/mastery-map" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MasteryMap /></Suspense></PageTransition>} />
+        <Route path="/prep" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PreWorkoutPrep /></Suspense></PageTransition>} />
+        <Route path="/supplements" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SupplementLog /></Suspense></PageTransition>} />
+        
+        {/* 👟 TRAINER / COACH SPECIFIC MODULES (Guarded Access) */}
+        <Route path="/instructor" element={<ProtectedRoleRoute allowedRoles={['TRAINER', 'COACH', 'ADMIN']}><PageTransition><Suspense fallback={<LoadingSpinner />}><InstructorDashboard /></Suspense></PageTransition></ProtectedRoleRoute>} />
+        <Route path="/student-progress" element={<ProtectedRoleRoute allowedRoles={['TRAINER', 'COACH', 'ADMIN']}><PageTransition><Suspense fallback={<LoadingSpinner />}><StudentProgressTracking /></Suspense></PageTransition></ProtectedRoleRoute>} />
+        <Route path="/feedback" element={<ProtectedRoleRoute allowedRoles={['TRAINER', 'COACH', 'ADMIN']}><PageTransition><Suspense fallback={<LoadingSpinner />}><StudentFeedbackCenter /></Suspense></PageTransition></ProtectedRoleRoute>} />
+        <Route path="/coach-dashboard" element={<ProtectedRoleRoute allowedRoles={['TRAINER', 'COACH', 'ADMIN']}><PageTransition><Suspense fallback={<LoadingSpinner />}><CoachDashboard /></Suspense></PageTransition></ProtectedRoleRoute>} />
+        <Route path="/org-dashboard" element={<ProtectedRoleRoute allowedRoles={['TRAINER', 'COACH', 'ADMIN']}><PageTransition><Suspense fallback={<LoadingSpinner />}><InstructorOrgDashboard /></Suspense></PageTransition></ProtectedRoleRoute>} />
+        <Route path="/retention" element={<ProtectedRoleRoute allowedRoles={['TRAINER', 'COACH', 'ADMIN']}><PageTransition><Suspense fallback={<LoadingSpinner />}><RetentionAnalytics /></Suspense></PageTransition></ProtectedRoleRoute>} />
+        <Route path="/coach-hub" element={<ProtectedRoleRoute allowedRoles={['TRAINER', 'COACH', 'ADMIN']}><PageTransition><Suspense fallback={<LoadingSpinner />}><CoachHub /></Suspense></PageTransition></ProtectedRoleRoute>} />
+
+        {/* 🩺 MEDICAL / CLINICAL CLINIC PORTAL MODULES (Guarded Access) */}
+        <Route path="/clinical" element={<ProtectedRoleRoute allowedRoles={['DOCTOR', 'ADMIN']}><PageTransition><Suspense fallback={<LoadingSpinner />}><ClinicalDashboard /></Suspense></PageTransition></ProtectedRoleRoute>} />
+        <Route path="/logistics" element={<ProtectedRoleRoute allowedRoles={['DOCTOR', 'ADMIN']}><PageTransition><Suspense fallback={<LoadingSpinner />}><ClinicalLogisticsHub /></Suspense></PageTransition></ProtectedRoleRoute>} />
+
+        {/* 🛡️ SYSTEM ADMINISTRATOR PRIVILEGED PORTS */}
+        <Route path="/admin" element={<ProtectedRoleRoute allowedRoles={['ADMIN']}><PageTransition><Suspense fallback={<LoadingSpinner />}><AdminDashboard /></Suspense></PageTransition></ProtectedRoleRoute>} />
+        <Route path="/beta-manager" element={<ProtectedRoleRoute allowedRoles={['ADMIN']}><PageTransition><Suspense fallback={<LoadingSpinner />}><BetaAccessManager /></Suspense></PageTransition></ProtectedRoleRoute>} />
+        <Route path="/approvals" element={<ProtectedRoleRoute allowedRoles={['ADMIN', 'COACH']}><PageTransition><Suspense fallback={<LoadingSpinner />}><ApprovalWorkflow /></Suspense></PageTransition></ProtectedRoleRoute>} />
+
+        {/* 👤 END-USER SPECIFIC ATHLETIC DATA TARGETS (Universal Default Authenticated Elements) */}
+        <Route path="/challenges" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><CommunityChallenge /></Suspense></PageTransition>} />
+        <Route path="/lift-analysis" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><LiftAnalysis /></Suspense></PageTransition>} />
+        <Route path="/squad-challenges" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SquadChallenges /></Suspense></PageTransition>} />
+        <Route path="/macros" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MacroTracking /></Suspense></PageTransition>} />
+        <Route path="/leaderboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><Leaderboard /></Suspense></PageTransition>} />
+        <Route path="/setup" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ProfileSetup /></Suspense></PageTransition>} />
+        <Route path="/training-dashboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PersonalizedTrainingDashboard /></Suspense></PageTransition>} />
+        <Route path="/biometrics" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BiometricsDashboard /></Suspense></PageTransition>} />
+        <Route path="/my-coaches" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MyCoaches /></Suspense></PageTransition>} />
+        <Route path="/zulu" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ZuluWarrior /></Suspense></PageTransition>} />
+        <Route path="/shred" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ZuluShred /></Suspense></PageTransition>} />
+        <Route path="/zulu-v4" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ZuluWarriorv4 /></Suspense></PageTransition>} />
+        <Route path="/master-protocol" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ZuluMasterProtocol /></Suspense></PageTransition>} />
+        <Route path="/bjj-journal" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BJJTacticalJournal /></Suspense></PageTransition>} />
+        <Route path="/correlation" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><TrainingCorrelationDashboard /></Suspense></PageTransition>} />
+        <Route path="/meal-planner" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MealPlanner /></Suspense></PageTransition>} />
+        <Route path="/hydration" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><HydrationTracker /></Suspense></PageTransition>} />
+        <Route path="/mobility" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MobilityRoutinePage /></Suspense></PageTransition>} />
+        <Route path="/physique" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><PhysiqueTrackerPage /></Suspense></PageTransition>} />
+        <Route path="/skill-roadmap" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SkillRoadmapPage /></Suspense></PageTransition>} />
+        <Route path="/sparring-advisor" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><AISparringAdvisor /></Suspense></PageTransition>} />
+        <Route path="/belt-progression" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BeltProgressionDashboard /></Suspense></PageTransition>} />
+        <Route path="/stats" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><StatsDashboard /></Suspense></PageTransition>} />
+        <Route path="/nutrition" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><NutritionTracker /></Suspense></PageTransition>} />
+        <Route path="/recovery-predictor" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><RecoveryPredictor /></Suspense></PageTransition>} />
+        <Route path="/search-console" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><SearchConsoleDashboard /></Suspense></PageTransition>} />
+        <Route path="/member-onboarding" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MemberOnboarding /></Suspense></PageTransition>} />
+        <Route path="/student-hub" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><StudentHub /></Suspense></PageTransition>} />
+        <Route path="/submit-video" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><StudentMobileHome /></Suspense></PageTransition>} />
+        <Route path="/referral" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ReferralPortal /></Suspense></PageTransition>} />
+        <Route path="/coach/:coachId" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><CoachShowcase /></Suspense></PageTransition>} />
+        <Route path="/hybrid-athlete" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><HybridAthlete /></Suspense></PageTransition>} />
+        <Route path="/bjj-strength-conditioning" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BJJStrengthConditioning /></Suspense></PageTransition>} />
+        <Route path="/executive-fitness-defense" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ExecutiveFitnessDefense /></Suspense></PageTransition>} />
+        <Route path="/eds-dashboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><EDS_Executive_Dashboard /></Suspense></PageTransition>} />
+        <Route path="/wearable-analytics" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WearableAnalytics /></Suspense></PageTransition>} />
+        <Route path="/insights" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><InsightsDashboard /></Suspense></PageTransition>} />
+        <Route path="/manual-log" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ManualDataLogger /></Suspense></PageTransition>} />
+        <Route path="/wellness-dashboard" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><WellnessDashboard /></Suspense></PageTransition>} />
+        <Route path="/body-goal-planner" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><BodyGoalPlanner /></Suspense></PageTransition>} />
+        <Route path="/schedule-drills" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><ScheduleDrills /></Suspense></PageTransition>} />
+        <Route path="/drill-templates" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><DrillTemplates /></Suspense></PageTransition>} />
+        <Route path="/monthly-report" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><MonthlyReport /></Suspense></PageTransition>} />
+        <Route path="/ep-tactical" element={<PageTransition><Suspense fallback={<LoadingSpinner />}><EPTacticalDashboard /></Suspense></PageTransition>} />
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
     </AnimatePresence>
   );
 };
@@ -264,16 +287,12 @@ const RootApp = () => {
   
   if (isLoadingAuth) return <LoadingSpinner />;
   
-  // If no error or user_not_registered, show authenticated app
-  // If auth_required, show public app
-  // If other errors, show authenticated app (let it handle)
   if (authError?.type === 'auth_required') {
     return <PublicApp />;
   }
   
   return <AuthenticatedApp />;
 };
-
 
 function App() {
   return (
@@ -292,4 +311,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
