@@ -26,4 +26,11 @@ jobs:
     - name: Compile Production Build
       env:
         VITE_API_BASE_URL: https://api.vellera.app/v1
-      run: npx vite build  # Runs the compiler directly bypassing custom script chains
+      run: npx vite build
+
+    - name: Upload Build Artifacts
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: production-dist
+        path: dist/
